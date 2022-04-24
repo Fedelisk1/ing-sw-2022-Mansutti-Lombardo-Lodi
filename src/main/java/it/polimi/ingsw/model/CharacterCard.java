@@ -1,4 +1,4 @@
-package Model;
+package it.polimi.ingsw.model;
 
 public class CharacterCard {
     private int cost;

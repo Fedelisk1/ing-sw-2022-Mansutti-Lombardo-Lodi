@@ -1,8 +1,7 @@
-package Model;
+package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 
 public class CloudCard {
-    private ArrayList<Student> student;
     private boolean full;
 }
