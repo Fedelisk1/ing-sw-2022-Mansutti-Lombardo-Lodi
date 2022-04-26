@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Random;
 
 public class Game {
     private EnumMap<Color, Integer> bag;
@@ -68,4 +69,48 @@ public class Game {
         return result;
     }
 
+
+    /**
+     * method extract from bag: it converts possible keys into numbers and extracts on of them by
+     * decreasing the number from bag and increasing to extracted
+     * @author Federico Lombardo
+     * @param student describes how many students we need to extract
+     * @return a new EnumMap with the extracted students
+     */
+
+    public EnumMap<Color,Integer> extractFromBag(int student){
+
+        EnumMap<Color,Integer> extracted= new EnumMap<>(Color.class);
+
+        for(int i=0;i<student;i++) {
+
+            int extractcolor = new Random().nextInt(bag.values().size());
+
+            if (bag.get(Color.values()[extractcolor]) > 0) {
+
+                bag.put(Color.values()[extractcolor], bag.get(Color.values()[extractcolor]) - 1);
+                extracted.put(Color.values()[extractcolor],extracted.get(Color.values()[extractcolor])+1);
+            }
+        }
+        return extracted;
+    }
+
+
+    /**
+     * method addToBag if bag does not contains Color c then this is added, else
+     * update the value
+     * @author Federico Lombardo
+     * @param students contains student that should be add to the bag
+     */
+
+    public void addToBag(EnumMap<Color, Integer> students) {
+
+        for (Color c : students.keySet()) {
+
+            if (!bag.containsKey(c))
+                bag.put(c, students.get(c));
+            else bag.put(c, bag.get(c) + students.get(c));
+
+        }
+    }
 }
