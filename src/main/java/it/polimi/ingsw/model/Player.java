@@ -8,13 +8,15 @@ public class Player {
     private Hand hand;
     private SchoolDashboard schoolDashboard;
 
-    public Player()
+    public Player(String nickname)
     {
         hand = new Hand();
         schoolDashboard = new SchoolDashboard();
-
+        coins = 0;
+        this.nickname = nickname;
 
     }
+
 
 
 }
