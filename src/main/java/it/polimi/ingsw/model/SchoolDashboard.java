@@ -22,13 +22,13 @@ public class SchoolDashboard {
 
     public void addTowers(int n)
     {
-        if(n<0 || towers+n>8) throw new IllegalArgumentException("numero torri non valido");
+        if(n<0 || towers+n>8) throw new IllegalArgumentException("tower number not valid");
         towers = towers + n;
     }
 
     public void removeTowers(int n) throws InputMismatchException
     {
-        if(n<0 || towers-n<0) throw new IllegalArgumentException("numero torri non valido");
+        if(n<0 || towers-n<0) throw new IllegalArgumentException("tower number not valid");
         towers = towers - n;
     }
 
@@ -46,5 +46,7 @@ public class SchoolDashboard {
     {
         return diningRoom;
     }
+
+
 
 }
