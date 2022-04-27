@@ -25,14 +25,10 @@ public class Player {
         try{
             MaxPosition = hand.assistantCards.get(i).getMaxSteps();
             PlayedPriority = hand.assistantCards.get(i).getPriority();
-            hand.assistantCards.remove(i);
+            hand.assistantCards.remove(i    );
         }
         catch (IndexOutOfBoundsException e){
             System.out.println("Assistant card not valid");
         }
     }
-
-
-
-
 }

@@ -6,7 +6,8 @@ import java.util.Random;
 
 public class Game {
     private EnumMap<Color, Integer> bag;
-    private int motherNaturePosition;
+    private static int motherNaturePosition;
+    private final int MAX_ISLANDS = 12;
     private final ArrayList<IslandGroup> islands;
     private ArrayList<Player> players;
     private Player currentPlayer;
@@ -18,7 +19,7 @@ public class Game {
     public Game(int players) {
         islands = new ArrayList<>();
 
-        for(int i = 0; i < 12; i++)
+        for(int i = 0; i < MAX_ISLANDS; i++)
             islands.add(new IslandGroup());
     }
 
@@ -112,5 +113,9 @@ public class Game {
             else bag.put(c, bag.get(c) + students.get(c));
 
         }
+    }
+
+    public static int getMotherNaturePosition() {
+        return motherNaturePosition;
     }
 }

@@ -62,4 +62,6 @@ class GameTest {
         assertEquals(11, g.getIslands().size());
         assertEquals(beforeMerge1To10, afterMerge1To10);
     }
+
+
 }
