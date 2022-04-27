@@ -7,7 +7,7 @@ import java.util.InputMismatchException;
 public class SchoolDashboard {
     private ArrayList<Professor> professors;
     private int towers;
-    private EnumMap<Color,Integer> entrance;
+    private static EnumMap<Color,Integer> entrance;
     private EnumMap<Color,Integer> diningRoom;
 
     /**le torri non vengono gestite tramite colore ma tramite proprietario**/
@@ -45,6 +45,16 @@ public class SchoolDashboard {
     public EnumMap<Color, Integer> getDiningRoom()
     {
         return diningRoom;
+    }
+
+    public void moveStudentToDiningRoom(Color color)
+    {
+        diningRoom.put(color,1);
+    }
+
+    public static void addStudentToEntrance(Color color)
+    {
+        entrance.put(color,1);
     }
 
 
