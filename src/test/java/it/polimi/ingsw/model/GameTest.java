@@ -63,5 +63,14 @@ class GameTest {
         assertEquals(beforeMerge1To10, afterMerge1To10);
     }
 
-
+    @Test
+    public void testMoveMN() {
+        assertEquals(0, Game.getMotherNaturePosition());
+        Game.moveMotherNature(3);
+        assertEquals(3, Game.getMotherNaturePosition());
+        Game.moveMotherNature(12);
+        assertEquals(3, Game.getMotherNaturePosition());
+        Game.moveMotherNature(9);
+        assertEquals(0, Game.getMotherNaturePosition());
+    }
 }

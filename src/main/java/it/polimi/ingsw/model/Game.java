@@ -5,10 +5,10 @@ import java.util.EnumMap;
 import java.util.Random;
 
 public class Game {
-    private EnumMap<Color, Integer> bag;
-    private static int motherNaturePosition;
-    private final int MAX_ISLANDS = 12;
-    private final ArrayList<IslandGroup> islands;
+    private static EnumMap<Color, Integer> bag;
+    private static int motherNaturePosition = 0;
+    private static final int MAX_ISLANDS = 12;
+    private static ArrayList<IslandGroup> islands;
     private ArrayList<Player> players;
     private Player currentPlayer;
     private ArrayList<CharacterCard> characterCards;
@@ -79,7 +79,7 @@ public class Game {
      * @return a new EnumMap with the extracted students
      */
 
-    public EnumMap<Color,Integer> extractFromBag(int student){
+    public static EnumMap<Color,Integer> extractFromBag(int student){
 
         EnumMap<Color,Integer> extracted= new EnumMap<>(Color.class);
 
@@ -104,7 +104,7 @@ public class Game {
      * @param students contains student that should be add to the bag
      */
 
-    public void addToBag(EnumMap<Color, Integer> students) {
+    public static void addToBag(EnumMap<Color, Integer> students) {
 
         for (Color c : students.keySet()) {
 
@@ -113,6 +113,14 @@ public class Game {
             else bag.put(c, bag.get(c) + students.get(c));
 
         }
+    }
+
+    /**
+     * moves MN position by the given steps
+     * @param steps steps to perform
+     */
+    public static void moveMotherNature(int steps) {
+        motherNaturePosition = (motherNaturePosition + steps) % islands.size();
     }
 
     public static int getMotherNaturePosition() {
