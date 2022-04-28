@@ -23,6 +23,11 @@ public class Game {
             islands.add(new IslandGroup());
     }
 
+    public ArrayList<Player> getPlayers()
+    {
+        return players;
+    }
+
     public ArrayList<IslandGroup> getIslands() {
         return islands;
     }

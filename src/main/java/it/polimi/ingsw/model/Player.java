@@ -10,6 +10,7 @@ public class Player {
     private ArrayList<AssistantCard> discardPile;
     private int playedPriority;
     private int maxPosition;
+    private Game currentGame;
 
     /** each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
     public Player(String nickname)
@@ -19,6 +20,11 @@ public class Player {
         coins = 0;
         this.nickname = nickname;
 
+    }
+
+    public void setCurrentGame(Game game)
+    {
+        this.currentGame=game;
     }
 
     public int getPlayedPriority()
