@@ -5,12 +5,12 @@ import java.util.EnumMap;
 import java.util.Random;
 
 public class Game {
-    private static EnumMap<Color, Integer> bag;
-    private static int motherNaturePosition = 0;
-    private static final int MAX_ISLANDS = 12;
-    private static ArrayList<IslandGroup> islands;
+    private EnumMap<Color, Integer> bag;
+    private int motherNaturePosition = 0;
+    private final int MAX_ISLANDS = 12;
+    private ArrayList<IslandGroup> islands;
     private ArrayList<Player> players;
-    private static Player currentPlayer;
+    private Player currentPlayer;
     private ArrayList<CharacterCard> characterCards;
     private int totalCoins;
     private ArrayList<CloudCard> cloudCards;
@@ -84,7 +84,7 @@ public class Game {
      * @return a new EnumMap with the extracted students
      */
 
-    public static EnumMap<Color,Integer> extractFromBag(int student){
+    public EnumMap<Color,Integer> extractFromBag(int student){
 
         EnumMap<Color,Integer> extracted= new EnumMap<>(Color.class);
 
@@ -109,7 +109,7 @@ public class Game {
      * @param students contains student that should be add to the bag
      */
 
-    public static void addToBag(EnumMap<Color, Integer> students) {
+    public void addToBag(EnumMap<Color, Integer> students) {
 
         for (Color c : students.keySet()) {
 
@@ -124,19 +124,22 @@ public class Game {
      * moves MN position by the given steps
      * @param steps steps to perform
      */
-    public static void moveMotherNature(int steps) {
+    public void moveMotherNature(int steps) {
         motherNaturePosition = (motherNaturePosition + steps) % islands.size();
     }
 
-    public static int getMotherNaturePosition() {
+    public int getMotherNaturePosition() {
         return motherNaturePosition;
     }
 
     //aggiunta io
-    public static Player getCurrentPlayer(){return currentPlayer;}
+    public Player getCurrentPlayer(){return currentPlayer;}
 
     public ArrayList<CharacterCard> getCharacterCards() {
         return characterCards;
     }
 
+    public ArrayList<CloudCard> getCloudCards() {
+        return cloudCards;
+    }
 }

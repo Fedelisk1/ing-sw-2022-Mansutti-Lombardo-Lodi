@@ -65,12 +65,13 @@ class GameTest {
 
     @Test
     public void testMoveMN() {
-        assertEquals(0, Game.getMotherNaturePosition());
-        Game.moveMotherNature(3);
-        assertEquals(3, Game.getMotherNaturePosition());
-        Game.moveMotherNature(12);
-        assertEquals(3, Game.getMotherNaturePosition());
-        Game.moveMotherNature(9);
-        assertEquals(0, Game.getMotherNaturePosition());
+        Game g = new Game(2);
+        assertEquals(0, g.getMotherNaturePosition());
+        g.moveMotherNature(3);
+        assertEquals(3, g.getMotherNaturePosition());
+        g.moveMotherNature(12);
+        assertEquals(3, g.getMotherNaturePosition());
+        g.moveMotherNature(9);
+        assertEquals(0, g.getMotherNaturePosition());
     }
 }

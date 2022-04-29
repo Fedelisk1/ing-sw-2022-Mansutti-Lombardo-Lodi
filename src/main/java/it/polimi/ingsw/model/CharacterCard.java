@@ -27,14 +27,14 @@ class Choose1ToIsland extends CharacterCard{
         extracted=new EnumMap<>(Color.class);
         extractedFromBag= new EnumMap<>(Color.class);
         cost=1;
-        extracted=Game.extractFromBag(4);
+        extracted=currentGame.extractFromBag(4);
     }
 
 
 
     public void doEffect(Color c,int islandNumber) {
 
-        Game.getCurrentPlayer().chooseStudent1(extracted,c);
+        currentGame.getCurrentPlayer().chooseStudent1(extracted,c);
 
          currentGame.getIslands().get(islandNumber).addStudents(c);
 
@@ -136,6 +136,8 @@ class AllRemoveColor extends CharacterCard{
     public AllRemoveColor() {
         cost=3;
     }
+
+
 }
 
 
