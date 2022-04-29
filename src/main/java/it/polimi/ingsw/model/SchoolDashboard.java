@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import java.util.InputMismatchException;
 
 public class SchoolDashboard {
-    private ArrayList<Professor> professors;
+    private ArrayList<Color> professors;
     private int towers;
     private EnumMap<Color,Integer> entrance;
     private EnumMap<Color,Integer> diningRoom;
@@ -27,7 +27,7 @@ public class SchoolDashboard {
         towers = towers + n;
     }
 
-    public void removeTowers(int n) throws InputMismatchException
+    public void removeTowers(int n)
     {
         if(n<0 || towers-n<0) throw new IllegalArgumentException("tower number not valid");
         towers = towers - n;
@@ -42,48 +42,80 @@ public class SchoolDashboard {
     {
         return entrance;
     }
-    
+
+    /**
+     * removes a student from the entrance
+     * @param color
+     * @throws IllegalArgumentException
+     * @throws NullPointerException
+     */
+    public void removeStudentFromEntrance(Color color) throws NullPointerException
+    {
+        if(entrance.get(color)==0) throw new IllegalArgumentException("no students of that color");
+        entrance.put(color,entrance.get(color)-1);
+    }
+
+    /**
+     * adds a student to the entrance
+     * @param color
+     * @throws NullPointerException
+     */
+    public void addStudentToEntrance(Color color) throws NullPointerException
+    {
+        entrance.put(color,entrance.get(color)+1);
+    }
+
+
     public EnumMap<Color, Integer> getDiningRoom()
     {
         return diningRoom;
     }
-    /**
-     * @param color
-     * @return 1 if successful, 0 otherwsie
-     */
-    public int removeStudentFromEntrance(Color color)
-    {
-        if(entrance.get(color)>=1)
-        {
-            entrance.remove(color);
-            return 1;
-        }
-        return 0;
-    }
 
     /**
-     *
+     *moves student from entrance to dining room
      * @param color
-     * @return 1 if successful, 0 otherwise
      */
-    public int moveStudentToDiningRoom(Color color)
+    public void moveStudentToDiningRoom(Color color)
     {
-        if(removeStudentFromEntrance(color)==1)
+        try
         {
+            removeStudentFromEntrance(color);
             addStudentToDiningRoom(color);
-            return 1;
         }
-        return 0;
-    }
-    public void addStudentToDiningRoom(Color color)
-    {
-        diningRoom.put(color,1);
+        catch(IllegalArgumentException e)
+        {
+            System.out.println("Remove student failed");
+        }
+        catch(NullPointerException e)
+        {
+            System.out.println("Null parameter");
+        }
+        catch(Exception e)
+        {
+            System.out.println("Unknown error");
+        }
+
     }
 
-    public void addStudentToEntrance(Color color)
+    /**
+     * adds a student to the Dining Room
+     * @param color
+     * @throws NullPointerException
+     */
+    public void addStudentToDiningRoom(Color color) throws NullPointerException
     {
-        entrance.put(color,1);
+        diningRoom.put(color,diningRoom.get(color)+1);
     }
 
+    /**
+     *Adds a professor to the player's school dashboard
+     * @param color
+     * @throws IllegalArgumentException
+     */
+    public void addProfessor(Color color)
+    {
+        if(professors.contains(color)) throw new IllegalArgumentException("There is already a color of that professor");
+        professors.add(color);
+    }
 
 }
