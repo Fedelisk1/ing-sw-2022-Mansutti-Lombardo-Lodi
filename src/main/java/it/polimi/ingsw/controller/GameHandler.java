@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.CharacterCard;
 import it.polimi.ingsw.model.Game;
 
 public class GameHandler {
@@ -13,6 +14,11 @@ public class GameHandler {
         {
             game.getPlayers().get(i).setCurrentGame(game);
         }
+        for (CharacterCard c : game.getCharacterCards()
+             ) {
+                c.setCurrentGame(game);
+
+               }
 
     }
 }

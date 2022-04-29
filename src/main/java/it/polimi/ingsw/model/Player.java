@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 
 public class Player {
     private String nickname;
@@ -36,7 +37,22 @@ public class Player {
         return maxPosition;
     }
 
+    //aggiunta io
+    public void setMaxPosition(int maxPosition){
+        this.maxPosition=maxPosition;
+    }
+
+    //aggiunta io
+    public SchoolDashboard getSchoolDashboard(){return schoolDashboard; }
+
+
+
+
     /**plays card number i from the hand**/
+
+
+
+
     public void playAssistantCard(int i)
     {
         try{
@@ -51,6 +67,19 @@ public class Player {
         }
     }
 
+    public EnumMap<Color,Integer> chooseStudent(EnumMap<Color,Integer> in,Color c){
+        EnumMap<Color,Integer> choosed= new EnumMap<>(Color.class);
+
+        choosed.put(c,1);
+        in.put(c,in.get(c)-1);
+
+        return choosed;
+    }
+
+    public Color chooseStudent1(EnumMap<Color,Integer> in,Color c){
+        in.put(c,in.get(c)-1);
+        return c;
+    }
 
 
 

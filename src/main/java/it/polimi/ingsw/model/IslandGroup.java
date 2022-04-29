@@ -46,7 +46,7 @@ public class IslandGroup {
         islandCount += quantity;
     }
 
-    public void incrementIslandCount() {
-        incrementIslandCount(1);
-    }
+    public void incrementIslandCount() {incrementIslandCount(1);}
+
+
 }

@@ -10,7 +10,7 @@ public class Game {
     private static final int MAX_ISLANDS = 12;
     private static ArrayList<IslandGroup> islands;
     private ArrayList<Player> players;
-    private Player currentPlayer;
+    private static Player currentPlayer;
     private ArrayList<CharacterCard> characterCards;
     private int totalCoins;
     private ArrayList<CloudCard> cloudCards;
@@ -131,4 +131,12 @@ public class Game {
     public static int getMotherNaturePosition() {
         return motherNaturePosition;
     }
+
+    //aggiunta io
+    public static Player getCurrentPlayer(){return currentPlayer;}
+
+    public ArrayList<CharacterCard> getCharacterCards() {
+        return characterCards;
+    }
+
 }
