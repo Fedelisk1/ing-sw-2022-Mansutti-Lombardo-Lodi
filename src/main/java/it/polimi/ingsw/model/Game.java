@@ -17,10 +17,18 @@ public class Game {
     private ArrayList<Color> unudesProfessors;
 
     public Game(int players) {
+        if(players>3)
+        {
+            System.out.println("Maximum player count is 3, players have been set to 3");
+            players = 3;
+        }
         islands = new ArrayList<>();
 
         for(int i = 0; i < MAX_ISLANDS; i++)
             islands.add(new IslandGroup());
+        for(int i=0;i < players; i++)
+            this.players.add(new Player());
+
     }
 
     public ArrayList<Player> getPlayers()
