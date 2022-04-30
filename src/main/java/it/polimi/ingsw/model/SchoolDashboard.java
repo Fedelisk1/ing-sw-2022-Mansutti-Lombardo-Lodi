@@ -45,23 +45,25 @@ public class SchoolDashboard {
 
     /**
      * removes a student from the entrance
-     * @param color
-     * @throws IllegalArgumentException
-     * @throws NullPointerException
+     * @param color student color
+     * @throws IllegalArgumentException if there is no student of the chosen color in the entrance
+     * @throws NullPointerException if color is null
      */
     public void removeStudentFromEntrance(Color color) throws NullPointerException
     {
+        entrance.putIfAbsent(color, 0);
         if(entrance.get(color)==0) throw new IllegalArgumentException("no students of that color");
         entrance.put(color,entrance.get(color)-1);
     }
 
     /**
      * adds a student to the entrance
-     * @param color
-     * @throws NullPointerException
+     * @param color student color
+     * @throws NullPointerException if color is null
      */
     public void addStudentToEntrance(Color color) throws NullPointerException
     {
+        entrance.putIfAbsent(color, 0);
         entrance.put(color,entrance.get(color)+1);
     }
 
@@ -73,49 +75,52 @@ public class SchoolDashboard {
 
     /**
      *moves student from entrance to dining room
-     * @param color
+     * @param color student color
+     * @throws NullPointerException if color is null
+     * @throws IllegalArgumentException if there is no student of the chosen color in the entrance
      */
-    public void moveStudentToDiningRoom(Color color)
+    public void moveStudentToDiningRoom(Color color) throws NullPointerException, IllegalArgumentException
     {
-        try
-        {
-            removeStudentFromEntrance(color);
-            addStudentToDiningRoom(color);
-        }
-        catch(IllegalArgumentException e)
-        {
-            System.out.println("Remove student failed");
-        }
-        catch(NullPointerException e)
-        {
-            System.out.println("Null parameter");
-        }
-        catch(Exception e)
-        {
-            System.out.println("Unknown error");
-        }
-
+        removeStudentFromEntrance(color);
+        addStudentToDiningRoom(color);
     }
 
     /**
      * adds a student to the Dining Room
-     * @param color
-     * @throws NullPointerException
+     * @param color student color
+     * @throws NullPointerException if color is null
      */
     public void addStudentToDiningRoom(Color color) throws NullPointerException
     {
+        diningRoom.putIfAbsent(color, 0);
         diningRoom.put(color,diningRoom.get(color)+1);
     }
 
     /**
      *Adds a professor to the player's school dashboard
-     * @param color
-     * @throws IllegalArgumentException
+     * @param color professor color
+     * @throws IllegalArgumentException if there is already a professor of that color
+     * @throws NullPointerException if color is null
      */
-    public void addProfessor(Color color)
+    public void addProfessor(Color color) throws NullPointerException
     {
         if(professors.contains(color)) throw new IllegalArgumentException("There is already a color of that professor");
         professors.add(color);
+    }
+
+
+
+    /**
+     * removes a professor from the school dashboard
+     * @param color professor color
+     * @throws NullPointerException if color is null
+     * @throws IllegalArgumentException if there is no professor of the chosen color
+     */
+
+    public void removeProfessor(Color color) throws NullPointerException
+    {
+        if(!professors.contains(color)) throw new IllegalArgumentException("There is no professor of such color");
+
     }
 
 }
