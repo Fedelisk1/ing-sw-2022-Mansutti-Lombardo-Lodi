@@ -9,6 +9,7 @@ public class SchoolDashboard {
     private int towers;
     private EnumMap<Color,Integer> entrance;
     private EnumMap<Color,Integer> diningRoom;
+    private Game currentGame;
 
     /**le torri non vengono gestite tramite colore ma tramite proprietario**/
     SchoolDashboard()
@@ -20,6 +21,9 @@ public class SchoolDashboard {
 
     }
 
+    public void setCurrentGame(Game currentGame) {
+        this.currentGame = currentGame;
+    }
 
     public void addTowers(int n)
     {
@@ -121,6 +125,19 @@ public class SchoolDashboard {
     {
         if(!professors.contains(color)) throw new IllegalArgumentException("There is no professor of such color");
 
+    }
+
+    /**
+     *
+     * @param color of the student to me moved
+     * @param i islandGroup number
+     * @throws NullPointerException if color is null
+     * @throws IllegalArgumentException if there is no specified color in the entrance
+     */
+    public void moveToIslandGroup(Color color, int i) throws NullPointerException, IllegalArgumentException
+    {
+        removeStudentFromEntrance(color);
+        currentGame.getIslands().get(i).addStudents(color);
     }
 
 }

@@ -14,6 +14,7 @@ public class GameHandler {
         for(int i =0; i<playerCount; i++)
         {
             game.getPlayers().get(i).setCurrentGame(game);
+            game.getPlayers().get(i).getSchoolDashboard().setCurrentGame(game);
         }
 
         for (CharacterCard c : game.getCharacterCards()) {
