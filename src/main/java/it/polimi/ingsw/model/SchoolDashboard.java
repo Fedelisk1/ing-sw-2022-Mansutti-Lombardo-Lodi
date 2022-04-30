@@ -100,6 +100,9 @@ public class SchoolDashboard {
         diningRoom.put(color,diningRoom.get(color)+1);
     }
 
+    public void removeStudentFromDiningRoom(Color color) throws NullPointerException{
+        diningRoom.put(color,diningRoom.get(color)-1);
+    }
     /**
      *Adds a professor to the player's school dashboard
      * @param color professor color
