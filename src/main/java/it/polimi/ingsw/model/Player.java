@@ -68,10 +68,20 @@ public class Player {
         discardPile.add(hand.assistantCards.get(i));
         hand.assistantCards.remove(i);
     }
-    public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, IllegalArgumentException, IndexOutOfBoundsException
+    public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, IllegalArgumentException
     {
-        schoolDashboard.moveToIslandGroup(color, i);
-        count++;
+        try {
+            if(count>=3)throw new IllegalStateException("limit of students moved reached for this turn");
+            schoolDashboard.moveToIslandGroup(color, i);
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+            System.out.println("Chosen island is outside the possible range of values");
+        }
+        finally{
+            count++;
+        }
+
 
     }
     public void moveOneOfThreeToDiningRoom(Color color) throws NullPointerException, IllegalArgumentException
@@ -83,10 +93,7 @@ public class Player {
 
 
     public boolean hasProfessor(Color c){
-        if(!professors.contains(c))
-            return false;
-        else
-            return true;
+        return professors.contains(c);
     }
 
 }

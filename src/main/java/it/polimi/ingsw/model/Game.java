@@ -26,6 +26,8 @@ public class Game {
 
         for(int i = 0; i < MAX_ISLANDS; i++)
             islands.add(new IslandGroup());
+
+        this.players = new ArrayList<>();
         for(int i=0;i < players; i++)
             this.players.add(new Player());
 
