@@ -150,4 +150,27 @@ public class Game {
     public ArrayList<CloudCard> getCloudCards() {
         return cloudCards;
     }
+
+    /**
+     * This method calculates the influence by adding the number of students whose player has the color of the professor
+     * and add up if player p has towers on that island
+     * @param p is the player
+     * @param isl is the island
+     * @return the calculation of the influence
+     */
+
+    public int countInfluence(Player p,IslandGroup isl){
+        int sum=0;
+
+        for (Color c : isl.getStudents().keySet()){
+            if(p.hasProfessor(c))
+                sum=sum+isl.getStudents(c);
+        }
+
+        if(isl.getOccupiedBy().equals(p)){
+            sum=sum+isl.getIslandCount();
+        }
+
+        return sum;
+    }
 }

@@ -7,6 +7,10 @@ public class IslandGroup {
     private Player occupiedBy;
     private final boolean noEntryTile = false;
     private final EnumMap<Color, Integer> students = new EnumMap<>(Color.class);
+    private boolean blockColorOnce_CC=false;
+    private boolean plus2Influence_CC=false;
+    private boolean blockTower_CC=false;
+    private boolean noEntryIsland=false;
 
     /**
      * Island constructor. Initializes the island with 0 students for each color
@@ -38,6 +42,8 @@ public class IslandGroup {
         return students.get(color);
     }
 
+    public EnumMap<Color,Integer> getStudents(){return students;}
+
     public int getIslandCount() {
         return islandCount;
     }
@@ -48,5 +54,37 @@ public class IslandGroup {
 
     public void incrementIslandCount() {incrementIslandCount(1);}
 
+    public Player getOccupiedBy() {return occupiedBy;}
 
+    public boolean isBlockColorOnce_CC() {
+        return blockColorOnce_CC;
+    }
+
+    public boolean isPlus2Influence_CC() {
+        return plus2Influence_CC;
+    }
+
+    public boolean isBlockTower_CC() {
+        return blockTower_CC;
+    }
+
+    public boolean isNoEntryIsland() {
+        return noEntryIsland;
+    }
+
+    public void setBlockColorOnce_CC(boolean blockColorOnce_CC) {
+        this.blockColorOnce_CC = blockColorOnce_CC;
+    }
+
+    public void setPlus2Influence_CC(boolean plus2Influence_CC) {
+        this.plus2Influence_CC = plus2Influence_CC;
+    }
+
+    public void setBlockTower_CC(boolean blockTower_CC) {
+        this.blockTower_CC = blockTower_CC;
+    }
+
+    public void setNoEntryIsland(boolean noEntryIsland) {
+        this.noEntryIsland = noEntryIsland;
+    }
 }

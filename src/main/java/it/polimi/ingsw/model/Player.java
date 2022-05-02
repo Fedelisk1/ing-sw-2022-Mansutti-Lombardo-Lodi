@@ -12,6 +12,10 @@ public class Player {
     private int maxPosition;
     private Game currentGame;
     private int count;
+    private ArrayList<Color> professors;
+
+
+
 
     /** each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
     public Player()
@@ -44,6 +48,13 @@ public class Player {
     //aggiunta io
     public SchoolDashboard getSchoolDashboard(){return schoolDashboard; }
 
+    public void addProfessor(Color c){
+        professors.add(c);
+    }
+    public void removeProfessor(Color c){
+        professors.add(c);
+
+    }
 
     /**
      * Player chooses the assistant card to play, setting the maximum position that mother nature can move and the priority. It gets placed in the discard pile.
@@ -71,5 +82,11 @@ public class Player {
     }
 
 
+    public boolean hasProfessor(Color c){
+        if(!professors.contains(c))
+            return false;
+        else
+            return true;
+    }
 
 }

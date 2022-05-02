@@ -23,6 +23,7 @@ class Choose1ToIsland extends CharacterCard{
 
 
     public Choose1ToIsland() {
+        
         extracted=new EnumMap<>(Color.class);
         extractedFromBag= new EnumMap<>(Color.class);
         cost=1;
@@ -37,7 +38,7 @@ class Choose1ToIsland extends CharacterCard{
 
     public void doEffect(Color c,int islandNumber) {
 
-        currentGame.getCurrentPlayer().chooseStudent1(extracted,c);
+         extracted.put(c, extracted.get(c)-1);
 
          currentGame.getIslands().get(islandNumber).addStudents(c);
 
@@ -168,6 +169,10 @@ class Plus2Influence extends CharacterCard{
 class BlockColorOnce extends CharacterCard{
     public BlockColorOnce() {
         cost=3;
+    }
+
+    public void doEffect(){
+
     }
 }
 
