@@ -8,9 +8,10 @@ public class Player {
     private Hand hand;
     private SchoolDashboard schoolDashboard;
     private ArrayList<AssistantCard> discardPile;
-    private int playedPriority;
+    private int cardValue;
     private int maxPosition;
     private Game currentGame;
+    private int count;
 
     /** each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
     public Player()
@@ -26,9 +27,9 @@ public class Player {
         this.currentGame=game;
     }
 
-    public int getPlayedPriority()
+    public int getCardValue()
     {
-        return playedPriority;
+        return cardValue;
     }
 
     public int getMaxPosition() {
@@ -44,27 +45,29 @@ public class Player {
     public SchoolDashboard getSchoolDashboard(){return schoolDashboard; }
 
 
-    public void playAssistantCard(int i) throws IndexOutOfBoundsException
+    /**
+     * Player chooses the assistant card to play, setting the maximum position that mother nature can move and the priority. It gets placed in the discard pile.
+     * @param i, card number i from the left in hand
+     * @throws IndexOutOfBoundsException if i is outside the possible range of values
+     */
+    public void chooseAssistantCard(int i) throws IndexOutOfBoundsException
     {
-
         maxPosition = hand.assistantCards.get(i).getMaxSteps();
-        playedPriority = hand.assistantCards.get(i).getPriority();
+        cardValue = hand.assistantCards.get(i).getCardValue();
         discardPile.add(hand.assistantCards.get(i));
         hand.assistantCards.remove(i);
     }
+    public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, IllegalArgumentException, IndexOutOfBoundsException
+    {
+        schoolDashboard.moveToIslandGroup(color, i);
+        count++;
 
-    public EnumMap<Color,Integer> chooseStudent(EnumMap<Color,Integer> in,Color c){
-        EnumMap<Color,Integer> choosed= new EnumMap<>(Color.class);
-
-        choosed.put(c,1);
-        in.put(c,in.get(c)-1);
-
-        return choosed;
     }
+    public void moveOneOfThreeToDiningRoom(Color color) throws NullPointerException, IllegalArgumentException
+    {
+        schoolDashboard.moveStudentToDiningRoom(color);
+        count++;
 
-    public Color chooseStudent1(EnumMap<Color,Integer> in,Color c){
-        in.put(c,in.get(c)-1);
-        return c;
     }
 
 

@@ -136,8 +136,9 @@ public class SchoolDashboard {
      * @param i islandGroup number
      * @throws NullPointerException if color is null
      * @throws IllegalArgumentException if there is no specified color in the entrance
+     * @throws IndexOutOfBoundsException if i is out of range
      */
-    public void moveToIslandGroup(Color color, int i) throws NullPointerException, IllegalArgumentException
+    public void moveToIslandGroup(Color color, int i) throws NullPointerException, IllegalArgumentException, IndexOutOfBoundsException
     {
         removeStudentFromEntrance(color);
         currentGame.getIslands().get(i).addStudents(color);

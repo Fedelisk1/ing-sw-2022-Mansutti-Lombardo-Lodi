@@ -1,17 +1,17 @@
 package it.polimi.ingsw.model;
 
 public class AssistantCard {
-    private int priority;
+    private int cardValue;
     private int maxSteps;
 
-    public AssistantCard(int priority, int maxSteps)
+    public AssistantCard(int cardValue, int maxSteps)
     {
-        this.priority = priority;
+        this.cardValue = cardValue;
         this.maxSteps = maxSteps;
     }
 
-    public int getPriority() {
-        return priority;
+    public int getCardValue() {
+        return cardValue;
     }
 
     public int getMaxSteps() {
