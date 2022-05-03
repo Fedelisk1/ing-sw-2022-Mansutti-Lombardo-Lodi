@@ -30,7 +30,6 @@ public class Game {
         this.players = new ArrayList<>();
         for(int i=0;i < players; i++)
             this.players.add(new Player());
-
     }
 
     public ArrayList<Player> getPlayers()
@@ -154,25 +153,49 @@ public class Game {
     }
 
     /**
-     * This method calculates the influence by adding the number of students whose player has the color of the professor
-     * and add up if player p has towers on that island
+     * This method calculates the influence
      * @param p is the player
      * @param isl is the island
      * @return the calculation of the influence
      */
 
     public int countInfluence(Player p,IslandGroup isl){
-        int sum=0;
 
+        if(isl.isBlockColorOnce_CC()){
+            return countInfluenceTowers(p,isl)+countInfluenceStudents(p,isl)-isl.getStudents(isl.getBlockedColor());
+        }
+        else if(isl.isPlus2Influence_CC()){
+            return countInfluenceStudents(p,isl)+countInfluenceTowers(p,isl)+2;
+        }
+        else if(isl.isNoEntryIsland()) {
+            throw new IllegalArgumentException("Influence cannot be calculated after activating the character card");
+        }
+        else if(isl.isBlockTower_CC()){
+            return countInfluenceStudents(p,isl);
+        }
+        else return countInfluenceTowers(p,isl)+countInfluenceStudents(p,isl);
+
+    }
+
+    public int countInfluenceStudents(Player p,IslandGroup isl){
+        int sum=0;
         for (Color c : isl.getStudents().keySet()){
             if(p.hasProfessor(c))
                 sum=sum+isl.getStudents(c);
         }
+        return sum;
+    }
+
+    public int countInfluenceTowers(Player p,IslandGroup isl){
+        int sum=0;
 
         if(isl.getOccupiedBy().equals(p)){
             sum=sum+isl.getIslandCount();
         }
-
         return sum;
     }
+
+
+
+
 }

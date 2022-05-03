@@ -4,7 +4,7 @@ import java.util.EnumMap;
 
 public abstract class CharacterCard {
     public int cost;
-    public boolean usageCount;
+    public boolean used;
     public Game currentGame;
 
 
@@ -17,7 +17,7 @@ class Choose1ToIsland extends CharacterCard{
 
     private EnumMap<Color,Integer> extracted;
     private EnumMap<Color,Integer> extractedFromBag;
-
+    private boolean used;
     private int cost;
 
 
@@ -38,6 +38,7 @@ class Choose1ToIsland extends CharacterCard{
 
     public void doEffect(Color c,int islandNumber) {
 
+         cost=2;
          extracted.put(c, extracted.get(c)-1);
 
          currentGame.getIslands().get(islandNumber).addStudents(c);
@@ -63,7 +64,10 @@ class TempControlProf extends CharacterCard{
 
     public TempControlProf() {
         cost=2;
+    }
 
+    public void doEffect(){
+        cost=3;
     }
 }
 
@@ -71,24 +75,58 @@ class ChooseIsland extends CharacterCard{
     public ChooseIsland() {
         cost=3;
     }
+    public void doEffect(){
+        cost=4;
+    }
 }
 
 class BlockTower extends CharacterCard{
     public BlockTower() {
         cost=3;
     }
+
+    /**
+     * Set true the boolean blockTower of IslandGroup
+     */
+    public void doEffect(){
+        cost=4;
+        currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setBlockTower_CC(true);
+    }
 }
 
 class NoEntryIsland extends CharacterCard{
+    int availableUses=4;
     public NoEntryIsland() {
+        availableUses=4;
         cost=2;
     }
+    /**
+     * Set true the boolean noEntryIsland of IslandGroup and decrement availableUses
+     */
+    public void doEffect(){
+        cost=3;
+
+        if(availableUses>0){
+
+            availableUses=availableUses-1;
+            currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setNoEntryIsland(true);
+
+        }else  throw new IllegalArgumentException("Maximum number of effect uses");
+
+    }
+
 }
 class TwoAdditionalMoves extends CharacterCard{
     public TwoAdditionalMoves() {
         cost=1;
     }
+
+    /**
+     * Add 2 to the attribute maxPosition of player
+     */
+
     public void doEffect() {
+        cost=2;
         currentGame.getCurrentPlayer().setMaxPosition(currentGame.getCurrentPlayer().getMaxPosition()+2);
     }
 }
@@ -98,6 +136,7 @@ class Choose3toEntrance extends CharacterCard {
     private int cost;
 
     public Choose3toEntrance() {
+
         extracted = new EnumMap<Color, Integer>(Color.class);
         extracted = currentGame.extractFromBag(6);
         cost = 1;
@@ -111,7 +150,7 @@ class Choose3toEntrance extends CharacterCard {
      */
 
     public void doEffect(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance) {
-
+        cost=2;
         if(totalNumberofStudent(chosenFromEntrance)!=totalNumberofStudent(chosenFromCard))throw new IllegalArgumentException("different number of selected students");
 
         for (Color c : chosenFromCard.keySet()) {
@@ -163,6 +202,14 @@ class Plus2Influence extends CharacterCard{
         cost=2;
     }
 
+    /**
+     * Set true the boolean plus2Influence of IslandGroup
+     */
+    public void doEffect(){
+        cost=3;
+        currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setPlus2Influence_CC(true);
+    }
+
 
 }
 
@@ -171,8 +218,14 @@ class BlockColorOnce extends CharacterCard{
         cost=3;
     }
 
-    public void doEffect(){
-
+    /**
+     *  Set true the boolean blockColorOnce of IslandGroup and set the color to block
+     * @param c is the color to block
+     */
+    public void doEffect(Color c){
+        cost=4;
+        currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setBlockedColor(c);
+        currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setBlockColorOnce_CC(true);
     }
 }
 
@@ -187,6 +240,8 @@ class Exchange2Students extends CharacterCard{
      * @param chosenFromDiningRoom are the cards chosen from the dining room
      */
     public void doEffect(EnumMap<Color,Integer> chosenFromEntrance,EnumMap<Color,Integer> chosenFromDiningRoom){
+
+        cost=2;
 
         for(Color c : chosenFromEntrance.keySet()){
             while(chosenFromEntrance.get(c)>0){
@@ -229,6 +284,7 @@ class Choose1DiningRoom extends CharacterCard{
      * @param c color of the student
      */
     public void doEffect(Color c){
+        cost=3;
         currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToDiningRoom(c);
         extracted.put(c, extracted.get(c)-1);
 
@@ -256,6 +312,7 @@ class AllRemoveColor extends CharacterCard{
      * @param c is the color
      */
     public void doEffect(Color c){
+        cost=4;
 
         for(Player p: currentGame.getPlayers()){
             int numberOfStudents=p.getSchoolDashboard().getDiningRoom().get(c);
@@ -268,7 +325,6 @@ class AllRemoveColor extends CharacterCard{
                     p.getSchoolDashboard().removeStudentFromDiningRoom(c);
             }else if(numberOfStudents==1)
                 p.getSchoolDashboard().removeStudentFromDiningRoom(c);
-
 
         }
 
