@@ -11,6 +11,7 @@ public abstract class CharacterCard {
     public void setCurrentGame(Game currentGame) {
         this.currentGame = currentGame;
     }
+
 }
 
 class Choose1ToIsland extends CharacterCard{
@@ -27,7 +28,7 @@ class Choose1ToIsland extends CharacterCard{
         extracted=new EnumMap<>(Color.class);
         extractedFromBag= new EnumMap<>(Color.class);
         cost=1;
-        extracted=currentGame.extractFromBag(4);
+        extracted = currentGame.extractFromBag(4);
     }
 
     /**
@@ -56,6 +57,7 @@ class Choose1ToIsland extends CharacterCard{
 
 
     }
+
 
 }
 

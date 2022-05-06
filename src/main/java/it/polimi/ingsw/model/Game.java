@@ -14,13 +14,19 @@ public class Game {
     private ArrayList<CharacterCard> characterCards;
     private int totalCoins;
     private ArrayList<CloudCard> cloudCards;
-    private ArrayList<Color> unudesProfessors;
+    private ArrayList<Color> unusedProfessors;
+    boolean expertMode;
 
     public Game(int players) {
         if(players>3)
         {
             System.out.println("Maximum player count is 3, players have been set to 3");
             players = 3;
+        }
+        else if(players<2)
+        {
+            System.out.println("Minimum player count is 2, game has been set with 2 players");
+            players=2;
         }
         islands = new ArrayList<>();
 
@@ -30,6 +36,22 @@ public class Game {
         this.players = new ArrayList<>();
         for(int i=0;i < players; i++)
             this.players.add(new Player());
+
+
+        //inizializzo bag
+        bag= new EnumMap<>(Color.class);
+
+        bag.put(Color.YELLOW,26);
+        bag.put(Color.RED,26);
+        bag.put(Color.GREEN,26);
+        bag.put(Color.PINK,26);
+        bag.put(Color.BLUE,26);
+
+        // metodo scritto sotto che sceglie le 3 carte personaggio
+        characterCards= new ArrayList<>();
+
+        extract3CharacterCard();
+
     }
 
     public ArrayList<Player> getPlayers()
@@ -141,7 +163,6 @@ public class Game {
         return motherNaturePosition;
     }
 
-    //aggiunta io
     public Player getCurrentPlayer(){return currentPlayer;}
 
     public ArrayList<CharacterCard> getCharacterCards() {
@@ -195,7 +216,71 @@ public class Game {
         return sum;
     }
 
+    /**
+     *
+     * @return array with three different numbers from 0 to 11
+     */
+
+    private int[] extract3Numbers() {
+        Random random = new Random();
+        int tempAr[];
+        tempAr = new int[3];
+        int casuale = 0;
+
+        casuale = random.nextInt(12);
+        tempAr[0] = casuale;
+
+        do {
+            casuale = random.nextInt(12);
+            tempAr[1] = casuale;
+
+        } while (tempAr[1] == tempAr[0]);
+
+        do {
+            casuale = random.nextInt(12);
+            tempAr[2] = casuale;
+
+        } while (tempAr[2] == tempAr[1] || tempAr[2] == tempAr[0]);
+
+        return tempAr;
+    }
+
+    private void extract3CharacterCard(){
+        ArrayList<CharacterCard> allCharacterCards= new ArrayList<CharacterCard>();
+        int extracted[];
 
 
+        allCharacterCards.add(new Choose1ToIsland());
+        allCharacterCards.add(new TempControlProf());
+        allCharacterCards.add(new ChooseIsland());
+        allCharacterCards.add(new BlockTower());
+        allCharacterCards.add(new NoEntryIsland());
+        allCharacterCards.add(new TwoAdditionalMoves());
+        allCharacterCards.add(new Choose3toEntrance());
+        allCharacterCards.add(new Plus2Influence());
+        allCharacterCards.add(new BlockColorOnce());
+        allCharacterCards.add(new Exchange2Students());
+        allCharacterCards.add(new Choose1DiningRoom());
+        allCharacterCards.add(new AllRemoveColor());
 
+        //estraggo 3 numeri e li metto in array
+
+        extracted=extract3Numbers();
+        //metto in arraylist characterCards le carte corrispondenti
+        //alle posizioni dei valori estratti di extracted dell'arraylist allCharacteCards
+
+
+        characterCards.add( allCharacterCards.get(extracted[0]));
+        characterCards.add( allCharacterCards.get(extracted[1]));
+        characterCards.add( allCharacterCards.get(extracted[2]));
+
+    }
+
+    public int getTotalCoins() {
+        return totalCoins;
+    }
+
+    public void decreaseTotalCoins(){
+        totalCoins=totalCoins-1;
+    }
 }

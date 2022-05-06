@@ -24,5 +24,10 @@ public class GameHandler {
         for (CloudCard c : game.getCloudCards()) {
             c.setCurrentGame(game);
         }
+
+        for(CharacterCard c: game.getCharacterCards()){
+            c.setCurrentGame(game);
+        }
+
     }
 }
