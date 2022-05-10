@@ -10,11 +10,11 @@ public class Game {
     private final int MAX_ISLANDS = 12;
     private ArrayList<IslandGroup> islands;
     private ArrayList<Player> players;
-    private Player currentPlayer;
+    private int currentPlayer;
     private ArrayList<CharacterCard> characterCards;
     private int totalCoins;
     private ArrayList<CloudCard> cloudCards;
-    private ArrayList<Color> unudesProfessors;
+    private ArrayList<Color> unusedProfessors;
 
     public Game(int players) {
         if(players>3)
@@ -143,7 +143,7 @@ public class Game {
     }
 
     //aggiunta io
-    public Player getCurrentPlayer(){return currentPlayer;}
+    public int getCurrentPlayer(){return currentPlayer;}
 
     public ArrayList<CharacterCard> getCharacterCards() {
         return characterCards;
@@ -174,5 +174,13 @@ public class Game {
         }
 
         return sum;
+    }
+
+    public ArrayList<Color> getUnusedProfessors() {
+        return unusedProfessors;
+    }
+    public void removeUnusedProfessor(Color color)
+    {
+        unusedProfessors.remove(color);
     }
 }

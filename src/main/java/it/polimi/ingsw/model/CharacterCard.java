@@ -89,7 +89,7 @@ class TwoAdditionalMoves extends CharacterCard{
         cost=1;
     }
     public void doEffect() {
-        currentGame.getCurrentPlayer().setMaxPosition(currentGame.getCurrentPlayer().getMaxPosition()+2);
+        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setMaxPosition(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getMaxPosition()+2);
     }
 }
 
@@ -98,7 +98,7 @@ class Choose3toEntrance extends CharacterCard {
     private int cost;
 
     public Choose3toEntrance() {
-        extracted = new EnumMap<Color, Integer>(Color.class);
+        extracted = new EnumMap<>(Color.class);
         extracted = currentGame.extractFromBag(6);
         cost = 1;
     }
@@ -119,7 +119,7 @@ class Choose3toEntrance extends CharacterCard {
 
                 chosenFromCard.put(c, chosenFromCard.get(c) - 1);
                 extracted.put(c, extracted.get(c) - 1);
-                currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToEntrance(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(c);
 
             }
 
@@ -132,7 +132,7 @@ class Choose3toEntrance extends CharacterCard {
                     extracted.putIfAbsent(c,1);
                 else
                 extracted.put(c, extracted.get(c)+1);
-                currentGame.getCurrentPlayer().getSchoolDashboard().removeStudentFromEntrance(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
             }
 
 
@@ -192,8 +192,8 @@ class Exchange2Students extends CharacterCard{
             while(chosenFromEntrance.get(c)>0){
 
                 chosenFromEntrance.put(c,chosenFromEntrance.get(c)-1);
-                currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToDiningRoom(c);
-                currentGame.getCurrentPlayer().getSchoolDashboard().removeStudentFromEntrance(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
 
 
             }
@@ -202,8 +202,8 @@ class Exchange2Students extends CharacterCard{
         for(Color c : chosenFromDiningRoom.keySet()){
             while(chosenFromDiningRoom.get(c)>0){
                 chosenFromDiningRoom.put(c,chosenFromDiningRoom.get(c)-1);
-                currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToEntrance(c);
-                currentGame.getCurrentPlayer().getSchoolDashboard().removeStudentFromDiningRoom(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromDiningRoom(c);
             }
         }
 
@@ -229,7 +229,7 @@ class Choose1DiningRoom extends CharacterCard{
      * @param c color of the student
      */
     public void doEffect(Color c){
-        currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToDiningRoom(c);
+        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(c);
         extracted.put(c, extracted.get(c)-1);
 
         extractedFromBag =  currentGame.extractFromBag(1);

@@ -90,14 +90,44 @@ public class SchoolDashboard {
     }
 
     /**
-     * adds a student to the Dining Room
+     * adds a student to the Dining Room, and if the students of that color in that dining room, are more than the other players, move a professor.
      * @param color student color
      * @throws NullPointerException if color is null
      */
     public void addStudentToDiningRoom(Color color) throws NullPointerException
     {
+        boolean hasMoreStudents = true;
         diningRoom.putIfAbsent(color, 0);
         diningRoom.put(color,diningRoom.get(color)+1);
+
+        //for each player different from the current player, check the number of students in his dining room, if they are less then add a professor to currentplayer
+        for(int i=0; i<currentGame.getPlayers().size();i++)
+        {
+            if(i!=currentGame.getCurrentPlayer())
+            {
+                //checks all players, if any of them has a number of students of the chosen color larger than the current player, sets hasMoreStudents to false
+                if(currentGame.getPlayers().get(i).getSchoolDashboard().getDiningRoom().get(color)>
+                        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(color))
+                {
+                    hasMoreStudents=false;
+                }
+                //if player i has less students and has the professor, move the professor
+                if(currentGame.getPlayers().get(i).getSchoolDashboard().getProfessors().contains(color) && hasMoreStudents)
+                {
+                    currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
+                    currentGame.getPlayers().get(i).getSchoolDashboard().removeProfessor(color);
+                    hasMoreStudents=false;
+                }
+
+            }
+        }
+        //if no player has more students than the current player, and no player has the chosen professor color, remove a professor from current game
+        if(hasMoreStudents)
+        {
+            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
+            currentGame.getUnusedProfessors().remove(color);
+        }
+
     }
 
     public void removeStudentFromDiningRoom(Color color) throws NullPointerException{
@@ -113,6 +143,11 @@ public class SchoolDashboard {
     {
         if(professors.contains(color)) throw new IllegalArgumentException("There is already a color of that professor");
         professors.add(color);
+    }
+
+    public ArrayList<Color> getProfessors()
+    {
+        return professors;
     }
 
 
