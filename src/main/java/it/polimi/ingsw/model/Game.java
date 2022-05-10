@@ -10,7 +10,7 @@ public class Game {
     private final int MAX_ISLANDS = 12;
     private ArrayList<IslandGroup> islands;
     private ArrayList<Player> players;
-    private Player currentPlayer;
+    private int currentPlayer;
     private ArrayList<CharacterCard> characterCards;
     private int totalCoins;
     private ArrayList<CloudCard> cloudCards;
@@ -163,7 +163,7 @@ public class Game {
         return motherNaturePosition;
     }
 
-    public Player getCurrentPlayer(){return currentPlayer;}
+    public int getCurrentPlayer(){return currentPlayer;}
 
     public ArrayList<CharacterCard> getCharacterCards() {
         return characterCards;
@@ -282,5 +282,9 @@ public class Game {
 
     public void decreaseTotalCoins(){
         totalCoins=totalCoins-1;
+    }
+
+    public ArrayList<Color> getUnusedProfessors() {
+        return unusedProfessors;
     }
 }
