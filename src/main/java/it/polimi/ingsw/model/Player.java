@@ -96,4 +96,9 @@ public class Player {
         return professors.contains(c);
     }
 
+    public void chooseCharacterCard(int i){
+
+
+    }
+
 }

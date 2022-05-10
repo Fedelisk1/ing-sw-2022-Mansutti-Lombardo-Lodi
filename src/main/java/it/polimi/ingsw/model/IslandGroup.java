@@ -5,9 +5,9 @@ import java.util.EnumMap;
 public class IslandGroup {
     private int islandCount = 1;
     private Player occupiedBy;
-    private final boolean noEntryTile = false;
     private final EnumMap<Color, Integer> students = new EnumMap<>(Color.class);
     private boolean blockColorOnce_CC=false;
+    private Color blockedColor;
     private boolean plus2Influence_CC=false;
     private boolean blockTower_CC=false;
     private boolean noEntryIsland=false;
@@ -15,6 +15,7 @@ public class IslandGroup {
     /**
      * Island constructor. Initializes the island with 0 students for each color
      */
+
     public IslandGroup() {
         for (Color c : Color.values())
             students.put(c, 0);
@@ -86,5 +87,13 @@ public class IslandGroup {
 
     public void setNoEntryIsland(boolean noEntryIsland) {
         this.noEntryIsland = noEntryIsland;
+    }
+
+    public void setBlockedColor(Color blockedColor) {
+        this.blockedColor = blockedColor;
+    }
+
+    public Color getBlockedColor() {
+        return blockedColor;
     }
 }
