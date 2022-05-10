@@ -15,6 +15,7 @@ public class IslandGroup {
     /**
      * Island constructor. Initializes the island with 0 students for each color
      */
+
     public IslandGroup() {
         for (Color c : Color.values())
             students.put(c, 0);

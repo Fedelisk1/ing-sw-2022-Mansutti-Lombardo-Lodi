@@ -11,6 +11,7 @@ public abstract class CharacterCard {
     public void setCurrentGame(Game currentGame) {
         this.currentGame = currentGame;
     }
+
 }
 
 class Choose1ToIsland extends CharacterCard{
@@ -27,7 +28,7 @@ class Choose1ToIsland extends CharacterCard{
         extracted=new EnumMap<>(Color.class);
         extractedFromBag= new EnumMap<>(Color.class);
         cost=1;
-        extracted=currentGame.extractFromBag(4);
+        extracted = currentGame.extractFromBag(4);
     }
 
     /**
@@ -56,6 +57,7 @@ class Choose1ToIsland extends CharacterCard{
 
 
     }
+
 
 }
 
@@ -127,7 +129,7 @@ class TwoAdditionalMoves extends CharacterCard{
 
     public void doEffect() {
         cost=2;
-        currentGame.getCurrentPlayer().setMaxPosition(currentGame.getCurrentPlayer().getMaxPosition()+2);
+        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setMaxPosition(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getMaxPosition()+2);
     }
 }
 
@@ -158,7 +160,7 @@ class Choose3toEntrance extends CharacterCard {
 
                 chosenFromCard.put(c, chosenFromCard.get(c) - 1);
                 extracted.put(c, extracted.get(c) - 1);
-                currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToEntrance(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(c);
 
             }
 
@@ -171,7 +173,7 @@ class Choose3toEntrance extends CharacterCard {
                     extracted.putIfAbsent(c,1);
                 else
                 extracted.put(c, extracted.get(c)+1);
-                currentGame.getCurrentPlayer().getSchoolDashboard().removeStudentFromEntrance(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
             }
 
 
@@ -247,8 +249,8 @@ class Exchange2Students extends CharacterCard{
             while(chosenFromEntrance.get(c)>0){
 
                 chosenFromEntrance.put(c,chosenFromEntrance.get(c)-1);
-                currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToDiningRoom(c);
-                currentGame.getCurrentPlayer().getSchoolDashboard().removeStudentFromEntrance(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
 
 
             }
@@ -257,8 +259,8 @@ class Exchange2Students extends CharacterCard{
         for(Color c : chosenFromDiningRoom.keySet()){
             while(chosenFromDiningRoom.get(c)>0){
                 chosenFromDiningRoom.put(c,chosenFromDiningRoom.get(c)-1);
-                currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToEntrance(c);
-                currentGame.getCurrentPlayer().getSchoolDashboard().removeStudentFromDiningRoom(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(c);
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromDiningRoom(c);
             }
         }
 
@@ -285,7 +287,7 @@ class Choose1DiningRoom extends CharacterCard{
      */
     public void doEffect(Color c){
         cost=3;
-        currentGame.getCurrentPlayer().getSchoolDashboard().addStudentToDiningRoom(c);
+        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(c);
         extracted.put(c, extracted.get(c)-1);
 
         extractedFromBag =  currentGame.extractFromBag(1);
