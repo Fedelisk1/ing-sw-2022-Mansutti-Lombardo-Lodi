@@ -110,6 +110,14 @@ public class Game {
         return extracted;
     }
 
+    /**
+     * extracts one single student from the bag
+     * @return color of the extracted student
+     */
+    public Color extractFromBag() {
+        return extractFromBag(1).keySet().stream().findFirst().get();
+    }
+
 
     /**
      * method addToBag if bag does not contains Color c then this is added, else
