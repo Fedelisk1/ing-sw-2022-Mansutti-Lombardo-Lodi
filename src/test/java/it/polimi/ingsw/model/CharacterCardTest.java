@@ -24,6 +24,7 @@ class Choose1ToIslandTest{
         p.setCurrentGame(game);
         p.init();
 
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(0);
 
         //controlliamo se sono 4 gli studenti di extracted
         int sum=0;
@@ -61,13 +62,15 @@ class Choose1ToIslandTest{
 }
 
 
+
+
 class TwoAdditionalMovesTest {
     @Test
     public void testDoEffect() {
         Game game = new Game(2);
         TwoAdditionalMoves p= new TwoAdditionalMoves();
         p.setCurrentGame(game);
-
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
         int x= game.getPlayers().get(game.getCurrentPlayer()).getMaxPosition();
         p.doEffect();
         assertEquals(x+2,game.getPlayers().get(game.getCurrentPlayer()).getMaxPosition());
@@ -80,7 +83,7 @@ class NoEntryIslandTest{
         Game game = new Game(2);
         NoEntryIsland p=new NoEntryIsland();
         p.setCurrentGame(game);
-
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
         int islNumb=1;
 
         assertEquals(2,p.cost);
@@ -102,6 +105,7 @@ class BlockTowerTest{
         Game game = new Game(2);
         BlockTower p=new BlockTower();
         p.setCurrentGame(game);
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
 
         assertEquals(3,p.cost);
 
@@ -123,6 +127,7 @@ class Plus2InfluenceTest{
         Game game = new Game(2);
         Plus2Influence p= new Plus2Influence();
         p.setCurrentGame(game);
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
 
         assertEquals(2,p.cost);
         assertEquals(false,game.getIslands().get(game.getMotherNaturePosition()).isPlus2Influence_CC());
@@ -139,7 +144,7 @@ class BlockColorOnceTest{
         Game game = new Game(2);
         BlockColorOnce p= new BlockColorOnce();
         p.setCurrentGame(game);
-
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
         Color choosen=Color.YELLOW;
 
         assertEquals(3,p.cost);
@@ -161,6 +166,7 @@ class Exchange2StudentsTest{
         Game game = new Game(2);
         Exchange2Students p=new Exchange2Students();
         p.setCurrentGame(game);
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
         game.getPlayers().get(0).setCurrentGame(game);
         game.getPlayers().get(0).getSchoolDashboard().setCurrentGame(game);
 
@@ -225,6 +231,7 @@ class Choose1DiningRoomTest{
         Game game= new Game(2);
         Choose1DiningRoom p=new Choose1DiningRoom();
         p.setCurrentGame(game);
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
         game.getPlayers().get(0).setCurrentGame(game);
         game.getPlayers().get(0).getSchoolDashboard().setCurrentGame(game);
         game.getPlayers().get(1).setCurrentGame(game);
@@ -255,6 +262,7 @@ class AllRemoveColorTest{
         Game game=new Game(3);
         AllRemoveColor p= new AllRemoveColor();
         p.setCurrentGame(game);
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
 
         for(Player g: game.getPlayers()){
             g.setCurrentGame(game);
@@ -289,6 +297,7 @@ class Choose3toEntranceTest{
         Game game = new Game(2);
         Choose3toEntrance p = new Choose3toEntrance();
         p.setCurrentGame(game);
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
         game.getPlayers().get(game.getCurrentPlayer()).setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().setCurrentGame(game);
 
