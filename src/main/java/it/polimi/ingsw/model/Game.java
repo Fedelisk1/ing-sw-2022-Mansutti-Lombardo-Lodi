@@ -264,7 +264,7 @@ public class Game {
         return tempAr;
     }
 
-    private void extract3CharacterCard(){
+    public void extract3CharacterCard(){
         ArrayList<CharacterCard> allCharacterCards= new ArrayList<CharacterCard>();
         int extracted[];
 

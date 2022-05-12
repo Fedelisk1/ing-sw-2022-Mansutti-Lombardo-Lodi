@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.Game;
 public class GameHandler {
     private Game game;
 
-    public void gameStart(int playerCount)
+    public void gameStart(int playerCount,boolean expMode)
     {
         game = new Game(playerCount);
 
@@ -25,7 +25,7 @@ public class GameHandler {
             c.setCurrentGame(game);
         }
 
-        for(CharacterCard c: game.getCharacterCards()){
+        for (CharacterCard c : game.getCharacterCards()) {
             c.setCurrentGame(game);
         }
 
