@@ -16,14 +16,17 @@ public class Player {
 
 
 
-
     /** each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
     public Player()
     {
         hand = new Hand();
         schoolDashboard = new SchoolDashboard();
-        coins = 0;
+        for(Color c: Color.values())
+            schoolDashboard.getDiningRoom().put(c,0);
 
+        coins = 0;
+        maxPosition=0;
+        professors=new ArrayList<>();
     }
 
     public void setCurrentGame(Game game)

@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model;
 
+
 import java.util.EnumMap;
 
 public abstract class CharacterCard {
     public int cost;
-    public boolean used;
     public Game currentGame;
 
 
@@ -24,10 +24,13 @@ class Choose1ToIsland extends CharacterCard{
 
 
     public Choose1ToIsland() {
-        
         extracted=new EnumMap<>(Color.class);
         extractedFromBag= new EnumMap<>(Color.class);
         cost=1;
+       // extracted = currentGame.extractFromBag(4);
+    }
+
+    public void init(){
         extracted = currentGame.extractFromBag(4);
     }
 
@@ -40,25 +43,30 @@ class Choose1ToIsland extends CharacterCard{
     public void doEffect(Color c,int islandNumber) {
 
          cost=2;
+         if(!extracted.containsKey(c)) throw new IllegalArgumentException ("Not present");
+         else{
          extracted.put(c, extracted.get(c)-1);
 
          currentGame.getIslands().get(islandNumber).addStudents(c);
 
          extractedFromBag =  currentGame.extractFromBag(1);
 
-         for(Color x: extractedFromBag.keySet()){
-               if (!extracted.containsKey(x))
-                   extracted.put(x, 1);
-               else extracted.put(x, extracted.get(x) + 1);
+         for(Color x: extractedFromBag.keySet()) {
+             if (!extracted.containsKey(x))
+                 extracted.put(x, 1);
+             else extracted.put(x, extracted.get(x) + 1);
 
-              extractedFromBag.remove(x);
+             extractedFromBag.remove(x);
+         }
         }
 
 
 
     }
 
-
+    public EnumMap<Color, Integer> getExtracted() {
+        return extracted;
+    }
 }
 
 class TempControlProf extends CharacterCard{
@@ -68,9 +76,35 @@ class TempControlProf extends CharacterCard{
         cost=2;
     }
 
+    /**
+     * DA CONTROLLARE
+     */
+
     public void doEffect(){
         cost=3;
+
+        for(Player p: currentGame.getPlayers()){
+
+            if(p!=currentGame.getPlayers().get(currentGame.getCurrentPlayer())){
+
+                for(Color c: Color.values()){
+
+                    if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(c)==p.getSchoolDashboard().getDiningRoom().get(c)){
+                        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(c);
+                        //fa quello che deve ma come viene gestito il fatto di rimuovere il professore appena finisce il turno?
+                    }
+
+                }
+            }
+
+        }
+
+
+
     }
+
+
+
 }
 
 class ChooseIsland extends CharacterCard{
@@ -105,13 +139,14 @@ class NoEntryIsland extends CharacterCard{
     /**
      * Set true the boolean noEntryIsland of IslandGroup and decrement availableUses
      */
-    public void doEffect(){
+    public void doEffect(int islNumb){
         cost=3;
 
         if(availableUses>0){
 
             availableUses=availableUses-1;
-            currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setNoEntryIsland(true);
+           currentGame.getIslands().get(islNumb).setNoEntryIsland(true);
+
 
         }else  throw new IllegalArgumentException("Maximum number of effect uses");
 
@@ -140,8 +175,16 @@ class Choose3toEntrance extends CharacterCard {
     public Choose3toEntrance() {
 
         extracted = new EnumMap<Color, Integer>(Color.class);
-        extracted = currentGame.extractFromBag(6);
+
         cost = 1;
+    }
+
+    public void init(){
+        extracted = currentGame.extractFromBag(6);
+    }
+
+    public void setExtracted(EnumMap<Color, Integer> extracted) {
+        this.extracted = extracted;
     }
 
     /**
@@ -151,26 +194,30 @@ class Choose3toEntrance extends CharacterCard {
      *
      */
 
-    public void doEffect(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance) {
+    public void doEffect(EnumMap<Color,Integer> chosenFromCard , EnumMap<Color,Integer> chosenFromEntrance) {
         cost=2;
-        if(totalNumberofStudent(chosenFromEntrance)!=totalNumberofStudent(chosenFromCard))throw new IllegalArgumentException("different number of selected students");
+        EnumMap<Color,Integer> support1 =new EnumMap<>(Color.class);
+        EnumMap<Color,Integer> support2 =new EnumMap<>(Color.class);
+        support1=chosenFromCard.clone();
+        support2=chosenFromEntrance.clone();
+        if(totalNumberofStudent(support1)!=totalNumberofStudent(support2))throw new IllegalArgumentException("different number of selected students");
+
 
         for (Color c : chosenFromCard.keySet()) {
+
             while (chosenFromCard.get(c) > 0){
 
                 chosenFromCard.put(c, chosenFromCard.get(c) - 1);
                 extracted.put(c, extracted.get(c) - 1);
                 currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(c);
-
             }
-
 
         }
         for(Color c : chosenFromEntrance.keySet()){
             while(chosenFromEntrance.get(c)>0){
                 chosenFromEntrance.put(c, chosenFromEntrance.get(c)-1);
                 if(extracted.get(c)==null)
-                    extracted.putIfAbsent(c,1);
+                    extracted.put(c,1);
                 else
                 extracted.put(c, extracted.get(c)+1);
                 currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
@@ -178,6 +225,10 @@ class Choose3toEntrance extends CharacterCard {
 
 
         }
+    }
+
+    public EnumMap<Color, Integer> getExtracted() {
+        return extracted;
     }
 
     /**
@@ -277,8 +328,13 @@ class Choose1DiningRoom extends CharacterCard{
         cost=2;
         extracted=new EnumMap<>(Color.class);
         extractedFromBag=new EnumMap<>(Color.class);
-        extracted= currentGame.extractFromBag(4);
 
+
+    }
+    public void init(){extracted= currentGame.extractFromBag(4);}
+
+    public EnumMap<Color, Integer> getExtracted() {
+        return extracted;
     }
 
     /**
@@ -286,6 +342,8 @@ class Choose1DiningRoom extends CharacterCard{
      * @param c color of the student
      */
     public void doEffect(Color c){
+        if(!extracted.containsKey(c)) throw new IllegalArgumentException ("Not present");
+
         cost=3;
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(c);
         extracted.put(c, extracted.get(c)-1);

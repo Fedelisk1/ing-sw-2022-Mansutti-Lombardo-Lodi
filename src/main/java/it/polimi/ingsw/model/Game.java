@@ -37,6 +37,10 @@ public class Game {
         for(int i=0;i < players; i++)
             this.players.add(new Player());
 
+        //inizializzo unused professor
+        unusedProfessors = new ArrayList<>();
+        for(Color c : Color.values())
+        unusedProfessors.add(c);
 
         //inizializzo bag
         bag= new EnumMap<>(Color.class);
@@ -47,10 +51,11 @@ public class Game {
         bag.put(Color.PINK,26);
         bag.put(Color.BLUE,26);
 
-        // metodo scritto sotto che sceglie le 3 carte personaggio
-        characterCards= new ArrayList<>();
+        //metodo scritto sotto che sceglie le 3 carte personaggio
 
-        extract3CharacterCard();
+       // characterCards= new ArrayList<>();
+
+       // extract3CharacterCard();
 
     }
 
@@ -126,7 +131,9 @@ public class Game {
             if (bag.get(Color.values()[extractcolor]) > 0) {
 
                 bag.put(Color.values()[extractcolor], bag.get(Color.values()[extractcolor]) - 1);
+                if(extracted.get(Color.values()[extractcolor])!=null)
                 extracted.put(Color.values()[extractcolor],extracted.get(Color.values()[extractcolor])+1);
+                else extracted.put(Color.values()[extractcolor],1);
             }
         }
         return extracted;
@@ -191,12 +198,16 @@ public class Game {
     public int countInfluence(Player p,IslandGroup isl){
 
         if(isl.isBlockColorOnce_CC()){
-            return countInfluenceTowers(p,isl)+countInfluenceStudents(p,isl)-isl.getStudents(isl.getBlockedColor());
+            int x=countInfluenceTowers(p,isl)+countInfluenceStudents(p,isl)-isl.getStudents(isl.getBlockedColor());
+            isl.setBlockedColor(null);
+            return x;
         }
         else if(isl.isPlus2Influence_CC()){
+            isl.setPlus2Influence_CC(false);
             return countInfluenceStudents(p,isl)+countInfluenceTowers(p,isl)+2;
         }
         else if(isl.isNoEntryIsland()) {
+            isl.setNoEntryIsland(false);
             throw new IllegalArgumentException("Influence cannot be calculated after activating the character card");
         }
         else if(isl.isBlockTower_CC()){
@@ -236,17 +247,17 @@ public class Game {
         int casuale = 0;
 
         casuale = random.nextInt(12);
-        tempAr[0] = casuale;
+        tempAr[0] = casuale +1;
 
         do {
             casuale = random.nextInt(12);
-            tempAr[1] = casuale;
+            tempAr[1] = casuale +1;
 
         } while (tempAr[1] == tempAr[0]);
 
         do {
             casuale = random.nextInt(12);
-            tempAr[2] = casuale;
+            tempAr[2] = casuale +1;
 
         } while (tempAr[2] == tempAr[1] || tempAr[2] == tempAr[0]);
 
@@ -257,32 +268,42 @@ public class Game {
         ArrayList<CharacterCard> allCharacterCards= new ArrayList<CharacterCard>();
         int extracted[];
 
-
-        allCharacterCards.add(new Choose1ToIsland());
-        allCharacterCards.add(new TempControlProf());
-        allCharacterCards.add(new ChooseIsland());
-        allCharacterCards.add(new BlockTower());
-        allCharacterCards.add(new NoEntryIsland());
-        allCharacterCards.add(new TwoAdditionalMoves());
-        allCharacterCards.add(new Choose3toEntrance());
-        allCharacterCards.add(new Plus2Influence());
-        allCharacterCards.add(new BlockColorOnce());
-        allCharacterCards.add(new Exchange2Students());
-        allCharacterCards.add(new Choose1DiningRoom());
-        allCharacterCards.add(new AllRemoveColor());
-
-        //estraggo 3 numeri e li metto in array
-
+        //estraggo 3 numeri e li metto in array extracted
         extracted=extract3Numbers();
-        //metto in arraylist characterCards le carte corrispondenti
-        //alle posizioni dei valori estratti di extracted dell'arraylist allCharacteCards
 
-
-        characterCards.add( allCharacterCards.get(extracted[0]));
-        characterCards.add( allCharacterCards.get(extracted[1]));
-        characterCards.add( allCharacterCards.get(extracted[2]));
+        //eseguo il ciclo 3 volte per generare i 3 CharacterCards
+        for(int i = 0;i<3;i++){
+            switch (extracted[i]){
+                case 1:
+                    characterCards.add(new Choose1ToIsland());
+                case 2:
+                    characterCards.add(new TempControlProf());
+                case 3:
+                    characterCards.add(new ChooseIsland());
+                case 4:
+                    characterCards.add(new BlockTower());
+                case 5:
+                    characterCards.add(new NoEntryIsland());
+                case 6:
+                    characterCards.add(new TwoAdditionalMoves());
+                case 7:
+                    characterCards.add(new Choose3toEntrance());
+                case 8:
+                    characterCards.add(new Plus2Influence());
+                case 9:
+                    characterCards.add(new BlockColorOnce());
+                case 10:
+                    characterCards.add(new Exchange2Students());
+                case 11:
+                    characterCards.add(new Choose1DiningRoom());
+                case 12:
+                    characterCards.add(new AllRemoveColor());
+            }
+        }
 
     }
+
+
 
     public int getTotalCoins() {
         return totalCoins;
@@ -294,5 +315,10 @@ public class Game {
 
     public ArrayList<Color> getUnusedProfessors() {
         return unusedProfessors;
+    }
+
+    public void addCharacterCard(CharacterCard c){
+        characterCards.add(c);
+
     }
 }

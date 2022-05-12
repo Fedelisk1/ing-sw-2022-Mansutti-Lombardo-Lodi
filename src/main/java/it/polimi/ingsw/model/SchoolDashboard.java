@@ -106,7 +106,7 @@ public class SchoolDashboard {
             if(i!=currentGame.getCurrentPlayer())
             {
                 //checks all players, if any of them has a number of students of the chosen color larger than the current player, sets hasMoreStudents to false
-                if(currentGame.getPlayers().get(i).getSchoolDashboard().getDiningRoom().get(color)>
+                if(currentGame.getPlayers().get(i).getSchoolDashboard().getDiningRoom().get(color)<
                         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(color))
                 {
                     hasMoreStudents=false;

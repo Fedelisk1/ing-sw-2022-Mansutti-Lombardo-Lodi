@@ -11,7 +11,6 @@ public class CloudCard {
 
 
     public void fillStudents(EnumMap<Color,Integer> students){
-
         students = currentGame.extractFromBag(3);
 
     }
