@@ -34,15 +34,19 @@ public class Game {
             islands.add(new IslandGroup());
 
         this.players = new ArrayList<>();
-        for(int i=0;i < players; i++)
-            this.players.add(new Player());
+        for(int i=0;i < players; i++) {
+            Player p = new Player();
+            p.setCurrentGame(this);
+            p.getSchoolDashboard().setCurrentGame(this);
+            this.players.add(p);
+        }
 
-        //inizializzo unused professor
+        //unused professor init
         unusedProfessors = new ArrayList<>();
         for(Color c : Color.values())
-        unusedProfessors.add(c);
+            unusedProfessors.add(c);
 
-        //inizializzo bag
+        // bag init
         bag= new EnumMap<>(Color.class);
 
         bag.put(Color.YELLOW,26);
@@ -51,12 +55,17 @@ public class Game {
         bag.put(Color.PINK,26);
         bag.put(Color.BLUE,26);
 
-        //metodo scritto sotto che sceglie le 3 carte personaggio
+        characterCards = new ArrayList<>();
+        extract3CharacterCard();
 
-       // characterCards= new ArrayList<>();
+        for (CharacterCard c : getCharacterCards()) {
+            c.setCurrentGame(this);
+        }
 
-       // extract3CharacterCard();
-
+        cloudCards = new ArrayList<>();
+        for (CloudCard c : getCloudCards()) {
+            c.setCurrentGame(this);
+        }
     }
 
     public ArrayList<Player> getPlayers()
@@ -268,10 +277,10 @@ public class Game {
         ArrayList<CharacterCard> allCharacterCards= new ArrayList<CharacterCard>();
         int extracted[];
 
-        //estraggo 3 numeri e li metto in array extracted
+        // extract 3 random numbers
         extracted=extract3Numbers();
 
-        //eseguo il ciclo 3 volte per generare i 3 CharacterCards
+        // loop through extracted numbers
         for(int i = 0;i<3;i++){
             switch (extracted[i]){
                 case 1:

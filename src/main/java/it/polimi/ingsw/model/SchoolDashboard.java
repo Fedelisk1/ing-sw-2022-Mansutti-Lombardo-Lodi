@@ -18,7 +18,6 @@ public class SchoolDashboard {
         towers = 8;
         entrance = new EnumMap<>(Color.class);
         diningRoom = new EnumMap<>(Color.class);
-
     }
 
     public void setCurrentGame(Game currentGame) {
