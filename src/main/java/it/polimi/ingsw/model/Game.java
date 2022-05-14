@@ -189,6 +189,10 @@ public class Game {
 
     public int getCurrentPlayer(){return currentPlayer;}
 
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
     public ArrayList<CharacterCard> getCharacterCards() {
         return characterCards;
     }

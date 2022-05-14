@@ -98,12 +98,55 @@ class SchoolDashboardTest
     @Test
     public void moveStudentToDiningRoom()
     {
+        game.setCurrentPlayer(1);
+
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
         game.getPlayers().get(1).getSchoolDashboard().moveStudentToDiningRoom(Color.YELLOW);
+
         Assertions.assertEquals(0, game.getPlayers().get(1).getSchoolDashboard().getEntrance().get(Color.YELLOW));
         Assertions.assertEquals(1, game.getPlayers().get(1).getSchoolDashboard().getDiningRoom().get(Color.YELLOW));
 
     }
+
+    @Test
+    public void addStudentToDiningRoom()
+    {
+        //one yellow student is added to player 1 dining room
+        game.setCurrentPlayer(1);
+        game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+
+        //player 1 now has the yellow professor
+        Assertions.assertTrue(game.getPlayers().get(1).getSchoolDashboard().getProfessors().contains(Color.YELLOW));
+
+        //2 yellow students are added to player 2 dining room
+        game.setCurrentPlayer(2);
+        game.getPlayers().get(2).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+        Assertions.assertFalse(game.getPlayers().get(2).getSchoolDashboard().getProfessors().contains(Color.YELLOW));
+        game.getPlayers().get(2).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+        Assertions.assertTrue(game.getPlayers().get(2).getSchoolDashboard().getProfessors().contains(Color.YELLOW));
+    }
+
+    @Test
+    public void removeStudentFromDiningRoom()
+    {
+        game.setCurrentPlayer(0);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.BLUE);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.BLUE);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().removeStudentFromDiningRoom(Color.BLUE);
+        Assertions.assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(Color.BLUE));
+    }
+
+    @Test
+    public void moveToIslandGroup()
+    {
+        game.setCurrentPlayer(0);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().moveToIslandGroup(Color.GREEN,1);
+        Assertions.assertEquals(0, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(Color.GREEN));
+        Assertions.assertEquals(1,game.getIslands().get(1).getStudents(Color.GREEN));
+    }
+
+
 
 
 

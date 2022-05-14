@@ -104,9 +104,12 @@ public class SchoolDashboard {
         {
             if(i!=currentGame.getCurrentPlayer())
             {
+                currentGame.getPlayers().get(i).getSchoolDashboard().getDiningRoom().putIfAbsent(color, 0);
+
                 //checks all players, if any of them has a number of students of the chosen color larger than the current player, sets hasMoreStudents to false
-                if(currentGame.getPlayers().get(i).getSchoolDashboard().getDiningRoom().get(color)<
-                        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(color))
+
+                if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(color)<=
+                        currentGame.getPlayers().get(i).getSchoolDashboard().getDiningRoom().get(color))
                 {
                     hasMoreStudents=false;
                 }
@@ -126,11 +129,12 @@ public class SchoolDashboard {
             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
             currentGame.getUnusedProfessors().remove(color);
         }
-
     }
 
     public void removeStudentFromDiningRoom(Color color) throws NullPointerException{
+
         diningRoom.put(color,diningRoom.get(color)-1);
+
     }
     /**
      *Adds a professor to the player's school dashboard
@@ -140,9 +144,9 @@ public class SchoolDashboard {
      */
     public void addProfessor(Color color) throws NullPointerException
     {
-        if(professors.contains(color)) throw new IllegalArgumentException("There is already a color of that professor");
         professors.add(color);
     }
+
 
     public ArrayList<Color> getProfessors()
     {
