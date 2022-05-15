@@ -70,7 +70,7 @@ public class Game {
         cloudCards = new ArrayList<>();
         for (CloudCard c : getCloudCards()) {
             c.setCurrentGame(this);
-            c.fillStudents();
+            c.setUp();
         }
     }
 
