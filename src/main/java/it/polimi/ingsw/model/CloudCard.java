@@ -8,23 +8,26 @@ public class CloudCard {
     private boolean full;
     private Game currentGame;
 
-    /**
-     * fill the card with 3 new students extracted from current game's bag
-     */
-    public void fillStudents() {
+    public CloudCard()
+    {
         students = currentGame.extractFromBag(3);
     }
 
-    public boolean isFilled() {
-        return students.size() == 3;
-    }
-
-    public EnumMap<Color, Integer> getStudents() {
+    public EnumMap<Color, Integer> getStudents()
+    {
         return students;
+    }
+    public void transferStudents()
+    {
+        for(Color color : students.keySet())
+        {
+            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getEntrance().put(color, currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(color)+ students.get(color));
+        }
+        students=new EnumMap<>(Color.class);
     }
 
     public void setCurrentGame(Game game) {
-        currentGame = game;
+        this.currentGame=game;
     }
 }
 

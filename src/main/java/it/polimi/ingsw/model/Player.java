@@ -9,7 +9,7 @@ public class Player {
     private SchoolDashboard schoolDashboard;
     private ArrayList<AssistantCard> discardPile;
     private int cardValue;
-    private int maxPosition;
+    private int maxSteps;
     private Game currentGame;
     private int count;
     private ArrayList<Color> professors;
@@ -25,8 +25,8 @@ public class Player {
             schoolDashboard.getDiningRoom().put(c,0);
 
         coins = 0;
-        maxPosition = 0;
-        professors = new ArrayList<>();
+        professors=new ArrayList<>();
+        discardPile=new ArrayList<>();
     }
 
     public void setCurrentGame(Game game)
@@ -39,13 +39,13 @@ public class Player {
         return cardValue;
     }
 
-    public int getMaxPosition() {
-        return maxPosition;
+    public int getMaxSteps() {
+        return maxSteps;
     }
 
     //aggiunta io
-    public void setMaxPosition(int maxPosition){
-        this.maxPosition=maxPosition;
+    public void setMaxSteps(int maxSteps){
+        this.maxSteps=maxSteps;
     }
 
     //aggiunta io
@@ -66,11 +66,12 @@ public class Player {
      */
     public void chooseAssistantCard(int i) throws IndexOutOfBoundsException
     {
-        maxPosition = hand.assistantCards.get(i).getMaxSteps();
+        maxSteps = hand.assistantCards.get(i).getMaxSteps();
         cardValue = hand.assistantCards.get(i).getCardValue();
         discardPile.add(hand.assistantCards.get(i));
         hand.assistantCards.remove(i);
     }
+
     public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, IllegalArgumentException
     {
         try {
@@ -95,21 +96,12 @@ public class Player {
     }
 
 
-    public boolean hasProfessor(Color c) {
-        for (Player p : currentGame.getPlayers()) {
-            SchoolDashboard sd = p.getSchoolDashboard();
-            int students = sd.getDiningRoom().get(c);
-            if(students > schoolDashboard.getDiningRoom().get(c))
-                return false;
-        }
-
-        return true;
-        //return professors.contains(c);
+    public boolean hasProfessor(Color c){
+        return professors.contains(c);
     }
 
-    public void chooseCharacterCard(int i){
-
-
+    public void chooseCloudCard(int i){
+        currentGame.getCloudCards().get(i).transferStudents();
     }
 
     public int getCoins() {

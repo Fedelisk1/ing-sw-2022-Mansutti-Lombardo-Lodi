@@ -149,6 +149,9 @@ public class SchoolDashboard {
             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
             currentGame.getUnusedProfessors().remove(color);
         }
+
+        if(diningRoom.get(color)%3==0)
+            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()+1);
     }
 
     public void removeStudentFromDiningRoom(Color color) throws NullPointerException{

@@ -71,9 +71,9 @@ class TwoAdditionalMovesTest {
         TwoAdditionalMoves p= new TwoAdditionalMoves();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
-        int x= game.getPlayers().get(game.getCurrentPlayer()).getMaxPosition();
+        int x= game.getPlayers().get(game.getCurrentPlayer()).getMaxSteps();
         p.doEffect();
-        assertEquals(x+2,game.getPlayers().get(game.getCurrentPlayer()).getMaxPosition());
+        assertEquals(x+2,game.getPlayers().get(game.getCurrentPlayer()).getMaxSteps());
     }
 
 }

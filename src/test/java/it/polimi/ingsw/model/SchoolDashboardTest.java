@@ -118,12 +118,17 @@ class SchoolDashboardTest
         //player 1 now has the yellow professor
         Assertions.assertTrue(game.getPlayers().get(1).getSchoolDashboard().getProfessors().contains(Color.YELLOW));
 
-        //2 yellow students are added to player 2 dining room
+        //2 yellow students are added to player 2 dining room, professor is now moved to player2
         game.setCurrentPlayer(2);
         game.getPlayers().get(2).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
         Assertions.assertFalse(game.getPlayers().get(2).getSchoolDashboard().getProfessors().contains(Color.YELLOW));
         game.getPlayers().get(2).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
         Assertions.assertTrue(game.getPlayers().get(2).getSchoolDashboard().getProfessors().contains(Color.YELLOW));
+
+        //adds one more student to player 2 dining room, checks if a coin is created
+        game.getPlayers().get(2).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+        Assertions.assertEquals(1, game.getPlayers().get(2).getCoins());
+
     }
 
     @Test
