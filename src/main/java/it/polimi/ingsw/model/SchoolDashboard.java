@@ -123,6 +123,8 @@ public class SchoolDashboard {
         diningRoom.putIfAbsent(color, 0);
         diningRoom.put(color,diningRoom.get(color)+1);
 
+        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).hasProfessor(color)) return;
+
         //for each player different from the current player, check the number of students in his dining room, if they are less then add a professor to currentplayer
         for(int i=0; i<currentGame.getPlayers().size();i++)
         {
