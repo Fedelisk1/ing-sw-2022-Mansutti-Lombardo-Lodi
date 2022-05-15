@@ -176,7 +176,7 @@ class TwoAdditionalMoves extends CharacterCard{
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=2;
-        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setMaxPosition(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getMaxPosition()+2);
+        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setMaxSteps(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getMaxSteps()+2);
     }
 }
 
