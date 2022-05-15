@@ -193,8 +193,9 @@ public class SchoolDashboard {
 
     public void removeProfessor(Color color) throws NullPointerException
     {
-        if(!professors.contains(color)) throw new IllegalArgumentException("There is no professor of such color");
 
+        if(!professors.contains(color)) throw new IllegalArgumentException("There is no professor of such color");
+        professors.remove(color);
     }
 
     /**
