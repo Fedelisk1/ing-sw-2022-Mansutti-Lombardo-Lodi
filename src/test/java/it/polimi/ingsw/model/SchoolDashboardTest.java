@@ -12,7 +12,7 @@ class SchoolDashboardTest
     @BeforeEach
     public void setUp()
     {
-        game = new Game(3);
+        game = new Game(3, true);
     }
     @Test
     public void RemoveTowersTest()

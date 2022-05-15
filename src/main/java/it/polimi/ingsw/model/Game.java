@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Random;
 
@@ -8,6 +9,7 @@ public class Game {
     private EnumMap<Color, Integer> bag;
     private int motherNaturePosition = 0;
     private final int MAX_ISLANDS = 12;
+    private final int MAX_BAG_STUDENTS = 130;
     private ArrayList<IslandGroup> islands;
     private ArrayList<Player> players;
     private int currentPlayer;
@@ -17,31 +19,31 @@ public class Game {
     private ArrayList<Color> unusedProfessors;
     boolean expertMode;
 
-    public Game(int players) {
-        if(players>3)
-        {
+    public Game(int players, boolean expertMode) {
+        if(players > 3) {
             System.out.println("Maximum player count is 3, players have been set to 3");
             players = 3;
-        }
-        else if(players<2)
-        {
+        } else if(players < 2) {
             System.out.println("Minimum player count is 2, game has been set with 2 players");
-            players=2;
+            players = 2;
         }
         islands = new ArrayList<>();
 
-        for(int i = 0; i < MAX_ISLANDS; i++)
-            islands.add(new IslandGroup());
+        for(int i = 0; i < MAX_ISLANDS; i++) {
+            IslandGroup ig = new IslandGroup();
+            islands.add(ig);
+        }
 
+        // players init
         this.players = new ArrayList<>();
-        for(int i=0;i < players; i++) {
+        for(int i = 0; i < players; i++) {
             Player p = new Player();
             p.setCurrentGame(this);
             p.getSchoolDashboard().setCurrentGame(this);
             this.players.add(p);
         }
 
-        //unused professor init
+        // unused professor init
         unusedProfessors = new ArrayList<>();
         for(Color c : Color.values())
             unusedProfessors.add(c);
@@ -49,23 +51,31 @@ public class Game {
         // bag init
         bag= new EnumMap<>(Color.class);
 
-        bag.put(Color.YELLOW,26);
-        bag.put(Color.RED,26);
-        bag.put(Color.GREEN,26);
-        bag.put(Color.PINK,26);
-        bag.put(Color.BLUE,26);
+        for (Color c : Color.values())
+            bag.put(c, MAX_BAG_STUDENTS / Color.values().length);
 
-        characterCards = new ArrayList<>();
-        extract3CharacterCard();
+        // characterCards init
+        if (expertMode) {
+            characterCards = new ArrayList<>();
+            extract3CharacterCard();
 
-        for (CharacterCard c : getCharacterCards()) {
-            c.setCurrentGame(this);
+            for (CharacterCard c : characterCards) {
+                c.setCurrentGame(this);
+            }
         }
 
+        this.expertMode = expertMode;
+
+        // cloudCards init
         cloudCards = new ArrayList<>();
         for (CloudCard c : getCloudCards()) {
             c.setCurrentGame(this);
+            c.fillStudents();
         }
+    }
+
+    public boolean isExpertMode() {
+        return  expertMode;
     }
 
     public ArrayList<Player> getPlayers()
@@ -129,11 +139,10 @@ public class Game {
      * @return a new EnumMap with the extracted students
      */
 
-    public EnumMap<Color,Integer> extractFromBag(int student){
+    public EnumMap<Color,Integer> extractFromBag(int student) {
+        EnumMap<Color,Integer> extracted = new EnumMap<>(Color.class);
 
-        EnumMap<Color,Integer> extracted= new EnumMap<>(Color.class);
-
-        for(int i=0;i<student;i++) {
+        for(int i = 0; i < student; i++) {
 
             int extractcolor = new Random().nextInt(bag.values().size());
 
@@ -146,6 +155,17 @@ public class Game {
             }
         }
         return extracted;
+    }
+
+    public int studentsInBag(Color color) {
+        return bag.containsKey(color) ? bag.get(color) : 0;
+    }
+
+    public int studentsInBag() {
+        int result = 0;
+        for (Color c : bag.keySet())
+            result += studentsInBag(c);
+        return result;
     }
 
     /**
@@ -203,34 +223,34 @@ public class Game {
 
     /**
      * This method calculates the influence
-     * @param p is the player
+     * @param player is the player
      * @param isl is the island
      * @return the calculation of the influence
      */
 
-    public int countInfluence(Player p,IslandGroup isl){
+    public int countInfluence(Player player, IslandGroup isl){
 
         if(isl.isBlockColorOnce_CC()){
-            int x=countInfluenceTowers(p,isl)+countInfluenceStudents(p,isl)-isl.getStudents(isl.getBlockedColor());
+            int x=countInfluenceTowers(player,isl)+countInfluenceStudents(player,isl)-isl.getStudents(isl.getBlockedColor());
             isl.setBlockedColor(null);
             return x;
         }
         else if(isl.isPlus2Influence_CC()){
             isl.setPlus2Influence_CC(false);
-            return countInfluenceStudents(p,isl)+countInfluenceTowers(p,isl)+2;
+            return countInfluenceStudents(player,isl)+countInfluenceTowers(player,isl)+2;
         }
         else if(isl.isNoEntryIsland()) {
             isl.setNoEntryIsland(false);
             throw new IllegalArgumentException("Influence cannot be calculated after activating the character card");
         }
         else if(isl.isBlockTower_CC()){
-            return countInfluenceStudents(p,isl);
+            return countInfluenceStudents(player,isl);
         }
-        else return countInfluenceTowers(p,isl)+countInfluenceStudents(p,isl);
+        else return countInfluenceTowers(player,isl)+countInfluenceStudents(player,isl);
 
     }
 
-    public int countInfluenceStudents(Player p,IslandGroup isl){
+    private int countInfluenceStudents(Player p, IslandGroup isl){
         int sum=0;
         for (Color c : isl.getStudents().keySet()){
             if(p.hasProfessor(c))
@@ -239,12 +259,15 @@ public class Game {
         return sum;
     }
 
-    public int countInfluenceTowers(Player p,IslandGroup isl){
+    private int countInfluenceTowers(Player p, IslandGroup isl){
         int sum=0;
 
-        if(isl.getOccupiedBy().equals(p)){
-            sum=sum+isl.getIslandCount();
-        }
+        if(isl.getOccupiedBy() == null)
+            return 0;
+
+        if(isl.getOccupiedBy().equals(p))
+            sum = isl.getIslandCount();
+
         return sum;
     }
 
@@ -279,7 +302,7 @@ public class Game {
 
     public void extract3CharacterCard(){
         ArrayList<CharacterCard> allCharacterCards= new ArrayList<CharacterCard>();
-        int extracted[];
+        int[] extracted;
 
         // extract 3 random numbers
         extracted=extract3Numbers();

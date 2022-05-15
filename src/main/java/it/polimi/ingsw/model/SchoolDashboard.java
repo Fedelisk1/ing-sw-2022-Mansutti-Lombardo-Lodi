@@ -70,6 +70,16 @@ public class SchoolDashboard {
         entrance.put(color,entrance.get(color)+1);
     }
 
+    /**
+     * increments the amount of student in entrance of the specified color by quantity
+     * @param color color of students to add
+     * @param quantity how many students to add
+     */
+    public void addStudentsToEntrance(Color color, int quantity) {
+        for (int i = 0; i < quantity; i++)
+            addStudentToEntrance(color);
+    }
+
 
     public EnumMap<Color, Integer> getDiningRoom()
     {
@@ -86,6 +96,16 @@ public class SchoolDashboard {
     {
         removeStudentFromEntrance(color);
         addStudentToDiningRoom(color);
+    }
+
+    /**
+     * moves the desired quantity of students of the specified color to the dining room
+     * @param color color of the students to move
+     * @param quantity how many students to move
+     */
+    public void moveStudentsToDiningRoom(Color color, int quantity) {
+        for (int i = 0; i < quantity; i++)
+            moveStudentToDiningRoom(color);
     }
 
     /**
@@ -171,15 +191,15 @@ public class SchoolDashboard {
     /**
      *
      * @param color of the student to me moved
-     * @param i islandGroup number
+     * @param islandIndex islandGroup number
      * @throws NullPointerException if color is null
      * @throws IllegalArgumentException if there is no specified color in the entrance
-     * @throws IndexOutOfBoundsException if i is out of range
+     * @throws IndexOutOfBoundsException if islandIndex is out of range
      */
-    public void moveToIslandGroup(Color color, int i) throws NullPointerException, IllegalArgumentException, IndexOutOfBoundsException
+    public void moveToIslandGroup(Color color, int islandIndex) throws NullPointerException, IllegalArgumentException, IndexOutOfBoundsException
     {
         removeStudentFromEntrance(color);
-        currentGame.getIslands().get(i).addStudents(color);
+        currentGame.getIslands().get(islandIndex).addStudents(color);
     }
 
 }

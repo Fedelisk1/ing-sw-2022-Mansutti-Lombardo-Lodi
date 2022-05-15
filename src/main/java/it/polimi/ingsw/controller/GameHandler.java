@@ -12,23 +12,6 @@ public class GameHandler {
 
     public void gameStart(int playerCount)
     {
-        game = new Game(playerCount);
-
-        /*
-        for (Player p : game.getPlayers())
-        {
-            p.setCurrentGame(game);
-            p.getSchoolDashboard().setCurrentGame(game);
-        }
-        */
-/*
-        for (CharacterCard c : game.getCharacterCards()) {
-            c.setCurrentGame(game);
-        }
-*/
-        for (CloudCard c : game.getCloudCards()) {
-            c.setCurrentGame(game);
-        }
-
+        game = new Game(playerCount, true);
     }
 }

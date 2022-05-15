@@ -25,8 +25,8 @@ public class Player {
             schoolDashboard.getDiningRoom().put(c,0);
 
         coins = 0;
-        maxPosition=0;
-        professors=new ArrayList<>();
+        maxPosition = 0;
+        professors = new ArrayList<>();
     }
 
     public void setCurrentGame(Game game)
@@ -95,8 +95,16 @@ public class Player {
     }
 
 
-    public boolean hasProfessor(Color c){
-        return professors.contains(c);
+    public boolean hasProfessor(Color c) {
+        for (Player p : currentGame.getPlayers()) {
+            SchoolDashboard sd = p.getSchoolDashboard();
+            int students = sd.getDiningRoom().get(c);
+            if(students > schoolDashboard.getDiningRoom().get(c))
+                return false;
+        }
+
+        return true;
+        //return professors.contains(c);
     }
 
     public void chooseCharacterCard(int i){

@@ -55,6 +55,10 @@ public class IslandGroup {
 
     public void incrementIslandCount() {incrementIslandCount(1);}
 
+    public void setOccupiedBy(Player player) {
+        occupiedBy = player;
+    }
+
     public Player getOccupiedBy() {return occupiedBy;}
 
     public boolean isBlockColorOnce_CC() {

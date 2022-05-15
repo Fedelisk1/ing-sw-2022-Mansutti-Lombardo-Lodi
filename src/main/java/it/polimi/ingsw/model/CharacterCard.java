@@ -16,8 +16,7 @@ public abstract class CharacterCard {
 
 class Choose1ToIsland extends CharacterCard{
 
-    private EnumMap<Color,Integer> extracted;
-    private EnumMap<Color,Integer> extractedFromBag;
+    private EnumMap<Color, Integer> extracted;
     private boolean used;
     private int cost;
 
@@ -25,7 +24,7 @@ class Choose1ToIsland extends CharacterCard{
 
     public Choose1ToIsland() {
         extracted=new EnumMap<>(Color.class);
-        extractedFromBag= new EnumMap<>(Color.class);
+
         cost=1;
     }
 
@@ -40,29 +39,29 @@ class Choose1ToIsland extends CharacterCard{
      */
 
     public void doEffect(Color c,int islandNumber) {
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
+        EnumMap<Color, Integer> extractedFromBag;
+
+        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() < cost) throw new IllegalArgumentException("Not enough coins ");
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
-         cost=2;
-         if(!extracted.containsKey(c)) throw new IllegalArgumentException ("Not present");
-         else{
-         extracted.put(c, extracted.get(c)-1);
+        cost=2;
+        if(!extracted.containsKey(c)) throw new IllegalArgumentException ("Not present");
+        else{
+            extracted.put(c, extracted.get(c)-1);
 
-         currentGame.getIslands().get(islandNumber).addStudents(c);
+            currentGame.getIslands().get(islandNumber).addStudents(c);
 
-         extractedFromBag =  currentGame.extractFromBag(1);
+            extractedFromBag =  currentGame.extractFromBag(1);
 
-         for(Color x: extractedFromBag.keySet()) {
-             if (!extracted.containsKey(x))
-                 extracted.put(x, 1);
-             else extracted.put(x, extracted.get(x) + 1);
+            for(Color x: extractedFromBag.keySet()) {
+                if (!extracted.containsKey(x))
+                    extracted.put(x, 1);
+                else
+                    extracted.put(x, extracted.get(x) + 1);
 
-             extractedFromBag.remove(x);
-         }
+                extractedFromBag.remove(x);
+            }
         }
-
-
-
     }
 
     public EnumMap<Color, Integer> getExtracted() {

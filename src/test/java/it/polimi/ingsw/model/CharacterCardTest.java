@@ -18,13 +18,13 @@ class Choose1ToIslandTest{
     @Test
 
     public void testDoEffect(){
-        Game game = new Game(2);
+        Game game = new Game(2, true);
 
         Choose1ToIsland p = new Choose1ToIsland();
         p.setCurrentGame(game);
         p.init();
 
-        game.getPlayers().get(game.getCurrentPlayer()).setCoins(0);
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(2);
 
         //controlliamo se sono 4 gli studenti di extracted
         int sum=0;
@@ -67,7 +67,7 @@ class Choose1ToIslandTest{
 class TwoAdditionalMovesTest {
     @Test
     public void testDoEffect() {
-        Game game = new Game(2);
+        Game game = new Game(2, true);
         TwoAdditionalMoves p= new TwoAdditionalMoves();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -80,7 +80,7 @@ class TwoAdditionalMovesTest {
 class NoEntryIslandTest{
     @Test
     public void testDoEffect(){
-        Game game = new Game(2);
+        Game game = new Game(2, true);
         NoEntryIsland p=new NoEntryIsland();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -102,7 +102,7 @@ class NoEntryIslandTest{
 class BlockTowerTest{
     @Test
     public void testDoEffect(){
-        Game game = new Game(2);
+        Game game = new Game(2, true);
         BlockTower p=new BlockTower();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -124,7 +124,7 @@ class BlockTowerTest{
 class Plus2InfluenceTest{
     @Test
     public void testDoEffect(){
-        Game game = new Game(2);
+        Game game = new Game(2, true);
         Plus2Influence p= new Plus2Influence();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -141,7 +141,7 @@ class Plus2InfluenceTest{
 class BlockColorOnceTest{
     @Test
     public void testDoEffect(){
-        Game game = new Game(2);
+        Game game = new Game(2, true);
         BlockColorOnce p= new BlockColorOnce();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -163,7 +163,7 @@ class BlockColorOnceTest{
 class Exchange2StudentsTest{
     @Test
     public void testDoEffect(){
-        Game game = new Game(2);
+        Game game = new Game(2, true);
         Exchange2Students p=new Exchange2Students();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -228,7 +228,7 @@ class Exchange2StudentsTest{
 class Choose1DiningRoomTest{
     @Test
     public void testDoEffect(){
-        Game game= new Game(2);
+        Game game= new Game(2, true);
         Choose1DiningRoom p=new Choose1DiningRoom();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -259,7 +259,7 @@ class Choose1DiningRoomTest{
 class AllRemoveColorTest{
     @Test
     public void testDoEffect(){
-        Game game=new Game(3);
+        Game game=new Game(3, true);
         AllRemoveColor p= new AllRemoveColor();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -294,7 +294,7 @@ class AllRemoveColorTest{
 class Choose3toEntranceTest{
     @Test
     public void testDoEffect() {
-        Game game = new Game(2);
+        Game game = new Game(2, true);
         Choose3toEntrance p = new Choose3toEntrance();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -360,7 +360,7 @@ class Choose3toEntranceTest{
 class TempControlProfTest{
     @Test
     public void testDoEffect(){
-        Game game = new Game(2);
+        Game game = new Game(2, true);
         TempControlProf p= new TempControlProf();
         p.setCurrentGame(game);
         for(Player g: game.getPlayers()) {

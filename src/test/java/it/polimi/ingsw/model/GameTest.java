@@ -4,16 +4,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-    private final Game game2Players = new Game(2);
+    private Game g;
+
+    @BeforeEach
+    public void init() {
+        g = new Game(2, true);
+    }
 
     @Test
     public void testMergeIslands_index0() {
-        Game g = new Game(2);
         ArrayList<IslandGroup> beforeMerge2To11 = null;
         ArrayList<IslandGroup> afterMerge1To10 = null;
 
@@ -39,7 +44,6 @@ class GameTest {
 
     @Test
     public void testMergeIslands_index11() {
-        Game g = new Game(2);
         ArrayList<IslandGroup> beforeMerge1To10 = null;
         ArrayList<IslandGroup> afterMerge1To10 = null;
 
@@ -65,7 +69,6 @@ class GameTest {
 
     @Test
     public void testMoveMN() {
-        Game g = new Game(2);
         assertEquals(0, g.getMotherNaturePosition());
         g.moveMotherNature(3);
         assertEquals(3, g.getMotherNaturePosition());
@@ -73,5 +76,54 @@ class GameTest {
         assertEquals(3, g.getMotherNaturePosition());
         g.moveMotherNature(9);
         assertEquals(0, g.getMotherNaturePosition());
+    }
+
+    @Test
+    public void testExtractFromBag() {
+        int prevStudentsInBag = g.studentsInBag();
+        EnumMap<Color, Integer> s = g.extractFromBag(3);
+        int sum = 0;
+        for(Color c : s.keySet())
+            sum += s.get(c);
+        assertEquals(3, sum);
+        assertEquals(prevStudentsInBag - 3, g.studentsInBag());
+    }
+
+    @Test
+    public void testExtractFromBagWithoutArgs() {
+        int prevStudentsInBag = g.studentsInBag();
+        Color color = g.extractFromBag();
+        assertEquals(prevStudentsInBag - 1, g.studentsInBag());
+    }
+
+    @Test
+    public void testAddToBag() {
+        int prevStudentsInBag = g.studentsInBag();
+        EnumMap<Color, Integer> toAdd = new EnumMap<Color, Integer>(Color.class);
+        toAdd.put(Color.GREEN, 1);
+        toAdd.put(Color.YELLOW, 2);
+        toAdd.put(Color.BLUE, 3);
+        g.addToBag(toAdd);
+        assertEquals(prevStudentsInBag + 6, g.studentsInBag());
+    }
+
+    @Test
+    public void testCountInfluence() {
+        IslandGroup islandGroup = g.getIslands().get(0);
+
+        g.getPlayers().get(0).getSchoolDashboard().addStudentsToEntrance(Color.BLUE, 2);
+        g.getPlayers().get(0).getSchoolDashboard().addStudentsToEntrance(Color.YELLOW, 2);
+        g.getPlayers().get(1).getSchoolDashboard().addStudentsToEntrance(Color.GREEN, 3);
+
+        g.getPlayers().get(0).getSchoolDashboard().moveToIslandGroup(Color.BLUE, 0);
+        g.getPlayers().get(0).getSchoolDashboard().moveToIslandGroup(Color.BLUE, 0);
+        g.getPlayers().get(0).getSchoolDashboard().moveToIslandGroup(Color.YELLOW, 0);
+        g.getPlayers().get(0).getSchoolDashboard().moveToIslandGroup(Color.YELLOW, 0);
+        g.getPlayers().get(1).getSchoolDashboard().moveToIslandGroup(Color.GREEN, 0);
+        g.getPlayers().get(1).getSchoolDashboard().moveToIslandGroup(Color.GREEN, 0);
+        g.getPlayers().get(1).getSchoolDashboard().moveToIslandGroup(Color.GREEN, 0);
+
+        System.out.println(g.countInfluence(g.getPlayers().get(0), g.getIslands().get(0)));
+        System.out.println(g.countInfluence(g.getPlayers().get(1), g.getIslands().get(0)));
     }
 }
