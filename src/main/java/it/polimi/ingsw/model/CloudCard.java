@@ -8,7 +8,7 @@ public class CloudCard {
     private boolean full;
     private Game currentGame;
 
-    public CloudCard()
+    public void setUp()
     {
         students = currentGame.extractFromBag(3);
     }
