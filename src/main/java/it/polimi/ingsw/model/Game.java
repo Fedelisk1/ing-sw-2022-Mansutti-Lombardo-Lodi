@@ -65,6 +65,7 @@ public class Game {
         cloudCards = new ArrayList<>();
         for (CloudCard c : getCloudCards()) {
             c.setCurrentGame(this);
+            c.setUp();
         }
     }
 
