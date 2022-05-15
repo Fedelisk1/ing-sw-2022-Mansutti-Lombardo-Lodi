@@ -164,6 +164,7 @@ class Exchange2StudentsTest{
     @Test
     public void testDoEffect(){
         Game game = new Game(2, true);
+        game.getPlayers().get(0).getSchoolDashboard().getEntrance().clear();
         Exchange2Students p=new Exchange2Students();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
@@ -295,6 +296,7 @@ class Choose3toEntranceTest{
     @Test
     public void testDoEffect() {
         Game game = new Game(2, true);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         Choose3toEntrance p = new Choose3toEntrance();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);

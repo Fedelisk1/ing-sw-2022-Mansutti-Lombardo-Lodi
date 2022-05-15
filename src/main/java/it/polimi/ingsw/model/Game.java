@@ -35,13 +35,7 @@ public class Game {
         }
 
         // players init
-        this.players = new ArrayList<>();
-        for(int i = 0; i < players; i++) {
-            Player p = new Player();
-            p.setCurrentGame(this);
-            p.getSchoolDashboard().setCurrentGame(this);
-            this.players.add(p);
-        }
+
 
         // unused professor init
         unusedProfessors = new ArrayList<>();
@@ -62,6 +56,14 @@ public class Game {
             for (CharacterCard c : characterCards) {
                 c.setCurrentGame(this);
             }
+        }
+        this.players = new ArrayList<>();
+        for(int i = 0; i < players; i++) {
+            Player p = new Player();
+            p.setCurrentGame(this);
+            p.getSchoolDashboard().setCurrentGame(this);
+            p.getSchoolDashboard().setUp();
+            this.players.add(p);
         }
 
         this.expertMode = expertMode;

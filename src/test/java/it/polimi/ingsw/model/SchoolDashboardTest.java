@@ -57,6 +57,7 @@ class SchoolDashboardTest
     @Test
     public void addStudentToEntranceTest()
     {
+        game.getPlayers().get(1).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
         Assertions.assertEquals(1, game.getPlayers().get(1).getSchoolDashboard().getEntrance().get(Color.YELLOW));
     }
@@ -69,6 +70,7 @@ class SchoolDashboardTest
     @Test
     public void removeStudentFromEntranceTest()
     {
+        game.getPlayers().get(1).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.RED);
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.RED);
@@ -86,6 +88,7 @@ class SchoolDashboardTest
     @Test
     public void addStudentToEntrance()
     {
+        game.getPlayers().get(1).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.RED);
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.RED);
@@ -99,6 +102,7 @@ class SchoolDashboardTest
     public void moveStudentToDiningRoom()
     {
         game.setCurrentPlayer(1);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
 
         game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
         game.getPlayers().get(1).getSchoolDashboard().moveStudentToDiningRoom(Color.YELLOW);

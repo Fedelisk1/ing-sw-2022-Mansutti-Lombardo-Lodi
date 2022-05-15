@@ -24,6 +24,16 @@ class PlayerTest {
 
     }
 
+    @Test
+    public void moveOneOfThreeToIsland()
+    {
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
+        game.getPlayers().get(game.getCurrentPlayer()).moveOneOfThreeToIsland(Color.GREEN,0);
+
+    }
+
+
 
 
 }

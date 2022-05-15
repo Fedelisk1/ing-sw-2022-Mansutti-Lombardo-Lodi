@@ -19,6 +19,10 @@ public class SchoolDashboard {
         entrance = new EnumMap<>(Color.class);
         diningRoom = new EnumMap<>(Color.class);
     }
+    public void setUp()
+    {
+        entrance=currentGame.extractFromBag(7);
+    }
 
     public void setCurrentGame(Game currentGame) {
         this.currentGame = currentGame;
