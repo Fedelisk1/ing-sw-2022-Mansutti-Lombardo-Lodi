@@ -255,7 +255,7 @@ public class Game {
     private int countInfluenceStudents(Player p, IslandGroup isl){
         int sum=0;
         for (Color c : isl.getStudents().keySet()){
-            if(p.hasProfessor(c))
+            if(p.getSchoolDashboard().getProfessors().contains(c))
                 sum=sum+isl.getStudents(c);
         }
         return sum;

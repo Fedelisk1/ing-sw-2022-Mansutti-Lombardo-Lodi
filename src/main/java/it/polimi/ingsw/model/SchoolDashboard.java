@@ -123,7 +123,10 @@ public class SchoolDashboard {
         diningRoom.putIfAbsent(color, 0);
         diningRoom.put(color,diningRoom.get(color)+1);
 
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).hasProfessor(color)) return;
+        if(diningRoom.get(color)%3==0)
+            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()+1);
+
+        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getProfessors().contains(color)) return;
 
         //for each player different from the current player, check the number of students in his dining room, if they are less then add a professor to currentplayer
         for(int i=0; i<currentGame.getPlayers().size();i++)
@@ -155,9 +158,6 @@ public class SchoolDashboard {
             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
             currentGame.getUnusedProfessors().remove(color);
         }
-
-        if(diningRoom.get(color)%3==0)
-            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()+1);
     }
 
     public void removeStudentFromDiningRoom(Color color) throws NullPointerException{

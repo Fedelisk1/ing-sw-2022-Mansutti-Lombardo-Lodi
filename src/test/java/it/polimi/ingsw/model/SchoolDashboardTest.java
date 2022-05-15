@@ -117,6 +117,7 @@ class SchoolDashboardTest
     {
         //one yellow student is added to player 1 dining room
         game.setCurrentPlayer(1);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
 
         //player 1 now has the yellow professor
