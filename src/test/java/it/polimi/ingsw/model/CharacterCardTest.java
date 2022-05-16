@@ -195,7 +195,7 @@ class BlockColorOnceTest{
 }
 class Exchange2StudentsTest{
     @Test
-    public void testDoEffect(){
+    public void testDoEffect() {
         Game game = new Game(2, true);
         game.getPlayers().get(0).getSchoolDashboard().getEntrance().clear();
         Exchange2Students p=new Exchange2Students();

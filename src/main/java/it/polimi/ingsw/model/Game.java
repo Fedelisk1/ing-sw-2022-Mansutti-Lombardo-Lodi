@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
     private EnumMap<Color, Integer> bag;
@@ -77,6 +74,8 @@ public class Game {
             c.setUp();
             this.cloudCards.add(c);
         }
+
+
     }
 
     public boolean isExpertMode() {
@@ -86,6 +85,10 @@ public class Game {
     public ArrayList<Player> getPlayers()
     {
         return players;
+    }
+
+    public int getPlayersCount() {
+        return players.size();
     }
 
     public ArrayList<IslandGroup> getIslands() {
@@ -155,7 +158,7 @@ public class Game {
 
                 bag.put(Color.values()[extractcolor], bag.get(Color.values()[extractcolor]) - 1);
                 if(extracted.get(Color.values()[extractcolor])!=null)
-                extracted.put(Color.values()[extractcolor],extracted.get(Color.values()[extractcolor])+1);
+                    extracted.put(Color.values()[extractcolor],extracted.get(Color.values()[extractcolor])+1);
                 else extracted.put(Color.values()[extractcolor],1);
             }
         }
@@ -212,7 +215,15 @@ public class Game {
         return motherNaturePosition;
     }
 
+    public IslandGroup getMotherNatureIsland() {
+        return islands.get(motherNaturePosition);
+    }
+
     public int getCurrentPlayer(){return currentPlayer;}
+
+    public Player getCurrentPlayerInstance() {
+        return players.get(currentPlayer);
+    }
 
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
@@ -372,7 +383,41 @@ public class Game {
 
     public void addCharacterCard(CharacterCard c){
         characterCards.add(c);
+    }
 
+    /**
+     * calculates the player with maximum influence, that is the eligible owner for islandGroup
+     *
+     * @param islandGroup island to compute influence on
+     * @return player instance with maximum influence for the given island or null if two players have maximum influence
+     */
+    public Player playerWithHigherInfluence(IslandGroup islandGroup) {
+        Map<Integer, ArrayList<Player>> influenceMap = new HashMap<>();
+        Player result = null;
+
+        for (Player p : players) {
+            int currentInfluence = countInfluence(p, islandGroup);
+            ArrayList<Player> players = influenceMap.get(currentInfluence);
+
+            ArrayList<Player> toAdd = new ArrayList<>();
+            if (players == null) {
+                toAdd.add(p);
+            } else {
+                toAdd = influenceMap.get(currentInfluence);
+                toAdd.add(p);
+            }
+
+            influenceMap.put(currentInfluence, toAdd);
+        }
+
+        int maxInfluence = Collections.max(influenceMap.keySet());
+
+        int tiedPlayersCount = influenceMap.get(maxInfluence).size();
+
+        if (tiedPlayersCount == 1)
+            result = influenceMap.get(maxInfluence).get(0);
+
+        return result;
     }
 
 }
