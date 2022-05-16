@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CharacterCardTest {
 
 
+
 }
 
 class Choose1ToIslandTest{
@@ -22,7 +23,12 @@ class Choose1ToIslandTest{
 
         Choose1ToIsland p = new Choose1ToIsland();
         p.setCurrentGame(game);
-        p.init();
+
+        EnumMap<Color,Integer> extractedFromCard= new EnumMap<>(Color.class);
+        extractedFromCard.put(Color.BLUE,2);
+        extractedFromCard.put(Color.YELLOW,1);
+        extractedFromCard.put(Color.GREEN,1);
+        p.setExtracted(extractedFromCard);
 
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(2);
 
@@ -32,8 +38,6 @@ class Choose1ToIslandTest{
             sum= sum+ p.getExtracted().get(c);
         }
         assertEquals(4,sum);
-        //stampa i 4 studenti estratti sulla carta
-        System.out.println(p.getExtracted());
 
         // se ne sceglie 1
         Color choosen;
@@ -44,20 +48,49 @@ class Choose1ToIslandTest{
         //metto in x il numero di studenti del colore choosen prima del do effect
         int x= game.getIslands().get(isl).getStudents().get(choosen);
 
-        if(p.getExtracted().containsKey(choosen)) {
-            p.doEffect(choosen, isl);
-            //vediamo se è stato veramente aggiunto lo studente all'isola
-            assertEquals(1 + x, game.getIslands().get(isl).getStudents().get(choosen));
-            sum=0;
-            for(Color c : p.getExtracted().keySet()){
-                sum= sum+ p.getExtracted().get(c);
-            }
-            assertEquals(4,sum);
-        } else {
-            Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen,isl);});
-            System.out.println("AssertThrows");
+
+        p.doEffect(choosen, isl);
+        //vediamo se è stato veramente aggiunto lo studente all'isola
+        assertEquals(1 + x, game.getIslands().get(isl).getStudents().get(choosen));
+
+        sum=0;
+        for(Color c : p.getExtracted().keySet()){
+            sum= sum+ p.getExtracted().get(c);
         }
+        assertEquals(4,sum);
+
     }
+    @Test
+    public void doEffectShouldThrowRuntimeExceptionWhenNullTest(){
+        Game game = new Game(2, true);
+
+        Choose1ToIsland p = new Choose1ToIsland();
+        p.setCurrentGame(game);
+        EnumMap<Color, Integer> extractedFromBag= new EnumMap<>(Color.class);
+        extractedFromBag.put(Color.BLUE,4);
+        Color choosen= Color.YELLOW;
+        int isl=1;
+
+        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen,isl);});
+        System.out.println("AssertThrows");
+
+
+    }
+    @Test
+    public void testInit(){
+        Game game = new Game(2, true);
+        Choose1ToIsland p = new Choose1ToIsland();
+        p.setCurrentGame(game);
+        p.init();
+
+        int sum=0;
+        for(Color c : p.getExtracted().keySet()){
+            sum= sum+ p.getExtracted().get(c);
+        }
+        assertEquals(4,sum);
+
+    }
+
 
 }
 

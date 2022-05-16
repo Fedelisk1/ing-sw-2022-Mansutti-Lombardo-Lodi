@@ -67,6 +67,10 @@ class Choose1ToIsland extends CharacterCard{
         }
     }
 
+    public void setExtracted(EnumMap<Color, Integer> extracted) {
+        this.extracted = extracted;
+    }
+
     public EnumMap<Color, Integer> getExtracted() {
         return extracted;
     }
