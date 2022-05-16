@@ -70,9 +70,11 @@ public class Game {
 
         // cloudCards init
         cloudCards = new ArrayList<>();
-        for (CloudCard c : getCloudCards()) {
+        for (int i = 0; i < players; i++) {
+            CloudCard c = new CloudCard();
             c.setCurrentGame(this);
             c.setUp();
+            this.cloudCards.add(c);
         }
     }
 
@@ -303,7 +305,7 @@ public class Game {
     }
 
     public void extract3CharacterCard(){
-        ArrayList<CharacterCard> allCharacterCards= new ArrayList<CharacterCard>();
+        ArrayList<CharacterCard> allCharacterCards= new ArrayList<>();
         int[] extracted;
 
         // extract 3 random numbers

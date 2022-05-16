@@ -18,6 +18,18 @@ public class SchoolDashboard {
         towers = 8;
         entrance = new EnumMap<>(Color.class);
         diningRoom = new EnumMap<>(Color.class);
+
+        entrance.putIfAbsent(Color.GREEN,0);
+        entrance.putIfAbsent(Color.RED,0);
+        entrance.putIfAbsent(Color.PINK,0);
+        entrance.putIfAbsent(Color.BLUE,0);
+        entrance.putIfAbsent(Color.YELLOW,0);
+
+        diningRoom.putIfAbsent(Color.GREEN,0);
+        diningRoom.putIfAbsent(Color.RED,0);
+        diningRoom.putIfAbsent(Color.PINK,0);
+        diningRoom.putIfAbsent(Color.BLUE,0);
+        diningRoom.putIfAbsent(Color.YELLOW,0);
     }
     public void setUp()
     {

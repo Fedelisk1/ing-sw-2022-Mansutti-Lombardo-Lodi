@@ -78,8 +78,14 @@ public class Player {
 
 
     }
+
+    public void resetCount()
+    {
+        count=0;
+    }
     public void moveOneOfThreeToDiningRoom(Color color) throws NullPointerException, IllegalArgumentException
     {
+        if(count==3)throw new IllegalStateException("limit of students moved reached for this turn");
         schoolDashboard.moveStudentToDiningRoom(color);
         count++;
 

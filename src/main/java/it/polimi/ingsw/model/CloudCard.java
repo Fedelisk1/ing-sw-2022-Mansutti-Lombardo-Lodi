@@ -5,12 +5,18 @@ import java.util.EnumMap;
 
 public class CloudCard {
     private EnumMap<Color, Integer> students;
-    private boolean full;
     private Game currentGame;
 
     public void setUp()
     {
         students = currentGame.extractFromBag(3);
+
+        students.putIfAbsent(Color.GREEN, 0);
+        students.putIfAbsent(Color.RED, 0);
+        students.putIfAbsent(Color.BLUE, 0);
+        students.putIfAbsent(Color.YELLOW, 0);
+        students.putIfAbsent(Color.PINK, 0);
+
     }
 
     public EnumMap<Color, Integer> getStudents()
