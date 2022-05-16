@@ -61,6 +61,7 @@ public class IslandGroup {
 
     public Player getOccupiedBy() {return occupiedBy;}
 
+
     public boolean isBlockColorOnce_CC() {
         return blockColorOnce_CC;
     }

@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CharacterCardTest {
 
 
+
 }
 
 class Choose1ToIslandTest{
@@ -22,7 +23,12 @@ class Choose1ToIslandTest{
 
         Choose1ToIsland p = new Choose1ToIsland();
         p.setCurrentGame(game);
-        p.init();
+
+        EnumMap<Color,Integer> extractedFromCard= new EnumMap<>(Color.class);
+        extractedFromCard.put(Color.BLUE,2);
+        extractedFromCard.put(Color.YELLOW,1);
+        extractedFromCard.put(Color.GREEN,1);
+        p.setExtracted(extractedFromCard);
 
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(2);
 
@@ -32,8 +38,6 @@ class Choose1ToIslandTest{
             sum= sum+ p.getExtracted().get(c);
         }
         assertEquals(4,sum);
-        //stampa i 4 studenti estratti sulla carta
-        System.out.println(p.getExtracted());
 
         // se ne sceglie 1
         Color choosen;
@@ -44,20 +48,49 @@ class Choose1ToIslandTest{
         //metto in x il numero di studenti del colore choosen prima del do effect
         int x= game.getIslands().get(isl).getStudents().get(choosen);
 
-        if(p.getExtracted().containsKey(choosen)) {
-            p.doEffect(choosen, isl);
-            //vediamo se è stato veramente aggiunto lo studente all'isola
-            assertEquals(1 + x, game.getIslands().get(isl).getStudents().get(choosen));
-            sum=0;
-            for(Color c : p.getExtracted().keySet()){
-                sum= sum+ p.getExtracted().get(c);
-            }
-            assertEquals(4,sum);
-        } else {
-            Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen,isl);});
-            System.out.println("AssertThrows");
+
+        p.doEffect(choosen, isl);
+        //vediamo se è stato veramente aggiunto lo studente all'isola
+        assertEquals(1 + x, game.getIslands().get(isl).getStudents().get(choosen));
+
+        sum=0;
+        for(Color c : p.getExtracted().keySet()){
+            sum= sum+ p.getExtracted().get(c);
         }
+        assertEquals(4,sum);
+
     }
+    @Test
+    public void doEffectShouldThrowRuntimeExceptionWhenNullTest(){
+        Game game = new Game(2, true);
+
+        Choose1ToIsland p = new Choose1ToIsland();
+        p.setCurrentGame(game);
+        EnumMap<Color, Integer> extractedFromBag= new EnumMap<>(Color.class);
+        extractedFromBag.put(Color.BLUE,4);
+        Color choosen= Color.YELLOW;
+        int isl=1;
+
+        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen,isl);});
+        System.out.println("AssertThrows");
+
+
+    }
+    @Test
+    public void testInit(){
+        Game game = new Game(2, true);
+        Choose1ToIsland p = new Choose1ToIsland();
+        p.setCurrentGame(game);
+        p.init();
+
+        int sum=0;
+        for(Color c : p.getExtracted().keySet()){
+            sum= sum+ p.getExtracted().get(c);
+        }
+        assertEquals(4,sum);
+
+    }
+
 
 }
 
@@ -225,6 +258,7 @@ class Exchange2StudentsTest{
     }
 
 }
+//DA SISTEMARE COME GLI ALTRI
 
 class Choose1DiningRoomTest{
     @Test
@@ -237,21 +271,45 @@ class Choose1DiningRoomTest{
         game.getPlayers().get(0).getSchoolDashboard().setCurrentGame(game);
         game.getPlayers().get(1).setCurrentGame(game);
         game.getPlayers().get(1).getSchoolDashboard().setCurrentGame(game);
-        p.init();
+
+        p.getExtracted().put(Color.YELLOW,2);
+        p.getExtracted().put(Color.RED,2);
 
         Color choosen= Color.YELLOW;
         //verifico che il colore non sia presente nella sala
         assertEquals(0,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(choosen));
 
-        if(p.getExtracted().containsKey(choosen)){
-            p.doEffect(choosen);
-            assertEquals(1,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(choosen));
 
-        }else {
-            System.out.println("Entra nella Throw");
-            Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen);});
+        p.doEffect(choosen);
+        assertEquals(1,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(choosen));
+
+
+    }
+    @Test
+    public void testDoEffectShouldThrowRuntimeExceptionWhenColorIsAbsent(){
+        Game game= new Game(2, true);
+        Choose1DiningRoom p=new Choose1DiningRoom();
+        p.setCurrentGame(game);
+
+        Color choosen= Color.RED;
+
+        p.getExtracted().put(Color.YELLOW,2);
+        p.getExtracted().put(Color.RED,2);
+
+        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen);});
+
+    }
+    @Test
+    public void testInit(){
+        Game game= new Game(2, true);
+        Choose1DiningRoom p=new Choose1DiningRoom();
+        p.setCurrentGame(game);
+        p.init();
+        int sum=0;
+        for(Color c: p.getExtracted().keySet()){
+            sum=sum + p.getExtracted().get(c);
         }
-
+        assertEquals(4,sum);
 
     }
 
@@ -327,7 +385,6 @@ class Choose3toEntranceTest{
         support1 = fromCard.clone();
         support2 = fromEntrance.clone();
 
-        if (p.totalNumberofStudent(support1) == p.totalNumberofStudent(support2)) {
 
             int sum1 = 0;
             for (Color c : p.getExtracted().keySet())
@@ -353,10 +410,48 @@ class Choose3toEntranceTest{
             assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.RED));
             assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.YELLOW));
             assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.GREEN));
-        } else {
-            System.out.println("Entra nella Throw");
-            Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(fromCard,fromEntrance);});
+
+    }
+    @Test
+    public void testShouldThrowRuntimeExceptionWhenDifferentStudentNumber(){
+        Game game = new Game(2, true);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
+        Choose3toEntrance p = new Choose3toEntrance();
+        p.setCurrentGame(game);
+
+        EnumMap<Color, Integer> fromCard = new EnumMap<>(Color.class);
+        fromCard.put(Color.GREEN, 1);
+        fromCard.put(Color.YELLOW, 1);
+        fromCard.put(Color.RED, 1);
+        EnumMap<Color, Integer> fromEntrance = new EnumMap<>(Color.class);
+        fromEntrance.put(Color.BLUE, 1);
+        fromEntrance.put(Color.PINK, 1);
+
+        EnumMap<Color, Integer> support1 = new EnumMap<>(Color.class);
+        EnumMap<Color, Integer> support2 = new EnumMap<>(Color.class);
+        support1 = fromCard.clone();
+        support2 = fromEntrance.clone();
+
+        System.out.println("Throw");
+        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(fromCard,fromEntrance);});
+
+
+
+    }
+    @Test
+    public void testInit(){
+        Game game = new Game(2, true);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
+        Choose3toEntrance p = new Choose3toEntrance();
+        p.setCurrentGame(game);
+        p.init();
+        int sum=0;
+        for(Color c: p.getExtracted().keySet()){
+            sum=sum+p.getExtracted().get(c);
         }
+        assertEquals(6,sum);
+
+
     }
 }
 class TempControlProfTest{
@@ -366,10 +461,26 @@ class TempControlProfTest{
         TempControlProf p= new TempControlProf();
         p.setCurrentGame(game);
         for(Player g: game.getPlayers()) {
+            g.setCoins(3);
             g.setCurrentGame(game);
             g.getSchoolDashboard().setCurrentGame(game);
         }
-        //DA TERMINARE
+        game.setCurrentPlayer(0);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        assertEquals(true,game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.RED));
+
+        game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        assertEquals(false,game.getPlayers().get(1).getSchoolDashboard().getProfessors().contains(Color.RED));
+
+        game.setCurrentPlayer(1);
+        p.doEffect();
+
+        //problema in schooldashboard addStudentToDining room
+        assertEquals(false,game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.RED));
+        assertEquals(true,game.getPlayers().get(1).getSchoolDashboard().getProfessors().contains(Color.RED));
+
 
     }
 

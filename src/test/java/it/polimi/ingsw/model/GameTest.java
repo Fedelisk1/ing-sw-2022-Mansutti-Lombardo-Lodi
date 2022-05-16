@@ -68,7 +68,7 @@ class GameTest {
     }
 
     @Test
-    public void testMoveMN() {
+    public void testMoveMN(){
         assertEquals(0, g.getMotherNaturePosition());
         g.moveMotherNature(3);
         assertEquals(3, g.getMotherNaturePosition());
@@ -107,23 +107,29 @@ class GameTest {
         assertEquals(prevStudentsInBag + 6, g.studentsInBag());
     }
 
+
+
     @Test
-    public void testCountInfluence() {
-        IslandGroup islandGroup = g.getIslands().get(0);
+    public void testExtract3CharacterCard(){
 
-        g.getPlayers().get(0).getSchoolDashboard().addStudentsToEntrance(Color.BLUE, 2);
-        g.getPlayers().get(0).getSchoolDashboard().addStudentsToEntrance(Color.YELLOW, 2);
-        g.getPlayers().get(1).getSchoolDashboard().addStudentsToEntrance(Color.GREEN, 3);
+        assertEquals(3,g.getCharacterCards().size());
 
-        g.getPlayers().get(0).getSchoolDashboard().moveToIslandGroup(Color.BLUE, 0);
-        g.getPlayers().get(0).getSchoolDashboard().moveToIslandGroup(Color.BLUE, 0);
-        g.getPlayers().get(0).getSchoolDashboard().moveToIslandGroup(Color.YELLOW, 0);
-        g.getPlayers().get(0).getSchoolDashboard().moveToIslandGroup(Color.YELLOW, 0);
-        g.getPlayers().get(1).getSchoolDashboard().moveToIslandGroup(Color.GREEN, 0);
-        g.getPlayers().get(1).getSchoolDashboard().moveToIslandGroup(Color.GREEN, 0);
-        g.getPlayers().get(1).getSchoolDashboard().moveToIslandGroup(Color.GREEN, 0);
-
-        System.out.println(g.countInfluence(g.getPlayers().get(0), g.getIslands().get(0)));
-        System.out.println(g.countInfluence(g.getPlayers().get(1), g.getIslands().get(0)));
+        assertNotEquals(g.getCharacterCards().get(0),g.getCharacterCards().get(1));
+        assertNotEquals(g.getCharacterCards().get(1),g.getCharacterCards().get(2));
+        assertNotEquals(g.getCharacterCards().get(2),g.getCharacterCards().get(0));
     }
+
+   @Test
+    public void testCountInfluence(){
+        g.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        g.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+        g.getIslands().get(0).setOccupiedBy(g.getPlayers().get(0));
+
+        g.getIslands().get(0).addStudents(Color.RED);
+        g.getIslands().get(0).addStudents(Color.RED);
+
+        assertEquals(3,g.countInfluence(g.getPlayers().get(0),g.getIslands().get(0)));
+
+    }
+
 }

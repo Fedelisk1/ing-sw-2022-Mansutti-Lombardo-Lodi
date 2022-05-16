@@ -45,6 +45,7 @@ public class Game {
         // bag init
         bag= new EnumMap<>(Color.class);
 
+
         for (Color c : Color.values())
             bag.put(c, MAX_BAG_STUDENTS / Color.values().length);
 
@@ -316,28 +317,40 @@ public class Game {
             switch (extracted[i]){
                 case 1:
                     characterCards.add(new Choose1ToIsland());
+                    break;
                 case 2:
                     characterCards.add(new TempControlProf());
+                    break;
                 case 3:
                     characterCards.add(new ChooseIsland());
+                    break;
                 case 4:
                     characterCards.add(new BlockTower());
+                    break;
                 case 5:
                     characterCards.add(new NoEntryIsland());
+                    break;
                 case 6:
                     characterCards.add(new TwoAdditionalMoves());
+                    break;
                 case 7:
                     characterCards.add(new Choose3toEntrance());
+                    break;
                 case 8:
                     characterCards.add(new Plus2Influence());
+                    break;
                 case 9:
                     characterCards.add(new BlockColorOnce());
+                    break;
                 case 10:
                     characterCards.add(new Exchange2Students());
+                    break;
                 case 11:
                     characterCards.add(new Choose1DiningRoom());
+                    break;
                 case 12:
                     characterCards.add(new AllRemoveColor());
+                    break;
             }
         }
 

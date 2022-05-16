@@ -11,6 +11,9 @@ public abstract class CharacterCard {
     public void setCurrentGame(Game currentGame) {
         this.currentGame = currentGame;
     }
+    public void doEffect(){
+
+    }
 
 }
 
@@ -64,6 +67,10 @@ class Choose1ToIsland extends CharacterCard{
         }
     }
 
+    public void setExtracted(EnumMap<Color, Integer> extracted) {
+        this.extracted = extracted;
+    }
+
     public EnumMap<Color, Integer> getExtracted() {
         return extracted;
     }
@@ -77,10 +84,14 @@ class TempControlProf extends CharacterCard{
     }
 
     /**
-     * DA CONTROLLARE
+     * If the player who activated the card has an equal number of students in the dining room then the professor is added
+     * to the current player and removed from the 'other
      */
 
     public void doEffect(){
+        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
+        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
+
 
         cost=3;
 
@@ -91,8 +102,13 @@ class TempControlProf extends CharacterCard{
                 for(Color c: Color.values()){
 
                     if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(c)==p.getSchoolDashboard().getDiningRoom().get(c)){
-                        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(c);
-                        //fa quello che deve teoricamente ma come viene gestito il fatto di rimuovere il professore appena finisce il turno?
+                        if(p.getSchoolDashboard().getProfessors().contains(c)) {
+                            p.getSchoolDashboard().removeProfessor(c);
+                            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(c);
+                            //BISOGNA RISISTEMARE I PROFESSORI ALLA FINE DEL TURNO CORRENTE
+                        }
+
+
                     }
 
                 }
@@ -324,7 +340,6 @@ class Exchange2Students extends CharacterCard{
                 chosenFromEntrance.put(c,chosenFromEntrance.get(c)-1);
                 currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(c);
                 currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
-
 
             }
         }
