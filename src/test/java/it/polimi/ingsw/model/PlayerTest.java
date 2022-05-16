@@ -25,41 +25,9 @@ class PlayerTest {
 
     }
 
-    @Test
-    public void moveOneOfThreeToIsland()
-    {
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
-        game.getPlayers().get(game.getCurrentPlayer()).moveOneOfThreeToIsland(Color.GREEN,0);
-
-        Assertions.assertEquals(0, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.GREEN));
-        Assertions.assertEquals(1, game.getIslands().get(0).getStudents(Color.GREEN));
-
-
-    }
 
     @Test
-    public void moveOneOfThreeToDiningRoomTest()
-    {
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
-        game.getPlayers().get(game.getCurrentPlayer()).moveOneOfThreeToDiningRoom(Color.GREEN);
-
-        Assertions.assertEquals(0, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.GREEN));
-        Assertions.assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(Color.GREEN));
-
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
-        game.getPlayers().get(game.getCurrentPlayer()).moveOneOfThreeToDiningRoom(Color.GREEN);
-
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
-        game.getPlayers().get(game.getCurrentPlayer()).moveOneOfThreeToDiningRoom(Color.GREEN);
-
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
-        Assertions.assertThrows(IllegalStateException.class, () ->{game.getPlayers().get(game.getCurrentPlayer()).moveOneOfThreeToDiningRoom(Color.GREEN);});
-    }
-
-    @Test
-    public void chooseCloudCard()
+    public void chooseCloudCardTest()
     {
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().putIfAbsent(Color.GREEN,0);

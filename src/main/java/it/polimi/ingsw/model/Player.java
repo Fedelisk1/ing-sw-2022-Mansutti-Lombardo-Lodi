@@ -11,7 +11,6 @@ public class Player {
     private int cardValue;
     private int maxSteps;
     private Game currentGame;
-    private int count;
 
 
     /** each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
@@ -60,35 +59,6 @@ public class Player {
         cardValue = hand.assistantCards.get(i).getCardValue();
         discardPile.add(hand.assistantCards.get(i));
         hand.assistantCards.remove(i);
-    }
-
-    public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, IllegalArgumentException
-    {
-        try {
-            if(count>=3)throw new IllegalStateException("limit of students moved reached for this turn");
-            schoolDashboard.moveToIslandGroup(color, i);
-        }
-        catch (IndexOutOfBoundsException e)
-        {
-            System.out.println("Chosen island is outside the possible range of values");
-        }
-        finally{
-            count++;
-        }
-
-
-    }
-
-    public void resetCount()
-    {
-        count=0;
-    }
-    public void moveOneOfThreeToDiningRoom(Color color) throws NullPointerException, IllegalArgumentException
-    {
-        if(count==3)throw new IllegalStateException("limit of students moved reached for this turn");
-        schoolDashboard.moveStudentToDiningRoom(color);
-        count++;
-
     }
 
 
