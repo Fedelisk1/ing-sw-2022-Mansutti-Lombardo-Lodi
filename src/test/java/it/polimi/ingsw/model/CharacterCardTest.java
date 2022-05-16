@@ -258,6 +258,7 @@ class Exchange2StudentsTest{
     }
 
 }
+//DA SISTEMARE COME GLI ALTRI
 
 class Choose1DiningRoomTest{
     @Test
@@ -270,21 +271,45 @@ class Choose1DiningRoomTest{
         game.getPlayers().get(0).getSchoolDashboard().setCurrentGame(game);
         game.getPlayers().get(1).setCurrentGame(game);
         game.getPlayers().get(1).getSchoolDashboard().setCurrentGame(game);
-        p.init();
+
+        p.getExtracted().put(Color.YELLOW,2);
+        p.getExtracted().put(Color.RED,2);
 
         Color choosen= Color.YELLOW;
         //verifico che il colore non sia presente nella sala
         assertEquals(0,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(choosen));
 
-        if(p.getExtracted().containsKey(choosen)){
-            p.doEffect(choosen);
-            assertEquals(1,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(choosen));
 
-        }else {
-            System.out.println("Entra nella Throw");
-            Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen);});
+        p.doEffect(choosen);
+        assertEquals(1,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(choosen));
+
+
+    }
+    @Test
+    public void testDoEffectShouldThrowRuntimeExceptionWhenColorIsAbsent(){
+        Game game= new Game(2, true);
+        Choose1DiningRoom p=new Choose1DiningRoom();
+        p.setCurrentGame(game);
+
+        Color choosen= Color.RED;
+
+        p.getExtracted().put(Color.YELLOW,2);
+        p.getExtracted().put(Color.RED,2);
+
+        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen);});
+
+    }
+    @Test
+    public void testInit(){
+        Game game= new Game(2, true);
+        Choose1DiningRoom p=new Choose1DiningRoom();
+        p.setCurrentGame(game);
+        p.init();
+        int sum=0;
+        for(Color c: p.getExtracted().keySet()){
+            sum=sum + p.getExtracted().get(c);
         }
-
+        assertEquals(4,sum);
 
     }
 
@@ -360,7 +385,6 @@ class Choose3toEntranceTest{
         support1 = fromCard.clone();
         support2 = fromEntrance.clone();
 
-        if (p.totalNumberofStudent(support1) == p.totalNumberofStudent(support2)) {
 
             int sum1 = 0;
             for (Color c : p.getExtracted().keySet())
@@ -386,10 +410,48 @@ class Choose3toEntranceTest{
             assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.RED));
             assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.YELLOW));
             assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.GREEN));
-        } else {
-            System.out.println("Entra nella Throw");
-            Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(fromCard,fromEntrance);});
+
+    }
+    @Test
+    public void testShouldThrowRuntimeExceptionWhenDifferentStudentNumber(){
+        Game game = new Game(2, true);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
+        Choose3toEntrance p = new Choose3toEntrance();
+        p.setCurrentGame(game);
+
+        EnumMap<Color, Integer> fromCard = new EnumMap<>(Color.class);
+        fromCard.put(Color.GREEN, 1);
+        fromCard.put(Color.YELLOW, 1);
+        fromCard.put(Color.RED, 1);
+        EnumMap<Color, Integer> fromEntrance = new EnumMap<>(Color.class);
+        fromEntrance.put(Color.BLUE, 1);
+        fromEntrance.put(Color.PINK, 1);
+
+        EnumMap<Color, Integer> support1 = new EnumMap<>(Color.class);
+        EnumMap<Color, Integer> support2 = new EnumMap<>(Color.class);
+        support1 = fromCard.clone();
+        support2 = fromEntrance.clone();
+
+        System.out.println("Throw");
+        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(fromCard,fromEntrance);});
+
+
+
+    }
+    @Test
+    public void testInit(){
+        Game game = new Game(2, true);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
+        Choose3toEntrance p = new Choose3toEntrance();
+        p.setCurrentGame(game);
+        p.init();
+        int sum=0;
+        for(Color c: p.getExtracted().keySet()){
+            sum=sum+p.getExtracted().get(c);
         }
+        assertEquals(6,sum);
+
+
     }
 }
 class TempControlProfTest{
