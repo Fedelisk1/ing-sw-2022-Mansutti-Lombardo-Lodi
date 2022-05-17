@@ -4,14 +4,21 @@ import it.polimi.ingsw.model.CharacterCard;
 import it.polimi.ingsw.model.CloudCard;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.view.View;
 
 import javax.swing.text.PlainDocument;
+import java.util.Map;
 
-public class GameHandler {
+public class GameController {
     private Game game;
+    private View view;
 
-    public void gameStart(int playerCount)
+    public void gameHandler(Game game, View view)
     {
-        game = new Game(playerCount, true);
+        this.game=game;
+        this.view=view;
+        this.view.addListener(this);
     }
+
+
 }

@@ -6,6 +6,7 @@ import java.util.EnumMap;
 public class Player {
     private int coins;
     private Hand hand;
+    private String nickname;
     private SchoolDashboard schoolDashboard;
     private ArrayList<AssistantCard> discardPile;
     private int cardValue;
@@ -24,6 +25,14 @@ public class Player {
 
         coins = 0;
         discardPile=new ArrayList<>();
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setHand(Hand hand) {
+        this.hand = hand;
     }
 
     public void setCurrentGame(Game game)
