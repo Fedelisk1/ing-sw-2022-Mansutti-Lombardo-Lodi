@@ -43,6 +43,8 @@ public class Cli extends ViewObservable implements ViewInterface {
                 serverInfo.put("address", serverAddress);
         }
 
+        inputOk = false;
+
         while (!inputOk) {
             System.out.println("Please enter the server port, or press ENTER to use the default port (12345): ");
             String port = input.nextLine();
