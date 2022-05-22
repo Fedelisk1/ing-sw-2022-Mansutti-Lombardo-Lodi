@@ -30,4 +30,9 @@ public class InitialState implements GameState{
 
     }
 
+    @Override
+    public void action1() {
+
+    }
+
 }

@@ -30,6 +30,11 @@ public class Planning1State implements GameState{
     }
 
     @Override
+    public void action1() {
+
+    }
+
+    @Override
     public void startGame()
     {
         //should never happen

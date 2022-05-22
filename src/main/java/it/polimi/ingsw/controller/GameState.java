@@ -7,5 +7,6 @@ public interface GameState {
     void startGame();
     void planning1();
     void planning2(int chosenCard);
+    void action1();
 
 }
