@@ -1,16 +1,11 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.controller.GameController;
+/**
+ * View interface implemented by the views (cli and gui)
+ */
+public interface View {
+    void nicknameInput();
 
-public class View {
-    GameController gameController;
-    public View()
-    {
+    void showLoginOutcome(boolean ok, String username);
 
-    }
-
-    public void addListener(GameController gameController)
-    {
-        this.gameController=gameController;
-    }
 }

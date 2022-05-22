@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.message;
 
 public enum MessageType {
-    NEW_GAME_REQUEST, JOIN_GAME_REQUEST
+    LOGIN_REQUEST, LOGIN_OUTCOME,
+    PLAYERNUMBER_REQUEST,
+    ERROR
 }

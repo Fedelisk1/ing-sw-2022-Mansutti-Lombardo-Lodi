@@ -1,14 +1,13 @@
 package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.controller.ClientController;
+import it.polimi.ingsw.Server;
 import it.polimi.ingsw.observer.ViewObservable;
-import it.polimi.ingsw.view.ViewInterface;
+import it.polimi.ingsw.view.View;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Cli extends ViewObservable implements ViewInterface {
+public class Cli extends ViewObservable implements View {
     Scanner input;
 
     public Cli() {
@@ -24,38 +23,47 @@ public class Cli extends ViewObservable implements ViewInterface {
         System.out.println("▐█▄▄▌▐█•█▌▐█▌▐█ ▪▐▌██▐█▌ ▐█▌· ▐█▀·.▐█▄▪▐█");
         System.out.println(" ▀▀▀ .▀  ▀▀▀▀ ▀  ▀ ▀▀ █▪ ▀▀▀   ▀ •  ▀▀▀▀ ");
         System.out.println();
+
+        // ask server info
+        askServerInfo();
     }
 
     public void askServerInfo() {
         HashMap<String, String> serverInfo = new HashMap<>();
-        boolean inputOk = false;
 
-        System.out.println("--- Server connection ---");
+        System.out.println("--- Connect to Server ---");
 
-        while (!inputOk) {
-            System.out.println("Please enter the server address, or press ENTER to use the default value (localhost): ");
-            String serverAddress = input.nextLine();
+        System.out.println("Please enter the server address, or press ENTER to use the default value (localhost): ");
+        String serverAddress = input.nextLine();
 
-            serverAddress = serverAddress.equals("") ? "localhost" : serverAddress;
+        serverAddress = serverAddress.equals("") ? "localhost" : serverAddress;
+        serverInfo.put("address", serverAddress);
 
-            inputOk = ClientController.validateIPAddress(serverAddress);
-            if (inputOk)
-                serverInfo.put("address", serverAddress);
-        }
 
-        inputOk = false;
+        System.out.println("Please enter the server port, or press ENTER to use the default port (" + Server.DEFAULT_PORT + "): ");
+        String port = input.nextLine();
 
-        while (!inputOk) {
-            System.out.println("Please enter the server port, or press ENTER to use the default port (12345): ");
-            String port = input.nextLine();
-
-            port = port.equals("") ? "12345" : port;
-
-            inputOk = ClientController.validatePort(port);
-            if (inputOk)
-                serverInfo.put("port", port);
-        }
+        port = port.equals("") ? Server.DEFAULT_PORT + "" : port;
+        serverInfo.put("port", port);
 
         notifyObservers(o -> o.onServerInfoInput(serverInfo));
+    }
+
+    @Override
+    public void nicknameInput() {
+        System.out.println("Please enter a nickname: ");
+        String nick = input.nextLine();
+        notifyObservers(o -> {});
+    }
+
+    @Override
+    public void showLoginOutcome(boolean success, String username) {
+        if (success) {
+            System.out.println("Successfully connected to server!");
+            nicknameInput();
+        } else {
+            System.out.println("Unable to connect to server. Please check parameters and retry.");
+            System.exit(-1);
+        }
     }
 }

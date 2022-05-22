@@ -1,7 +1,5 @@
 package it.polimi.ingsw.observer;
 
-import it.polimi.ingsw.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

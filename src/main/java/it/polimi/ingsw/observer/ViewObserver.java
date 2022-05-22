@@ -6,5 +6,7 @@ import java.util.Map;
  * Observer interface for views
  */
 public interface ViewObserver {
-    public void onServerInfoInput(Map<String, String> serverInfo);
+    void onServerInfoInput(Map<String, String> serverInfo);
+
+    void onNicknameInput(String nickname);
 }
