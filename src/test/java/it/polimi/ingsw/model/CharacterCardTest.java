@@ -197,29 +197,27 @@ class Exchange2StudentsTest{
     @Test
     public void testDoEffect() {
         Game game = new Game(2, true);
-        game.getPlayers().get(0).getSchoolDashboard().getEntrance().clear();
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         Exchange2Students p=new Exchange2Students();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
-        game.getPlayers().get(0).setCurrentGame(game);
-        game.getPlayers().get(0).getSchoolDashboard().setCurrentGame(game);
 
-        game.getPlayers().get(0).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
-        game.getPlayers().get(0).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
-        game.getPlayers().get(0).getSchoolDashboard().addStudentToEntrance(Color.BLUE);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.YELLOW);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.BLUE);
 
-        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
-        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
 
         //controllo numero di studenti in entrance
         int sumDiningRoom1=0;
-        for(Color c: game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().keySet()){
-            sumDiningRoom1 = sumDiningRoom1 +game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().get(c);
+        for(Color c: game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().keySet()){
+            sumDiningRoom1 = sumDiningRoom1 +game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(c);
         }
         //controllo numero di studenti in diningRoom
         int sumEntrance1=0;
-        for(Color c: game.getPlayers().get(0).getSchoolDashboard().getEntrance().keySet()){
-            sumEntrance1 = sumEntrance1 +game.getPlayers().get(0).getSchoolDashboard().getEntrance().get(c);
+        for(Color c: game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().keySet()){
+            sumEntrance1 = sumEntrance1 +game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(c);
         }
 
 
@@ -239,22 +237,22 @@ class Exchange2StudentsTest{
 
         //controllo numero di studenti in entrance
         int sumDiningRoom2=0;
-        for(Color c: game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().keySet()){
-            sumDiningRoom2 = sumDiningRoom2 +game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().get(c);
+        for(Color c: game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().keySet()){
+            sumDiningRoom2 = sumDiningRoom2 +game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(c);
         }
         //controllo numero di studenti in diningRoom
         int sumEntrance2=0;
-        for(Color c: game.getPlayers().get(0).getSchoolDashboard().getEntrance().keySet()){
-            sumEntrance2 = sumEntrance2 +game.getPlayers().get(0).getSchoolDashboard().getEntrance().get(c);
+        for(Color c: game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().keySet()){
+            sumEntrance2 = sumEntrance2 +game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(c);
         }
 
         assertEquals(sumDiningRoom1,sumDiningRoom2);
         assertEquals(sumEntrance1,sumEntrance2);
-        assertEquals(0,game.getPlayers().get(0).getSchoolDashboard().getEntrance().get(Color.BLUE));
-        assertEquals(1,game.getPlayers().get(0).getSchoolDashboard().getEntrance().get(Color.YELLOW));
+        assertEquals(0,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.BLUE));
+        assertEquals(1,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.YELLOW));
 
-        assertEquals(1,game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().get(Color.YELLOW));
-        assertEquals(1,game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().get(Color.BLUE));
+        assertEquals(1,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(Color.YELLOW));
+        assertEquals(1,game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(Color.BLUE));
     }
 
 }

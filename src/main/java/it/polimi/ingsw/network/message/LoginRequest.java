@@ -8,6 +8,7 @@ public class LoginRequest extends Message {
         this.username = username;
     }
 
+
     public String getUsername() {
         return username;
     }

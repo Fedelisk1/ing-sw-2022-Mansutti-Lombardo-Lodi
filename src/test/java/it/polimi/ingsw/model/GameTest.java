@@ -121,14 +121,14 @@ class GameTest {
 
    @Test
     public void testCountInfluence(){
-        g.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
-        g.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
-        g.getIslands().get(0).setOccupiedBy(g.getPlayers().get(0));
+        g.getPlayers().get(g.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        g.getPlayers().get(g.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+        g.getIslands().get(0).setOccupiedBy(g.getPlayers().get(g.getCurrentPlayer()));
 
         g.getIslands().get(0).addStudents(Color.RED);
         g.getIslands().get(0).addStudents(Color.RED);
 
-        assertEquals(3,g.countInfluence(g.getPlayers().get(0),g.getIslands().get(0)));
+        assertEquals(3,g.countInfluence(g.getPlayers().get(g.getCurrentPlayer()),g.getIslands().get(0)));
 
     }
 

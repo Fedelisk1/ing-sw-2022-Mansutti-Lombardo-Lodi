@@ -15,8 +15,13 @@ public class Game {
     private ArrayList<CloudCard> cloudCards;
     private ArrayList<Color> unusedProfessors;
     boolean expertMode;
+    private String gameID;
+
 
     public Game(int players, boolean expertMode) {
+        //creates unique identifier for the game instance
+        gameID=UUID.randomUUID().toString();
+
         if(players > 3) {
             System.out.println("Maximum player count is 3, players have been set to 3");
             players = 3;
@@ -55,6 +60,8 @@ public class Game {
                 c.setCurrentGame(this);
             }
         }
+
+        //players and dashboard init
         this.players = new ArrayList<>();
         for(int i = 0; i < players; i++) {
             Player p = new Player();
@@ -64,17 +71,18 @@ public class Game {
             this.players.add(p);
         }
 
+        Random rand = new Random();
+        currentPlayer = rand.nextInt(players);
+
+        //sets game mode
         this.expertMode = expertMode;
 
         // cloudCards init
         cloudCards = new ArrayList<>();
         for (int i = 0; i < players; i++) {
-            CloudCard c = new CloudCard();
-            c.setCurrentGame(this);
-            c.setUp();
+            CloudCard c = new CloudCard(this);
             this.cloudCards.add(c);
         }
-
 
     }
 
