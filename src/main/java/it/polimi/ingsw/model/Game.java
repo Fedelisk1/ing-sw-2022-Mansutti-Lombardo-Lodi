@@ -18,6 +18,7 @@ public class Game {
     private String gameID;
 
 
+
     public Game(int players, boolean expertMode) {
         //creates unique identifier for the game instance
         gameID=UUID.randomUUID().toString();
@@ -152,29 +153,32 @@ public class Game {
 
 
     /**
-     * method extract from bag: it converts possible keys into numbers and extracts on of them by
-     * decreasing the number from bag and increasing to extracted
-     * @author Federico Lombardo
+     * method extract from bag: it converts possible keys into numbers and extracts one of them by
+     * decreasing the number from bag and increasing to extracted.
+     * If there are not enough students throw IllegalArgumentException
      * @param student describes how many students we need to extract
      * @return a new EnumMap with the extracted students
+     *
      */
 
     public EnumMap<Color,Integer> extractFromBag(int student) {
         EnumMap<Color,Integer> extracted = new EnumMap<>(Color.class);
+        if(studentsInBag()>0 && studentsInBag()>=student){
+            for (int i = 0; i < student; i++) {
 
-        for(int i = 0; i < student; i++) {
+                int extractColor = new Random().nextInt(bag.values().size());
 
-            int extractcolor = new Random().nextInt(bag.values().size());
+                if (bag.get(Color.values()[extractColor]) > 0) {
 
-            if (bag.get(Color.values()[extractcolor]) > 0) {
-
-                bag.put(Color.values()[extractcolor], bag.get(Color.values()[extractcolor]) - 1);
-                if(extracted.get(Color.values()[extractcolor])!=null)
-                    extracted.put(Color.values()[extractcolor],extracted.get(Color.values()[extractcolor])+1);
-                else extracted.put(Color.values()[extractcolor],1);
+                    bag.put(Color.values()[extractColor], bag.get(Color.values()[extractColor]) - 1);
+                    if (extracted.get(Color.values()[extractColor]) != null)
+                        extracted.put(Color.values()[extractColor], extracted.get(Color.values()[extractColor]) + 1);
+                    else extracted.put(Color.values()[extractColor], 1);
+                }else i--;
             }
+            return extracted;
         }
-        return extracted;
+        else throw new  IllegalArgumentException("Not enough students");
     }
 
     public int studentsInBag(Color color) {
