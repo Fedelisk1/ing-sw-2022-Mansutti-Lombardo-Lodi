@@ -20,6 +20,7 @@ public class GameController {
         this.state= new InitialState(this);
         playerActionCount=0;
     }
+
     public void changeState(GameState state)
     {
         this.state=state;

@@ -15,6 +15,10 @@ public class Message implements Serializable{
         return messageType;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     @Override
     public String toString() {
         return "nickname"+nickname;

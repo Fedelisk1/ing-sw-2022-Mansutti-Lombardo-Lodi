@@ -17,13 +17,13 @@ public class Server {
 
     public static void main(String[] args) {
         int port = DEFAULT_PORT;
-        for (int i = 0; i < args.length; i++) {
-            if ((args[i].equals("--port") || args[i].equals("-p") ) && args.length > i+1) {
+
+        for (int i = 0; i < args.length; i++)
+            if ((args[i].equals("--port") || args[i].equals("-p") ) && args.length > i+1)
                 port = Integer.parseInt(args[i+1]);
-            }
-        }
 
         ServerSocket serverSocket = null;
+        Lobby lobby = new Lobby();
 
         try {
             serverSocket = new ServerSocket(port);
@@ -40,7 +40,7 @@ public class Server {
 
                 System.out.println("new client connected " + client.getInetAddress());
 
-                new Thread(() -> {/*lobby handle new user*/});
+                new Thread(() -> {lobby.allocateClient(client);});
             } catch (IOException e) {
                 System.out.println("connection hangup");
             }

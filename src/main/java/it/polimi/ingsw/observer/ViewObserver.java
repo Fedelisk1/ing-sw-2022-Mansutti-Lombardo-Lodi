@@ -9,4 +9,6 @@ public interface ViewObserver {
     void onServerInfoInput(Map<String, String> serverInfo);
 
     void onNicknameInput(String nickname);
+
+    void onNewGameParametersInput(int playersNumber, boolean expertMode);
 }

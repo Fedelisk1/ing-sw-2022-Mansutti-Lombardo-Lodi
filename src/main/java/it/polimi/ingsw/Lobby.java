@@ -18,12 +18,19 @@ public class Lobby {
     }
 
     public synchronized void allocateClient(Socket client) {
-        boolean isAvailableGame = false;
+        boolean availableEmptyGame = false;
         GameController availableGame = null;
 
         for (GameController game : games) {
             // find available spot
+        }
 
+        if (availableEmptyGame) {
+            // if a game is available, let the user join it
+
+        } else {
+            // otherwise put him in a newly created game
+            //GameController newGame = new GameController(new Game());
         }
 
     }
