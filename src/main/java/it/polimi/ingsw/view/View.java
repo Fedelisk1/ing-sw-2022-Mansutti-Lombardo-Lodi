@@ -8,4 +8,5 @@ public interface View {
 
     void showLoginOutcome(boolean ok, String username);
 
+
 }

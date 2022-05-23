@@ -25,16 +25,19 @@ public class GameController {
         this.state=state;
     }
 
+    public void startGame()
+    {
+        state.startGame();
+    }
+
     public Game getGame() {
         return game;
     }
 
-    public boolean gamePhaseChange(Message message)
+    public void gamePhaseChange(Message message)
     {
         switch(message.getMessageType())
         {
-            case START_GAME:
-                state.startGame();
             case FILL_CLOUD_CARDS:
                 state.planning1();
             case PLAY_ASSISTANT_CARD:
@@ -54,10 +57,6 @@ public class GameController {
                 state.action3(msg5.getCloudCard());
             case END_PLAYER_TURN:
                 state.endPlayerTurn();
-
-
-            default:
-                return false;
         }
 
     }
