@@ -11,12 +11,14 @@ public class GameController {
     private Game game;
     private View view;
     private GameState state;
+    private int playerActionCount;
 
     public GameController(Game game, View view)
     {
         this.game=game;
         this.view=view;
         this.state= new InitialState(this);
+        playerActionCount=0;
     }
     public void changeState(GameState state)
     {
@@ -47,12 +49,27 @@ public class GameController {
             case MOVE_MOTHER_NATURE:
                 MoveMotherNature msg4 = (MoveMotherNature) message;
                 state.action2(msg4.getSteps());
+            case CHOOSE_CLOUD_CARD:
+                ChooseCloudCard msg5 = (ChooseCloudCard) message;
+                state.action3(msg5.getCloudCard());
+            case END_PLAYER_TURN:
+                state.endPlayerTurn();
 
 
             default:
                 return false;
         }
 
+    }
+
+    public void clearPlayerActionCount() {
+        this.playerActionCount = 0;
+    }
+    public void addPlayerActionCount() {
+        this.playerActionCount++;
+    }
+    public int getPlayerActionCount() {
+        return playerActionCount;
     }
 
 }

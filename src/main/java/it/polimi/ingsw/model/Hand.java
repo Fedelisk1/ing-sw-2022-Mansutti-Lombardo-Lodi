@@ -22,4 +22,7 @@ public class Hand {
 
     }
 
+    public ArrayList<AssistantCard> getAssistantCards() {
+        return assistantCards;
+    }
 }

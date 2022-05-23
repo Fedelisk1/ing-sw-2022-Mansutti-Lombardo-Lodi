@@ -11,5 +11,6 @@ public interface GameState {
     void action1Island(Color color, int islandNumber);
     void action1DiningRoom(Color color);
     void action2(int steps);
-
+    void action3(int cloudCard);
+    void endPlayerTurn();
 }

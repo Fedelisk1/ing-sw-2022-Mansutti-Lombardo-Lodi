@@ -23,9 +23,6 @@ public class Planning2State implements GameState{
     @Override
     public void planning2(int chosenCard)
     {
-        //TODO: check discard pile for duplicate cards
-
-
         //the current player chooses the assistant card, then the current player is changed to the next
         game.getPlayers().get(game.getCurrentPlayer()).chooseAssistantCard(chosenCard);
         if(game.getCurrentPlayer()+1==game.getPlayers().size())
@@ -70,6 +67,16 @@ public class Planning2State implements GameState{
 
     @Override
     public void action2(int steps) {
+
+    }
+
+    @Override
+    public void action3(int cloudCard) {
+
+    }
+
+    @Override
+    public void endPlayerTurn() {
 
     }
 
