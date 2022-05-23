@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Color;
 
 public class Planning2State implements GameState{
 
@@ -58,7 +59,17 @@ public class Planning2State implements GameState{
     }
 
     @Override
-    public void action1() {
+    public void action1Island(Color color, int islandNumber) {
+
+    }
+
+    @Override
+    public void action1DiningRoom(Color color) {
+
+    }
+
+    @Override
+    public void action2(int steps) {
 
     }
 

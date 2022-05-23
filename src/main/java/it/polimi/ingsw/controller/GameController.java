@@ -1,9 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.NewGameRequest;
-import it.polimi.ingsw.network.message.PlayAssistantCard;
+import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.view.View;
 
 /**
@@ -40,6 +38,13 @@ public class GameController {
             case PLAY_ASSISTANT_CARD:
                 PlayAssistantCard msg = (PlayAssistantCard) message;
                 state.planning2(msg.getChosenCard());
+            case MOVE_STUDENT_TO_ISLAND:
+                MoveStudentToIsland msg2 = (MoveStudentToIsland) message;
+                state.action1Island(msg2.getColor(),msg2.getIslandNumber());
+            case MOVE_STUDENT_TO_DINING_ROOM:
+                MoveStudentToDiningRoom msg3 = (MoveStudentToDiningRoom) message;
+                state.action1DiningRoom(msg3.getColor());
+
 
             default:
                 return false;

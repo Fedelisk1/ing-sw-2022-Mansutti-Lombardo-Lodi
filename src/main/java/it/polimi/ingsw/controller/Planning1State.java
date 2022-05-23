@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.message.FillCloudCards;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.model.Color;
 
 public class Planning1State implements GameState{
     private GameController gameController;
@@ -30,9 +31,20 @@ public class Planning1State implements GameState{
     }
 
     @Override
-    public void action1() {
+    public void action1Island(Color color, int islandNumber) {
 
     }
+
+    @Override
+    public void action1DiningRoom(Color color) {
+
+    }
+
+    @Override
+    public void action2(int steps) {
+
+    }
+
 
     @Override
     public void startGame()

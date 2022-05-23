@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
@@ -31,8 +32,19 @@ public class InitialState implements GameState{
     }
 
     @Override
-    public void action1() {
+    public void action1Island(Color color, int islandNumber) {
 
     }
+
+    @Override
+    public void action1DiningRoom(Color color) {
+
+    }
+
+    @Override
+    public void action2(int steps) {
+
+    }
+
 
 }
