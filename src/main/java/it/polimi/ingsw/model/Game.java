@@ -432,4 +432,41 @@ public class Game {
         return result;
     }
 
+    /**
+     * finds the player with the highest amount of towers used and, if tied, the player with the most professors
+     * @return
+     */
+    public Player winner()
+    {
+        Player winner=players.get(0);
+
+        //finds the player with the lowest number of towers in their school dashboard
+        for(int i=1;i<players.size();i++)
+        {
+            if(players.get(i).getSchoolDashboard().getTowers()<winner.getSchoolDashboard().getTowers())
+            {
+                winner=players.get(i);
+            }
+        }
+
+
+        //checks if there is any other player with the same number of towers (tie), if there is, winner is the player with the highest amount of professors
+        for(Player p : players)
+        {
+            if(p!=winner)
+            {
+                if(p.getSchoolDashboard().getTowers()==winner.getSchoolDashboard().getTowers())
+                {
+
+                    if(p.getSchoolDashboard().getProfessors().size()>winner.getSchoolDashboard().getProfessors().size())
+                    {
+                        winner=p;
+                    }
+                }
+            }
+        }
+
+        return winner;
+    }
+
 }

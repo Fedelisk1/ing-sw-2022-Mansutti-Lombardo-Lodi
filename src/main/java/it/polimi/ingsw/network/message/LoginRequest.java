@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.message;
 
+/**
+ * Message sent from client to server ofter the connection is successfully established.
+ */
 public class LoginRequest extends Message {
     private String username;
 

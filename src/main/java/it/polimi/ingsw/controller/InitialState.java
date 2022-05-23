@@ -46,5 +46,15 @@ public class InitialState implements GameState{
 
     }
 
+    @Override
+    public void action3(int cloudCard) {
+
+    }
+
+    @Override
+    public void endPlayerTurn() {
+
+    }
+
 
 }

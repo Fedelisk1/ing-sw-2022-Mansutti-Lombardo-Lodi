@@ -5,15 +5,18 @@ import it.polimi.ingsw.view.cli.Cli;
 
 public class Client {
     public static void main(String[] args) {
-        boolean useCli = false;
+        String mode = "";
 
-        for (String arg : args) {
-            if (arg.equals("--cli")) {
-                useCli = true;
+        for(int i = 0; i < args.length; i++)
+            if((args[i].equals("--view") || args[i].equals("-v")) && args.length > i + 1) {
+                mode = args[i+1].toUpperCase();
+                break;
             }
-        }
 
-        if (useCli) {
+        if (! (mode.equals("CLI") || mode.equals("GUI")))
+            mode = Cli.askViewModeAtStart();
+
+        if (mode.equals("CLI")) {
             Cli cli = new Cli();
             ClientController cc = new ClientController(cli);
             cli.addObserver(cc);

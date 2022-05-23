@@ -22,19 +22,6 @@ class SchoolDashboardTest
     }
 
     @Test
-    public void RemoveTowersShouldThrowRuntimeExceptionWhenInputIsNegativeTest()
-    {
-        game.getPlayers().get(1).getSchoolDashboard().removeTowers(3);
-        Assertions.assertThrows(IllegalArgumentException.class, () ->{ game.getPlayers().get(1).getSchoolDashboard().removeTowers(-3);});
-    }
-    @Test
-    public void RemoveTowersShouldThrowRuntimeExceptionWhenLessThan0Test()
-    {
-        game.getPlayers().get(1).getSchoolDashboard().removeTowers(3);
-        Assertions.assertThrows(IllegalArgumentException.class, () ->{ game.getPlayers().get(1).getSchoolDashboard().removeTowers(9);});
-    }
-
-    @Test
     public void addTowersTest()
     {
         game.getPlayers().get(1).getSchoolDashboard().removeTowers(3);

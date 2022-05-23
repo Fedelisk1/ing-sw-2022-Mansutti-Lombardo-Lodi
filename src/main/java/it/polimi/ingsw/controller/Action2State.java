@@ -16,26 +16,82 @@ public class Action2State implements GameState{
     }
 
 
+    /**
+     * Moves mother nature, changes island ownership and checks/executes possible island merges
+     * @param steps to move mother nature
+     */
     @Override
     public void action2(int steps) {
+        Player winner = null;
 
         //moves mother nature
         game.moveMotherNature(steps);
 
-        //calculates player with highest influence and sets occupation on island
+        //if the island is already occupied, add back the towers to the occupying player, otherwise just remove towers from the winning player
         IslandGroup currentIslandGroup = game.getMotherNatureIsland();
-        Player winningPlayer= game.playerWithHigherInfluence(currentIslandGroup);
-        currentIslandGroup.setOccupiedBy(winningPlayer);
 
-        //towers are automatically set on island upon ownership, all is needed is to remove towers from the school dashboard.
+
+        //calculates player with highest influence and sets occupation on island and adds/removes towers
         int groupSize = currentIslandGroup.getIslandCount();
-        game.getCurrentPlayerInstance().getSchoolDashboard().removeTowers(groupSize);
+        Player winningPlayer= game.playerWithHigherInfluence(currentIslandGroup);
 
-        //checks if the next island in the sequence is occupied by the same player
-        if(game.getIslands().get(game.getMotherNaturePosition()+1).getOccupiedBy()==winningPlayer)
+        //if winning player is tied, go to next state
+        if(winningPlayer==null)
         {
-            game.mergeIslands(game.getMotherNaturePosition());
+            gameController.changeState(new Action3State(gameController));
+            return;
         }
+
+
+        //if no one occupies the island, remove towers from the winning player dashboard
+        if(currentIslandGroup.getOccupiedBy()==null)
+        {
+            winningPlayer.getSchoolDashboard().removeTowers(groupSize);
+            currentIslandGroup.setOccupiedBy(winningPlayer);
+        }
+        //if the island is already occupied, add towers back to the losing player and remove towers from the winning player
+        else
+        {
+            if(!winningPlayer.equals(currentIslandGroup.getOccupiedBy()))
+            {
+                currentIslandGroup.getOccupiedBy().getSchoolDashboard().addTowers(groupSize);
+                winningPlayer.getSchoolDashboard().removeTowers(groupSize);
+                currentIslandGroup.setOccupiedBy(winningPlayer);
+            }
+        }
+
+        if(winningPlayer.getSchoolDashboard().getTowers()<=0)
+        {
+            winner = winningPlayer;
+            //TODO: close game
+        }
+
+        //checks if the next island group in the sequence is occupied by the same player
+        if(game.getIslands().get((game.getMotherNaturePosition()+1)%game.getIslands().size()).getOccupiedBy()==winningPlayer)
+            game.mergeIslands(game.getMotherNaturePosition());
+        //also, if the previous island group is occupied by the same player
+        if(game.getIslands().get(Math.floorMod((game.getMotherNaturePosition()-1),game.getIslands().size())).getOccupiedBy()==winningPlayer)
+            game.mergeIslands(game.getMotherNaturePosition()-1);
+
+        //if there are 3 or less island groups left, game ends.
+        if(game.getIslands().size()<=3)
+        {
+            winner = game.winner();
+            //TODO: close game
+        }
+
+        gameController.changeState(new Action3State(gameController));
+
+    }
+
+
+    @Override
+    public void action3(int cloudCard) {
+
+    }
+
+    @Override
+    public void endPlayerTurn() {
 
     }
 

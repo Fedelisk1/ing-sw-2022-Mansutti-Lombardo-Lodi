@@ -15,6 +15,11 @@ public class Action1State implements GameState{
         game= gameController.getGame();
     }
 
+    /**
+     * moves a student of a specified color to a specified island
+     * @param color
+     * @param islandNumber
+     */
     @Override
     public void action1Island(Color color, int islandNumber) {
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().moveToIslandGroup(color, islandNumber);
@@ -27,6 +32,11 @@ public class Action1State implements GameState{
         }
 
     }
+
+    /**
+     * moves a student of a specified color to a specified dining room
+     * @param color
+     */
     @Override
     public void action1DiningRoom(Color color) {
 
@@ -44,6 +54,16 @@ public class Action1State implements GameState{
 
     @Override
     public void action2(int steps) {
+
+    }
+
+    @Override
+    public void action3(int cloudCard) {
+
+    }
+
+    @Override
+    public void endPlayerTurn() {
 
     }
 

@@ -15,6 +15,9 @@ public class Planning1State implements GameState{
         this.game= gameController.getGame();
     }
 
+    /**
+     * fills all cloud cards
+     */
     @Override
     public void planning1() {
         for(int i=0; i<game.getPlayers().size(); i++)
@@ -42,6 +45,16 @@ public class Planning1State implements GameState{
 
     @Override
     public void action2(int steps) {
+
+    }
+
+    @Override
+    public void action3(int cloudCard) {
+
+    }
+
+    @Override
+    public void endPlayerTurn() {
 
     }
 

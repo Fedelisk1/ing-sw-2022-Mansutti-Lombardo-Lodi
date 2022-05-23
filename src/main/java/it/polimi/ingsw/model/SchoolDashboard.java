@@ -53,7 +53,6 @@ public class SchoolDashboard {
 
     public void removeTowers(int n)
     {
-        if(n<0 || towers-n<0) throw new IllegalArgumentException("tower number not valid");
         towers = towers - n;
     }
 

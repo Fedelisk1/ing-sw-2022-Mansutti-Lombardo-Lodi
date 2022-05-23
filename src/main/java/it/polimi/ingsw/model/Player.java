@@ -118,4 +118,8 @@ public class Player {
         count++;
 
     }
+    public Hand getHand()
+    {
+        return hand;
+    }
 }
