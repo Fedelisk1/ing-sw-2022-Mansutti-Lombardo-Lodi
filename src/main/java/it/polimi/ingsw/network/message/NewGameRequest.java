@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.message;
 
+/**
+ * Sent from client to server when a new game has to start.
+ */
 public class NewGameRequest extends Message {
     private int players;
     private boolean expertMode;

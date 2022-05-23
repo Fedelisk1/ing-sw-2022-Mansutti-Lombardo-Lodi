@@ -4,6 +4,7 @@ public enum MessageType {
     LOGIN_REQUEST, LOGIN_OUTCOME,
     NEW_GAME_REQUEST,
     LOBBY,
+    GAME_START,
     ERROR,
     FILL_CLOUD_CARDS,
     PLAY_ASSISTANT_CARD,

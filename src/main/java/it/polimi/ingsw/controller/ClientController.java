@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.network.SocketClient;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.observer.Observer;
@@ -77,7 +78,10 @@ public class ClientController implements ViewObserver, Observer {
                 taskQueue.execute(() -> view.showLobby(lobbyMessage.getNicknames(), lobbyMessage.getPlayers()));
                 break;
 
+            case GAME_START:
+                GameStart gameStart = (GameStart) message;
 
+                break;
             case ERROR:
                 break;
             default:
