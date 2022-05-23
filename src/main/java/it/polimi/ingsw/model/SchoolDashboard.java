@@ -11,6 +11,9 @@ public class SchoolDashboard {
     private EnumMap<Color,Integer> diningRoom;
     private Game currentGame;
 
+
+
+
     /**le torri non vengono gestite tramite colore ma tramite proprietario**/
     SchoolDashboard()
     {
@@ -30,6 +33,8 @@ public class SchoolDashboard {
         diningRoom.putIfAbsent(Color.PINK,0);
         diningRoom.putIfAbsent(Color.BLUE,0);
         diningRoom.putIfAbsent(Color.YELLOW,0);
+
+
     }
     public void setUp()
     {
@@ -125,6 +130,7 @@ public class SchoolDashboard {
 
     /**
      * adds a student to the Dining Room, and if the students of that color in that dining room, are more than the other players, move a professor.
+     *
      * @param color student color
      * @throws NullPointerException if color is null
      */
@@ -133,9 +139,11 @@ public class SchoolDashboard {
         boolean hasMoreStudents = true;
         diningRoom.putIfAbsent(color, 0);
         diningRoom.put(color,diningRoom.get(color)+1);
+        if(currentGame.isExpertMode()){
+            if(diningRoom.get(color)%3==0)
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).addCoins();
+        }
 
-        if(diningRoom.get(color)%3==0)
-            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()+1);
 
         if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getProfessors().contains(color)) return;
 
@@ -169,7 +177,9 @@ public class SchoolDashboard {
             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
             currentGame.getUnusedProfessors().remove(color);
         }
+
     }
+
 
     public void removeStudentFromDiningRoom(Color color) throws NullPointerException{
 
@@ -194,7 +204,6 @@ public class SchoolDashboard {
     }
 
 
-
     /**
      * removes a professor from the school dashboard
      * @param color professor color
@@ -204,7 +213,6 @@ public class SchoolDashboard {
 
     public void removeProfessor(Color color) throws NullPointerException
     {
-
         if(!professors.contains(color)) throw new IllegalArgumentException("There is no professor of such color");
         professors.remove(color);
     }

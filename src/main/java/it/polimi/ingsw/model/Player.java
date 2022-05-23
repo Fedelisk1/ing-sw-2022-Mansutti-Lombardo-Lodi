@@ -22,9 +22,11 @@ public class Player {
         schoolDashboard = new SchoolDashboard();
         for(Color c: Color.values())
             schoolDashboard.getDiningRoom().put(c,0);
-
-        coins = 0;
         discardPile=new ArrayList<>();
+
+    }
+    public void initCoins(){
+        coins=0;
     }
 
     public String getNickname() {
@@ -33,6 +35,10 @@ public class Player {
 
     public void setHand(Hand hand) {
         this.hand = hand;
+    }
+    public void addCoins(){
+        coins=getCoins()+1;
+        currentGame.decreaseTotalCoins();
     }
 
     public void setCurrentGame(Game game)
