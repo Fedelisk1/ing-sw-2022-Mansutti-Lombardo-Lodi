@@ -44,6 +44,9 @@ public class GameController {
             case MOVE_STUDENT_TO_DINING_ROOM:
                 MoveStudentToDiningRoom msg3 = (MoveStudentToDiningRoom) message;
                 state.action1DiningRoom(msg3.getColor());
+            case MOVE_MOTHER_NATURE:
+                MoveMotherNature msg4 = (MoveMotherNature) message;
+                state.action2(msg4.getSteps());
 
 
             default:

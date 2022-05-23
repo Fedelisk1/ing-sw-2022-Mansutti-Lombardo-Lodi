@@ -105,7 +105,6 @@ class TempControlProf extends CharacterCard{
                         if(p.getSchoolDashboard().getProfessors().contains(c)) {
                             p.getSchoolDashboard().removeProfessor(c);
                             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(c);
-                            //BISOGNA RISISTEMARE I PROFESSORI ALLA FINE DEL TURNO CORRENTE
                         }
 
 

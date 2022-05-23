@@ -389,9 +389,6 @@ public class Game {
         return unusedProfessors;
     }
 
-    public void addCharacterCard(CharacterCard c){
-        characterCards.add(c);
-    }
 
     /**
      * calculates the player with maximum influence, that is the eligible owner for islandGroup
