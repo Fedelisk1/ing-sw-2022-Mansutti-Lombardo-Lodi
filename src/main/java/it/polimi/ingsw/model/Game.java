@@ -51,15 +51,7 @@ public class Game {
         for (Color c : Color.values())
             bag.put(c, MAX_BAG_STUDENTS / Color.values().length);
 
-        // characterCards init
-        if (expertMode) {
-            characterCards = new ArrayList<>();
-            extract3CharacterCard();
 
-            for (CharacterCard c : characterCards) {
-                c.setCurrentGame(this);
-            }
-        }
 
         //players and dashboard init
         this.players = new ArrayList<>();
@@ -70,7 +62,18 @@ public class Game {
             p.getSchoolDashboard().setUp();
             this.players.add(p);
         }
+        // expertMode init
+        if (expertMode) {
+            characterCards = new ArrayList<>();
+            extract3CharacterCard();
 
+            for (CharacterCard c : characterCards) {
+                c.setCurrentGame(this);
+            }
+            for(Player p : getPlayers()){
+                p.initCoins();
+            }
+        }
         Random rand = new Random();
         currentPlayer = rand.nextInt(players);
 
@@ -94,6 +97,7 @@ public class Game {
     {
         return players;
     }
+
 
     public int getPlayersCount() {
         return players.size();
@@ -253,22 +257,21 @@ public class Game {
      */
 
     public int countInfluence(Player player, IslandGroup isl){
-
-        if(isl.isBlockColorOnce_CC()){
-            int x=countInfluenceTowers(player,isl)+countInfluenceStudents(player,isl)-isl.getStudents(isl.getBlockedColor());
-            isl.setBlockedColor(null);
-            return x;
-        }
-        else if(isl.isPlus2Influence_CC()){
-            isl.setPlus2Influence_CC(false);
-            return countInfluenceStudents(player,isl)+countInfluenceTowers(player,isl)+2;
-        }
-        else if(isl.isNoEntryIsland()) {
-            isl.setNoEntryIsland(false);
-            throw new IllegalArgumentException("Influence cannot be calculated after activating the character card");
-        }
-        else if(isl.isBlockTower_CC()){
-            return countInfluenceStudents(player,isl);
+        if(expertMode) {
+            if (isl.isBlockColorOnce_CC()) {
+                int x = countInfluenceTowers(player, isl) + countInfluenceStudents(player, isl) - isl.getStudents(isl.getBlockedColor());
+                isl.setBlockedColor(null);
+                return x;
+            } else if (isl.isPlus2Influence_CC()) {
+                isl.setPlus2Influence_CC(false);
+                return countInfluenceStudents(player, isl) + countInfluenceTowers(player, isl) + 2;
+            } else if (isl.isNoEntryIsland()) {
+                isl.setNoEntryIsland(false);
+                return 0;
+            } else if (isl.isBlockTower_CC()) {
+                return countInfluenceStudents(player, isl);
+            }
+            else return countInfluenceTowers(player,isl)+countInfluenceStudents(player,isl);
         }
         else return countInfluenceTowers(player,isl)+countInfluenceStudents(player,isl);
 

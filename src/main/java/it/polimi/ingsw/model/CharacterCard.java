@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumMap;
 
 public abstract class CharacterCard {
@@ -44,7 +46,6 @@ class Choose1ToIsland extends CharacterCard{
     public void doEffect(Color c,int islandNumber) {
         EnumMap<Color, Integer> extractedFromBag;
 
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() < cost) throw new IllegalArgumentException("Not enough coins ");
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=2;
@@ -78,9 +79,11 @@ class Choose1ToIsland extends CharacterCard{
 
 class TempControlProf extends CharacterCard{
     private int cost;
+    private ArrayList<Player> playerModified;
 
     public TempControlProf() {
         cost=2;
+        playerModified= new ArrayList<>();
     }
 
     /**
@@ -89,7 +92,7 @@ class TempControlProf extends CharacterCard{
      */
 
     public void doEffect(){
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
+
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
 
@@ -101,10 +104,12 @@ class TempControlProf extends CharacterCard{
 
                 for(Color c: Color.values()){
 
-                    if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(c)==p.getSchoolDashboard().getDiningRoom().get(c)){
+                    if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(c)==p.getSchoolDashboard().getDiningRoom().get(c) && p.getSchoolDashboard().getDiningRoom().get(c)!=0){
                         if(p.getSchoolDashboard().getProfessors().contains(c)) {
+
                             p.getSchoolDashboard().removeProfessor(c);
                             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(c);
+                            playerModified.add(p);
                         }
 
 
@@ -119,16 +124,37 @@ class TempControlProf extends CharacterCard{
 
     }
 
+    /**
+     * When the turn ends, this method is called to bring back to the starting condition
+     */
+    public void resetTempControlProf(){
+        for(Player p: playerModified){
 
+            for(Color c: Color.values() ){
 
+                if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(c)==p.getSchoolDashboard().getDiningRoom().get(c) && p.getSchoolDashboard().getDiningRoom().get(c)!=0){
+                    currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeProfessor(c);
+                    p.getSchoolDashboard().addProfessor(c);
+                }
+            }
+        }
+        playerModified.clear();
+    }
+
+    public ArrayList<Player> getPlayerModified() {
+        return playerModified;
+    }
 }
 
 class ChooseIsland extends CharacterCard{
     public ChooseIsland() {
         cost=3;
     }
-    public void doEffect(){
+    public void doEffect(int islnumb){
+
         cost=4;
+        currentGame.countInfluence(currentGame.getPlayers().get(currentGame.getCurrentPlayer()),currentGame.getIslands().get(islnumb));
+
     }
 }
 
@@ -141,9 +167,8 @@ class BlockTower extends CharacterCard{
      * Set true the boolean blockTower of IslandGroup
      */
     public void doEffect(){
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
-        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
+        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=4;
         currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setBlockTower_CC(true);
@@ -160,7 +185,7 @@ class NoEntryIsland extends CharacterCard{
      * Set true the boolean noEntryIsland of IslandGroup and decrement availableUses
      */
     public void doEffect(int islNumb){
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
+
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=3;
@@ -186,7 +211,6 @@ class TwoAdditionalMoves extends CharacterCard{
      */
 
     public void doEffect() {
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=2;
@@ -209,9 +233,6 @@ class Choose3toEntrance extends CharacterCard {
         extracted = currentGame.extractFromBag(6);
     }
 
-    public void setExtracted(EnumMap<Color, Integer> extracted) {
-        this.extracted = extracted;
-    }
 
     /**
      * Check that the number of selected students is the same and then move the students from the card to the entrance
@@ -221,7 +242,6 @@ class Choose3toEntrance extends CharacterCard {
      */
 
     public void doEffect(EnumMap<Color,Integer> chosenFromCard , EnumMap<Color,Integer> chosenFromEntrance) {
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=2;
@@ -288,7 +308,7 @@ class Plus2Influence extends CharacterCard{
      * Set true the boolean plus2Influence of IslandGroup
      */
     public void doEffect(){
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
+
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=3;
@@ -308,7 +328,6 @@ class BlockColorOnce extends CharacterCard{
      * @param c is the color to block
      */
     public void doEffect(Color c){
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=4;
@@ -328,7 +347,7 @@ class Exchange2Students extends CharacterCard{
      * @param chosenFromDiningRoom are the cards chosen from the dining room
      */
     public void doEffect(EnumMap<Color,Integer> chosenFromEntrance,EnumMap<Color,Integer> chosenFromDiningRoom){
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
+
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=2;
@@ -378,7 +397,6 @@ class Choose1DiningRoom extends CharacterCard{
      * @param c color of the student
      */
     public void doEffect(Color c){
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         if(!extracted.containsKey(c)) throw new IllegalArgumentException ("Not present");
@@ -411,7 +429,6 @@ class AllRemoveColor extends CharacterCard{
      * @param c is the color
      */
     public void doEffect(Color c){
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()<cost) throw new IllegalArgumentException("Not enough coins ");
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins()-cost);
 
         cost=4;

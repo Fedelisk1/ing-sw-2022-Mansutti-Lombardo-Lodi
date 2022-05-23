@@ -256,7 +256,7 @@ class Exchange2StudentsTest{
     }
 
 }
-//DA SISTEMARE COME GLI ALTRI
+
 
 class Choose1DiningRoomTest{
     @Test
@@ -475,13 +475,42 @@ class TempControlProfTest{
         game.setCurrentPlayer(1);
         p.doEffect();
 
-        //problema in schooldashboard addStudentToDining room
         assertEquals(false,game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.RED));
         assertEquals(true,game.getPlayers().get(1).getSchoolDashboard().getProfessors().contains(Color.RED));
 
 
     }
+    @Test
+    public void testResetTempControlProf(){
+        Game game = new Game(2, true);
+        TempControlProf p= new TempControlProf();
+        p.setCurrentGame(game);
+        for(Player g: game.getPlayers()) {
+            g.setCoins(3);
+            g.setCurrentGame(game);
+            g.getSchoolDashboard().setCurrentGame(game);
+        }
+        game.setCurrentPlayer(0);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        assertEquals(true,game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.RED));
 
+        game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        assertEquals(false,game.getPlayers().get(1).getSchoolDashboard().getProfessors().contains(Color.RED));
+
+        game.setCurrentPlayer(1);
+        p.doEffect();
+
+        assertEquals(false,game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.RED));
+        assertEquals(true,game.getPlayers().get(1).getSchoolDashboard().getProfessors().contains(Color.RED));
+
+        p.resetTempControlProf();
+
+        assertEquals(true,game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.RED));
+        assertEquals(false,game.getPlayers().get(1).getSchoolDashboard().getProfessors().contains(Color.RED));
+        assertTrue(p.getPlayerModified().isEmpty());
+    }
 
 
 }
