@@ -283,7 +283,20 @@ class Choose1DiningRoomTest{
 
 
     }
+    @Test
+    public void testDoEffectShouldThrowRuntimeExceptionWhenColorIsAbsent(){
+        Game game= new Game(2, true);
+        Choose1DiningRoom p=new Choose1DiningRoom();
+        p.setCurrentGame(game);
 
+        Color choosen= Color.RED;
+
+        p.getExtracted().put(Color.YELLOW,2);
+        p.getExtracted().put(Color.RED,2);
+
+        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen);});
+
+    }
     @Test
     public void testInit(){
         Game game= new Game(2, true);
