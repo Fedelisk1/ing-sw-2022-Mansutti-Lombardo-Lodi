@@ -153,7 +153,7 @@ class ChooseIsland extends CharacterCard{
 
     /**
      * Check if the attribute occupiedBy is different from null ,and then check if the influence is major than the player and eventually
-     * place the tower,else place the tower and set occupiedBy with the currentPlayer
+     * place the tower,else if the influence is major of 0 it places the tower and set occupiedBy with the currentPlayer
      * @param islnumb
      */
 
@@ -175,8 +175,10 @@ class ChooseIsland extends CharacterCard{
                 currentGame.getIslands().get(islnumb).setOccupiedBy(currentGame.getPlayers().get(currentGame.getCurrentPlayer()));
             }
         //se l'isola non è occupata da nessuno
-        }else if(currentGame.getIslands().get(islnumb).getOccupiedBy()==null){
+        }else if(currentGame.getIslands().get(islnumb).getOccupiedBy()==null &&
+        currentGame.countInfluence(currentGame.getPlayers().get(currentGame.getCurrentPlayer()),currentGame.getIslands().get(islnumb))>0){
             //decrementare le torri e settare occupiedby
+
             int sizeIsland=currentGame.getIslands().get(islnumb).getIslandCount();
             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeTowers(sizeIsland);
             currentGame.getIslands().get(islnumb).setOccupiedBy(currentGame.getPlayers().get(currentGame.getCurrentPlayer()));
@@ -384,9 +386,7 @@ class Exchange2Students extends CharacterCard{
             while(chosenFromEntrance.get(c)>0){
 
                 chosenFromEntrance.put(c,chosenFromEntrance.get(c)-1);
-                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(c);
-                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
-
+                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().moveStudentToDiningRoom(c);
             }
         }
 

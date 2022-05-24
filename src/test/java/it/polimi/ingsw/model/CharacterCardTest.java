@@ -439,6 +439,69 @@ class Choose3toEntranceTest{
 
     }
 }
+class ChooseIslandTest{
+    @Test
+    public void testDoEffectOccupiedBy(){
+        Game game = new Game(2, true);
+        ChooseIsland p= new ChooseIsland();
+        p.setCurrentGame(game);
+
+        for(Player x : game.getPlayers()){
+
+            x.getSchoolDashboard().setCurrentGame(game);
+            x.setCurrentGame(game);
+            game.getPlayers().get(0).setCoins(3);
+        }
+        game.setCurrentPlayer(0);
+
+        //isola occupata 2 dal giocatore 1 decremento torri
+        game.getIslands().get(2).setOccupiedBy(game.getPlayers().get(1));
+        game.getPlayers().get(1).getSchoolDashboard().removeTowers(1);
+        //aggiungo 1 studente rosso e 1 verde all'isola
+        game.getIslands().get(2).addStudents(Color.RED,1);
+        game.getIslands().get(2).addStudents(Color.GREEN,1);
+        game.getIslands().get(2).addStudents(Color.YELLOW,1);
+        //metto 1 studenti nella dining room di entrambi gli studenti
+        game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
+
+        assertEquals(7,game.getPlayers().get(1).getSchoolDashboard().getTowers());
+        assertEquals(8,game.getPlayers().get(0).getSchoolDashboard().getTowers());
+        //ora il giocatore 1 ha il prof
+        p.doEffect(2);
+
+        assertEquals(game.getPlayers().get(0),game.getIslands().get(2).getOccupiedBy());
+        assertEquals(7,game.getPlayers().get(0).getSchoolDashboard().getTowers());
+        assertEquals(8,game.getPlayers().get(1).getSchoolDashboard().getTowers());
+    }
+    @Test
+    public void testDoEffect(){
+        Game game = new Game(2, true);
+        ChooseIsland p= new ChooseIsland();
+        p.setCurrentGame(game);
+        for(Player x : game.getPlayers()){
+
+            x.getSchoolDashboard().setCurrentGame(game);
+            x.setCurrentGame(game);
+
+        }
+        game.getPlayers().get(0).setCoins(3);
+        game.setCurrentPlayer(0);
+
+        game.getIslands().get(2).addStudents(Color.GREEN);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
+
+        p.doEffect(2);
+
+        assertEquals(7,game.getPlayers().get(0).getSchoolDashboard().getTowers());
+        assertEquals(game.getPlayers().get(0),game.getIslands().get(2).getOccupiedBy());
+
+    }
+
+
+}
+
 class TempControlProfTest{
     @Test
     public void testDoEffect(){
