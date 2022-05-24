@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Allocates connected clients.
- * When a client connects, if a game is available, it joins. Otherwise it creates a new onw.
+ * When a client connects, if a game is available, it joins. Otherwise, it creates a new onw.
  */
 public class Lobby {
     ArrayList<GameController> games;
@@ -22,14 +22,17 @@ public class Lobby {
         GameController availableGame = null;
 
         for (GameController game : games) {
-            // find available spot
+            if (game.canBeJoined()) {
+                availableEmptyGame = true;
+                break;
+            }
         }
 
         if (availableEmptyGame) {
-            // if a game is available, let the user join it
+            // TODO: if a game is available, let the user join it
 
         } else {
-            // otherwise put him in a newly created game
+            // TODO: otherwise put him in a newly created game
             //GameController newGame = new GameController(new Game());
         }
 

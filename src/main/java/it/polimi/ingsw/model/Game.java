@@ -16,7 +16,7 @@ public class Game {
     private ArrayList<Color> unusedProfessors;
     boolean expertMode;
     private String gameID;
-
+    private int maxPlayers;
 
 
     public Game(int players, boolean expertMode) {
@@ -30,6 +30,7 @@ public class Game {
             System.out.println("Minimum player count is 2, game has been set with 2 players");
             players = 2;
         }
+        maxPlayers = players;
         islands = new ArrayList<>();
 
         for(int i = 0; i < MAX_ISLANDS; i++) {
@@ -101,8 +102,17 @@ public class Game {
     }
 
 
+    /**
+     * Gets the current number of players in the game.
+     *
+     * @return number of players currently in the game.
+     */
     public int getPlayersCount() {
         return players.size();
+    }
+
+    public int getMaxPlayers() {
+        return maxPlayers;
     }
 
     public ArrayList<IslandGroup> getIslands() {

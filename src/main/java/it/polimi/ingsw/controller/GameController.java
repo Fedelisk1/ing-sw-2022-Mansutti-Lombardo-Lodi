@@ -108,4 +108,11 @@ public class GameController {
         return playerActionCount;
     }
 
+    /**
+     * Allows to check if the game can still be joined (the maximum number of players has not been reached yet).
+     * @return
+     */
+    public boolean canBeJoined() {
+        return game.getPlayersCount() < game.getMaxPlayers();
+    }
 }
