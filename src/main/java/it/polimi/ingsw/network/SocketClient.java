@@ -19,7 +19,6 @@ public class SocketClient extends Observable {
     private final Socket socket;
     private final ObjectOutputStream outputStream;
     private final ObjectInputStream inputStream;
-    private final ExecutorService readExecutionQueue;
     private static int TIMEOUT = 5000;
 
     public SocketClient(String serverAddress, int serverPort) throws IOException {
@@ -27,30 +26,30 @@ public class SocketClient extends Observable {
         this.socket.connect(new InetSocketAddress(serverAddress, serverPort), TIMEOUT);
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
         this.inputStream = new ObjectInputStream(socket.getInputStream());
-        this.readExecutionQueue = Executors.newSingleThreadExecutor();
     }
 
     public void readMessage() {
-        readExecutionQueue.execute(() -> {
-            while (!readExecutionQueue.isShutdown()) {
+        Thread readerThread = new Thread(() -> {
+            boolean read = true;
+            while (read) {
                 Message message;
                 try {
                     message = (Message) inputStream.readObject();
                 } catch (IOException | ClassNotFoundException e) {
                     message = new ErrorMessage(null, "Connection lost with the server.");
                     disconnect();
-                    readExecutionQueue.shutdownNow();
+                    read = false;
                 }
                 notifyObservers(message);
             }
         });
+        readerThread.start();
     }
 
     public void sendMessage(Message message) {
         try {
             outputStream.writeObject(message);
             outputStream.reset();
-            notifyObservers(message);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -59,7 +58,6 @@ public class SocketClient extends Observable {
 
     public void disconnect() {
         try {
-            readExecutionQueue.shutdown();
             socket.close();
         } catch (IOException e) {
             // disconnection error

@@ -3,9 +3,11 @@ package it.polimi.ingsw;
 import it.polimi.ingsw.network.SocketClient;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PipedOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Server {
     public final static int DEFAULT_PORT = 12345;
@@ -38,9 +40,11 @@ public class Server {
             try {
                 Socket client = serverSocket.accept();
 
+                //new ObjectOutputStream(client.getOutputStream()).writeObject(new it.polimi.ingsw.network.message.Lobby("aa", Arrays.asList("aa", "bb"), 3));;
+
                 System.out.println("new client connected " + client.getInetAddress());
 
-                new Thread(() -> {lobby.allocateClient(client);});
+                //new Thread(() -> {lobby.allocateClient(client);});
             } catch (IOException e) {
                 System.out.println("connection hangup");
             }

@@ -1,12 +1,12 @@
 package it.polimi.ingsw.observer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.observer.Observer;
 
 public abstract class Observable {
-    private List<Observer> observers;
+    private List<Observer> observers = new ArrayList<>();
 
     public void addObserver(Observer observer) {
         observers.add(observer);
@@ -17,6 +17,6 @@ public abstract class Observable {
     }
 
     public void notifyObservers(Message message) {
-        observers.forEach((o) -> o.update(message));
+        observers.forEach((o) -> o.onMessageArrived(message));
     }
 }

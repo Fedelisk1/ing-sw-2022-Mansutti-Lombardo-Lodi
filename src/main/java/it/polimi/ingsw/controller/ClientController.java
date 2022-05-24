@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static it.polimi.ingsw.network.message.MessageType.*;
+
 /**
  * Handles messages communication with server to achieve a correct game flow client side.
  */
@@ -39,6 +41,7 @@ public class ClientController implements ViewObserver, Observer {
         }
 
         boolean finalConnectionOk = connectionOk;
+        //view.showConnectionOutcome(finalConnectionOk);
         taskQueue.execute(() -> view.showConnectionOutcome(finalConnectionOk));
     }
 
@@ -59,7 +62,7 @@ public class ClientController implements ViewObserver, Observer {
      * @param message message received.
      */
     @Override
-    public void update(Message message) {
+    public void onMessageArrived(Message message) {
         switch (message.getMessageType()) {
             case LOGIN_OUTCOME:
                 LoginOutcome loginOutcome = (LoginOutcome) message;
