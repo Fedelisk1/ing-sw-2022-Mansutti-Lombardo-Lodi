@@ -219,15 +219,6 @@ public class Cli extends ViewObservable implements View {
     }
 
     private String readLine() {
-        /*
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            return br.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        */
-
         FutureTask<String> futureTask = new FutureTask<>(() -> {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             try {
