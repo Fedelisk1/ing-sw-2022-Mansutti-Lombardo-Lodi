@@ -4,7 +4,12 @@ import it.polimi.ingsw.Server;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 public class Cli extends ViewObservable implements View {
     private final Scanner input;
@@ -58,18 +63,20 @@ public class Cli extends ViewObservable implements View {
 
         System.out.println("--- Connect to Server ---");
 
-        System.out.println("Please enter the server address, or press ENTER to use the default value (localhost): \n");
-        String serverAddress = input.nextLine();
+        System.out.println("Please enter the server address, or press ENTER to use the default value (localhost): ");
+        String serverAddress = readLine();
 
         serverAddress = serverAddress.equals("") ? "localhost" : serverAddress;
         serverInfo.put("address", serverAddress);
+        System.out.println("Chosen address: " + serverAddress);
 
+        System.out.println("Please enter the server port, or press ENTER to use the default port (" + Server.DEFAULT_PORT + "): ");
 
-        System.out.println("Please enter the server port, or press ENTER to use the default port (" + Server.DEFAULT_PORT + "): \n");
-        String port = input.nextLine();
+        String port = readLine();
 
         port = port.equals("") ? Server.DEFAULT_PORT + "" : port;
         serverInfo.put("port", port);
+        System.out.println("Chosen port: " + port);
 
         notifyObservers(o -> o.onServerInfoInput(serverInfo));
     }
@@ -209,5 +216,38 @@ public class Cli extends ViewObservable implements View {
         }
 
         return inputStr;
+    }
+
+    private String readLine() {
+        /*
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            return br.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        */
+
+        FutureTask<String> futureTask = new FutureTask<>(() -> {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            try {
+                return br.readLine();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        Thread inputThread = new Thread(futureTask);
+        inputThread.start();
+
+        String input = null;
+
+        try {
+            input = futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            futureTask.cancel(true);
+            Thread.currentThread().interrupt();
+        }
+        return input;
     }
 }
