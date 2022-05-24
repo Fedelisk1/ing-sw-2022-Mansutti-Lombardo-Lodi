@@ -118,13 +118,17 @@ class NoEntryIslandTest{
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
         int islNumb=1;
+        game.getIslands().get(islNumb).addStudents(Color.GREEN,2);
+        game.getCurrentPlayerInstance().getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
 
         assertEquals(2,p.cost);
 
         assertEquals(false,game.getIslands().get(islNumb).isNoEntryIsland());
         p.doEffect(islNumb);
         assertEquals(true,game.getIslands().get(islNumb).isNoEntryIsland());
-
+        assertEquals(0,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(islNumb)));
+        assertEquals(false,game.getIslands().get(islNumb).isNoEntryIsland());
+        assertEquals(3,p.availableUses);
         assertEquals(3,p.cost);
 
     }
@@ -139,15 +143,18 @@ class BlockTowerTest{
         BlockTower p=new BlockTower();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
+        game.getIslands().get(0).addStudents(Color.GREEN,2);
+        game.getCurrentPlayerInstance().getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
+        game.getIslands().get(0).setOccupiedBy(game.getCurrentPlayerInstance());
 
         assertEquals(3,p.cost);
 
         assertEquals(false,game.getIslands().get(game.getMotherNaturePosition()).isBlockTower_CC());
 
         p.doEffect();
-
         assertEquals(true,game.getIslands().get(game.getMotherNaturePosition()).isBlockTower_CC());
-
+        assertEquals(2,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(0)));
+        assertEquals(false,game.getIslands().get(game.getMotherNaturePosition()).isBlockTower_CC());
         assertEquals(4,p.cost);
 
     }
@@ -161,12 +168,17 @@ class Plus2InfluenceTest{
         Plus2Influence p= new Plus2Influence();
         p.setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
+        game.getIslands().get(0).addStudents(Color.GREEN,2);
+        game.getCurrentPlayerInstance().getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
 
         assertEquals(2,p.cost);
         assertEquals(false,game.getIslands().get(game.getMotherNaturePosition()).isPlus2Influence_CC());
         p.doEffect();
         assertEquals(true,game.getIslands().get(game.getMotherNaturePosition()).isPlus2Influence_CC());
         assertEquals(3,p.cost);
+
+        assertEquals(4,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(0)));
+        assertEquals(false,game.getIslands().get(0).isPlus2Influence_CC());
 
     }
 }
@@ -180,14 +192,22 @@ class BlockColorOnceTest{
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
         Color choosen=Color.YELLOW;
 
+        game.getIslands().get(0).addStudents(Color.YELLOW,2);
+        game.setCurrentPlayer(0);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+
         assertEquals(3,p.cost);
-        assertEquals(false,game.getIslands().get(game.getMotherNaturePosition()).isBlockColorOnce_CC());
-        assertEquals(null,game.getIslands().get(game.getMotherNaturePosition()).getBlockedColor());
+        assertEquals(false,game.getIslands().get(0).isBlockColorOnce_CC());
+        assertEquals(null,game.getIslands().get(0).getBlockedColor());
+
 
         p.doEffect(choosen);
-
-        assertEquals(true,game.getIslands().get(game.getMotherNaturePosition()).isBlockColorOnce_CC());
         assertEquals(choosen,game.getIslands().get(game.getMotherNaturePosition()).getBlockedColor());
+
+        assertEquals(true,game.getIslands().get(0).isBlockColorOnce_CC());
+        assertEquals(0,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(0)));
+        assertEquals(false,game.getIslands().get(0).isBlockColorOnce_CC());
+
 
         assertEquals(4,p.cost);
 
@@ -219,8 +239,6 @@ class Exchange2StudentsTest{
         for(Color c: game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().keySet()){
             sumEntrance1 = sumEntrance1 +game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(c);
         }
-
-
 
         //inizializzo enum map ChoosenFromEntrance
 
@@ -283,20 +301,7 @@ class Choose1DiningRoomTest{
 
 
     }
-    @Test
-    public void testDoEffectShouldThrowRuntimeExceptionWhenColorIsAbsent(){
-        Game game= new Game(2, true);
-        Choose1DiningRoom p=new Choose1DiningRoom();
-        p.setCurrentGame(game);
 
-        Color choosen= Color.RED;
-
-        p.getExtracted().put(Color.YELLOW,2);
-        p.getExtracted().put(Color.RED,2);
-
-        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen);});
-
-    }
     @Test
     public void testInit(){
         Game game= new Game(2, true);
@@ -325,22 +330,22 @@ class AllRemoveColorTest{
             g.setCurrentGame(game);
             g.getSchoolDashboard().setCurrentGame(game);
         }
+
         for(int i=0;i<4;i++)
             game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
         for(int i=0;i<2;i++)
             game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
         game.getPlayers().get(2).getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
 
+        Color chosen=Color.RED;
 
-        Color choosen=Color.RED;
+        assertEquals(4,game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().get(chosen));
+        assertEquals(2,game.getPlayers().get(1).getSchoolDashboard().getDiningRoom().get(chosen));
 
-        assertEquals(4,game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().get(choosen));
-        assertEquals(2,game.getPlayers().get(1).getSchoolDashboard().getDiningRoom().get(choosen));
+        p.doEffect(chosen);
 
-        p.doEffect(choosen);
-
-        assertEquals(1,game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().get(choosen));
-        assertEquals(0,game.getPlayers().get(1).getSchoolDashboard().getDiningRoom().get(choosen));
+        assertEquals(1,game.getPlayers().get(0).getSchoolDashboard().getDiningRoom().get(chosen));
+        assertEquals(0,game.getPlayers().get(1).getSchoolDashboard().getDiningRoom().get(chosen));
 
         assertEquals(1,game.getPlayers().get(2).getSchoolDashboard().getDiningRoom().get(Color.GREEN));
 

@@ -22,6 +22,7 @@ public class AllRemoveColor extends CharacterCard {
             if (numberOfStudents > 2) {
                 for (int i = 0; i < 3; i++)
                     p.getSchoolDashboard().removeStudentFromDiningRoom(c);
+
             } else if (numberOfStudents == 2) {
                 for (int i = 0; i < 2; i++)
                     p.getSchoolDashboard().removeStudentFromDiningRoom(c);

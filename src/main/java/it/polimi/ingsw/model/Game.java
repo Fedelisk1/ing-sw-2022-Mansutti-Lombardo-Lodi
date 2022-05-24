@@ -75,6 +75,7 @@ public class Game {
                 p.initCoins();
             }
         }
+
         Random rand = new Random();
         currentPlayer = rand.nextInt(players);
 
@@ -265,6 +266,7 @@ public class Game {
             if (isl.isBlockColorOnce_CC()) {
                 int x = countInfluenceTowers(player, isl) + countInfluenceStudents(player, isl) - isl.getStudents(isl.getBlockedColor());
                 isl.setBlockedColor(null);
+                isl.setBlockColorOnce_CC(false);
                 return x;
             } else if (isl.isPlus2Influence_CC()) {
                 isl.setPlus2Influence_CC(false);
@@ -273,6 +275,7 @@ public class Game {
                 isl.setNoEntryIsland(false);
                 return 0;
             } else if (isl.isBlockTower_CC()) {
+                isl.setBlockTower_CC(false);
                 return countInfluenceStudents(player, isl);
             }
             else return countInfluenceTowers(player,isl)+countInfluenceStudents(player,isl);
