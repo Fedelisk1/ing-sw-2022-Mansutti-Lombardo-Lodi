@@ -102,5 +102,15 @@ public class IslandGroup {
         return blockedColor;
     }
 
+    /**
+     * Merges th current island with another given one.
+     * @param with Island to merge. It is supposed to have the same owner as the current island.
+     */
+    public void merge(IslandGroup with) {
 
+        for(Color c : Color.values())
+            addStudents(c, with.getStudents(c));
+
+        incrementIslandCount(with.getIslandCount());
+    }
 }

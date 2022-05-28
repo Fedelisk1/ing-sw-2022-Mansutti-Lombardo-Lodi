@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 
 
+import it.polimi.ingsw.exceptions.MissingStudentException;
+import it.polimi.ingsw.model.charactercards.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -195,7 +197,7 @@ class BlockColorOnceTest{
 }
 class Exchange2StudentsTest{
     @Test
-    public void testDoEffect() {
+    public void testDoEffect() throws MissingStudentException {
         Game game = new Game(2, true);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         Exchange2Students p=new Exchange2Students();
@@ -350,7 +352,7 @@ class AllRemoveColorTest{
 
 class Choose3toEntranceTest{
     @Test
-    public void testDoEffect() {
+    public void testDoEffect() throws MissingStudentException {
         Game game = new Game(2, true);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         Choose3toEntrance p = new Choose3toEntrance();

@@ -1,9 +1,11 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.network.message.FillCloudCards;
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.util.EnumMap;
 
@@ -28,6 +30,7 @@ public class Planning1State implements GameState{
         }
         gameController.changeState(new Planning2State(gameController));
 
+        gameController.getViews().forEach(vv -> vv.update(new ReducedGame(game)));
     }
 
     @Override

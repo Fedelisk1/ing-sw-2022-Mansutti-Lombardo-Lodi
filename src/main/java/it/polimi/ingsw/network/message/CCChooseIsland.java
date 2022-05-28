@@ -1,12 +1,14 @@
 package it.polimi.ingsw.network.message;
 
-public class CCChooseIsland extends Message{
-    private MessageType messageType;
-    private String nickname;
-    private int islnumb;
-    private int cardPosition;
+import java.io.Serial;
 
-    public CCChooseIsland(String nickname, MessageType messageType, int islnumb, int cardPosition) {
+public class CCChooseIsland extends Message{
+    @Serial
+    private static final long serialVersionUID = 3732250567974070317L;
+    private final int islnumb;
+    private final int cardPosition;
+
+    public CCChooseIsland(String nickname, int islnumb, int cardPosition) {
         super(nickname, MessageType.CC_CHOOSE_ISLAND);
         this.islnumb=islnumb;
         this.cardPosition=cardPosition;

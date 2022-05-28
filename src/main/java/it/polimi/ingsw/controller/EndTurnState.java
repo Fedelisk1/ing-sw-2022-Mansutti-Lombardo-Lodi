@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.MissingStudentException;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.charactercards.*;
 
 import java.util.EnumMap;
 
@@ -31,11 +33,15 @@ public class EndTurnState implements GameState{
                 //TODO: close game
             }
             gameController.clearPlayerActionCount();
+            gameController.askAssistantCard(null);
             gameController.changeState(new Planning1State(gameController));
+            gameController.getState().planning1();
         }
         //if some players haven't yet completed action turns, set current player to the next player and go back to the start of the action phase
         else {
-            game.setCurrentPlayer((game.getCurrentPlayer()+1)%game.getPlayers().size());
+            game.setCurrentPlayer((game.getCurrentPlayer()+1) % game.getMaxPlayers());
+            gameController.getCurrentPlayerView().askActionPhase1(1, game.getIslands().size());
+
             gameController.changeState(new Action1State(gameController));
         }
 
@@ -74,7 +80,11 @@ public class EndTurnState implements GameState{
     public void ccChoose3ToEntrance(EnumMap<Color,Integer> chosenFromCard , EnumMap<Color,Integer> chosenFromEntrance, int cardPosition)
     {
         Choose3toEntrance chosenCard = (Choose3toEntrance) game.getCharacterCards().get(cardPosition);
-        chosenCard.doEffect(chosenFromCard,chosenFromEntrance);
+        try {
+            chosenCard.doEffect(chosenFromCard,chosenFromEntrance);
+        } catch (MissingStudentException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void ccChooseIsland(int islandNumber,int cardPosition)
@@ -86,7 +96,11 @@ public class EndTurnState implements GameState{
     public void ccExchange2Students(EnumMap<Color,Integer> chosenFromEntrance,EnumMap<Color,Integer> chosenFromDiningRoom,int cardPosition)
     {
         Exchange2Students chosenCard = (Exchange2Students) game.getCharacterCards().get(cardPosition);
-        chosenCard.doEffect(chosenFromEntrance,chosenFromDiningRoom);
+        try {
+            chosenCard.doEffect(chosenFromEntrance,chosenFromDiningRoom);
+        } catch (MissingStudentException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void ccNoEntryIsland(int islandNumber,int cardPosition)

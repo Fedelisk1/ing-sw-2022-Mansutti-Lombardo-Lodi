@@ -1,4 +1,7 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.charactercards;
+
+import it.polimi.ingsw.exceptions.MissingStudentException;
+import it.polimi.ingsw.model.Color;
 
 import java.util.EnumMap;
 
@@ -25,7 +28,7 @@ public class Choose3toEntrance extends CharacterCard {
      * @param chosenFromEntrance represent the students chosen from the entrance
      */
 
-    public void doEffect(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance) {
+    public void doEffect(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance) throws MissingStudentException {
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
 
         cost = 2;

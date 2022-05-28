@@ -1,21 +1,22 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 
-public class CloudCard {
+public class CloudCard implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -6310738750800145727L;
     private EnumMap<Color, Integer> students;
-    private Game currentGame;
+    private transient final Game currentGame;
 
     public CloudCard(Game currentGame)
     {
         students=new EnumMap<>(Color.class);
 
-        students.putIfAbsent(Color.GREEN, 0);
-        students.putIfAbsent(Color.RED, 0);
-        students.putIfAbsent(Color.BLUE, 0);
-        students.putIfAbsent(Color.YELLOW, 0);
-        students.putIfAbsent(Color.PINK, 0);
+        Arrays.stream(Color.values()).forEach(c -> students.putIfAbsent(c, 0));
 
         this.currentGame=currentGame;
     }
@@ -32,9 +33,12 @@ public class CloudCard {
     {
         for(Color color : students.keySet())
         {
-            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getEntrance().put(color, currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(color)+ students.get(color));
+            Player currentPlayer = currentGame.getCurrentPlayerInstance();
+            SchoolDashboard schoolDashboard = currentPlayer.getSchoolDashboard();
+            int previousValue = schoolDashboard.getEntrance().getOrDefault(color, 0);
+            schoolDashboard.getEntrance().put(color, previousValue + students.get(color));
         }
-        students=new EnumMap<>(Color.class);
+        students.clear();
     }
 
     public void fill() {

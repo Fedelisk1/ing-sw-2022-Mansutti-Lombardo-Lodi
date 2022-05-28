@@ -2,16 +2,17 @@ package it.polimi.ingsw.network.message;
 
 import it.polimi.ingsw.model.Color;
 
+import java.io.Serial;
 import java.util.EnumMap;
 
 public class CCExchange2Students extends Message {
-    private MessageType messageType;
-    private String nickname;
-    private EnumMap<Color, Integer> chosenFromEntrance;
-    private EnumMap<Color, Integer> chosenFromDiningRoom;
-    private int cardPosition;
+    @Serial
+    private static final long serialVersionUID = -6468602063016590475L;
+    private final EnumMap<Color, Integer> chosenFromEntrance;
+    private final EnumMap<Color, Integer> chosenFromDiningRoom;
+    private final int cardPosition;
 
-    public CCExchange2Students(String nickname, MessageType messageType, EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom, int cardPosition) {
+    public CCExchange2Students(String nickname, EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom, int cardPosition) {
         super(nickname, MessageType.CC_EXCHANGE_2_STUDENTS);
         this.chosenFromDiningRoom=chosenFromDiningRoom;
         this.chosenFromEntrance=chosenFromEntrance;

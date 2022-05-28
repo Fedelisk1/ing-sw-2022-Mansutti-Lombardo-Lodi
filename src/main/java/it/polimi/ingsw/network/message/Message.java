@@ -1,12 +1,15 @@
 package it.polimi.ingsw.network.message;
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Message implements Serializable{
+    @Serial
+    private static final long serialVersionUID = 3787705488330519611L;
     public static String SERVER_NICKNAME = "SERVER";
-    private MessageType messageType;
-    private String nickname;
+    private final MessageType messageType;
+    private final String nickname;
 
-    Message(String nickname, MessageType messageType) {
+    public Message(String nickname, MessageType messageType) {
         this.messageType = messageType;
         this.nickname=nickname;
     }
@@ -21,7 +24,6 @@ public class Message implements Serializable{
 
     @Override
     public String toString() {
-        return "nickname"+nickname;
+        return "nickname -> " + nickname;
     }
-
 }

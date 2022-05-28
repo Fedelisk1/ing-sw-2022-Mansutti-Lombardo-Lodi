@@ -1,13 +1,14 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
+import it.polimi.ingsw.exceptions.MissingStudentException;
+
+import java.util.*;
 
 public class Player {
     private int coins;
     private Hand hand;
     private String nickname;
-    private SchoolDashboard schoolDashboard;
+    private final SchoolDashboard schoolDashboard;
     private ArrayList<AssistantCard> discardPile;
     private int cardValue;
     private int maxSteps;
@@ -33,6 +34,10 @@ public class Player {
         return nickname;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public void setHand(Hand hand) {
         this.hand = hand;
     }
@@ -55,26 +60,34 @@ public class Player {
         return maxSteps;
     }
 
-    //aggiunta io
     public void setMaxSteps(int maxSteps){
         this.maxSteps=maxSteps;
     }
 
-    //aggiunta io
     public SchoolDashboard getSchoolDashboard(){return schoolDashboard; }
 
 
     /**
      * Player chooses the assistant card to play, setting the maximum position that mother nature can move and the priority. It gets placed in the discard pile.
-     * @param i, card number i from the left in hand
-     * @throws IndexOutOfBoundsException if i is outside the possible range of values
+     * @param chosenCard, card number chosenCard from the left in hand
+     * @throws IndexOutOfBoundsException if chosenCard is outside the possible range of values
      */
-    public void chooseAssistantCard(int i) throws IndexOutOfBoundsException
+    public void chooseAssistantCard(int chosenCard) throws IndexOutOfBoundsException
     {
-        maxSteps = hand.assistantCards.get(i).getMaxSteps();
-        cardValue = hand.assistantCards.get(i).getCardValue();
-        discardPile.add(hand.assistantCards.get(i));
-        hand.assistantCards.remove(i);
+        int chosenCardIndex = 0;
+        int i = 0;
+        for (AssistantCard assistantCard : getHand().getAssistantCards()) {
+            if (assistantCard.getPriority() == chosenCard) {
+                chosenCardIndex = i;
+                break;
+            }
+            i++;
+        }
+
+        maxSteps = hand.getAssistantCards().get(chosenCardIndex).getMaxSteps();
+        cardValue = hand.getAssistantCards().get(chosenCardIndex).getPriority();
+        discardPile.add(hand.getAssistantCards().get(chosenCardIndex));
+        hand.getAssistantCards().remove(chosenCardIndex);
     }
 
 
@@ -90,7 +103,7 @@ public class Player {
         this.coins = coins;
     }
 
-    public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, IllegalArgumentException
+    public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, MissingStudentException
     {
         try {
             if(count>=3)throw new IllegalStateException("limit of students moved reached for this turn");
@@ -111,7 +124,7 @@ public class Player {
     {
         count=0;
     }
-    public void moveOneOfThreeToDiningRoom(Color color) throws NullPointerException, IllegalArgumentException
+    public void moveOneOfThreeToDiningRoom(Color color) throws NullPointerException, MissingStudentException
     {
         if(count==3)throw new IllegalStateException("limit of students moved reached for this turn");
         schoolDashboard.moveStudentToDiningRoom(color);

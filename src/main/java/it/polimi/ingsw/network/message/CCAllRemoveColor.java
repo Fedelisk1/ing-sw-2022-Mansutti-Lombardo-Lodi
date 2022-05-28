@@ -2,14 +2,16 @@ package it.polimi.ingsw.network.message;
 
 import it.polimi.ingsw.model.Color;
 
+import java.io.Serial;
+
 public class CCAllRemoveColor extends Message{
 
-    private MessageType messageType;
-    private String nickname;
-    private Color color;
-    private int cardPosition;
+    @Serial
+    private static final long serialVersionUID = -1615577338990425315L;
+    private final Color color;
+    private final int cardPosition;
 
-    public CCAllRemoveColor(String nickname, MessageType messageType, Color color, int cardPosition) {
+    public CCAllRemoveColor(String nickname, Color color, int cardPosition) {
         super(nickname, MessageType.CC_ALL_REMOVE_COLOR);
         this.color=color;
         this.cardPosition=cardPosition;

@@ -1,61 +1,84 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.reduced.ReducedGame;
+import it.polimi.ingsw.network.message.Update;
+import it.polimi.ingsw.view.VirtualView;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Planning2State implements GameState{
 
     private GameController gameController;
     private Game game;
     int count;
+    private List<Integer> playedAssistants;
 
     public Planning2State(GameController gameController)
     {
         this.gameController=gameController;
         this.game=gameController.getGame();
         count = 0;
+
+        playedAssistants = new ArrayList<>();
     }
 
     /**
      * executes planning phase 2, planning phase 2 must be called a number of times equal to player number to change to next state
-     * @param chosenCard by the player
+     * @param chosenPriority by the player
      */
     @Override
-    public void planning2(int chosenCard)
+    public void planning2(int chosenPriority)
     {
         //the current player chooses the assistant card, then the current player is changed to the next
-        game.getPlayers().get(game.getCurrentPlayer()).chooseAssistantCard(chosenCard);
-        if(game.getCurrentPlayer()+1==game.getPlayers().size())
-        {
-            game.setCurrentPlayer(0);
+        game.getCurrentPlayerInstance().chooseAssistantCard(chosenPriority);
 
+        gameController.viewsExceptCurrentPlayer()
+                .forEach(vv -> vv.showPlayedAssistantCard(game.getCurrentPlayerNick(), chosenPriority));
+
+        playedAssistants.add(chosenPriority);
+
+        if(count == game.getMaxPlayers() - 1) {
+            game.setCurrentPlayer(0);
+            playedAssistants.clear();
+            count = 1;
+        } else {
+            game.setCurrentPlayer((game.getCurrentPlayer() + 1) % game.getMaxPlayers());
+
+            // in case the player has only cards that have already been played, let him play anyway
+            if (playedAssistants.equals(game.getCurrentPlayerInstance().getHand().getAssistantCardsAsList()))
+                gameController.askAssistantCard(null);
+            else
+                gameController.askAssistantCard(playedAssistants);
         }
-        else
-        {
-            game.setCurrentPlayer(game.getCurrentPlayer()+1);
-        }
-        count++;
 
         //if all players have chosen an assistant card, it sets the current player to the player that has chosen the card
         //with the least value and changes state
-        if(count==game.getPlayers().size())
-        {
-            int position=0;
-            for(int i=1;i<game.getPlayers().size();i++)
-            {
-                if(game.getPlayers().get(i).getCardValue()<game.getPlayers().get(position).getCardValue())
-                {
-                    position=i;
+        if(count == game.getMaxPlayers() - 1) {
+            int position = 0;
+            for (int i = 1; i < game.getPlayers().size(); i++) {
+                if (game.getPlayers().get(i).getCardValue() < game.getPlayers().get(position).getCardValue()) {
+                    position = i;
                 }
             }
             game.setCurrentPlayer(position);
             gameController.changeState(new Action1State(gameController));
+
+
+            String currentNick = game.getCurrentPlayerNick();
+            gameController.getCurrentPlayerView().update(new ReducedGame(game));
+            gameController.getCurrentPlayerView().askActionPhase1(1, game.getIslands().size());
+            gameController.broadcastMessage(currentNick + " is playing (action phase)...", currentNick);
         }
 
-
+        count++;
     }
-
 
     @Override
     public void action1Island(Color color, int islandNumber) {

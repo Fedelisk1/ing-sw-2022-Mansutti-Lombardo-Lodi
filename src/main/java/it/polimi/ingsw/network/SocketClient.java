@@ -35,12 +35,13 @@ public class SocketClient extends Observable {
                 Message message;
                 try {
                     message = (Message) inputStream.readObject();
+                    notifyObservers(message);
                 } catch (IOException | ClassNotFoundException e) {
                     message = new ErrorMessage(null, "Connection lost with the server.");
                     disconnect();
                     read = false;
                 }
-                notifyObservers(message);
+
             }
         });
         readerThread.start();
@@ -53,7 +54,6 @@ public class SocketClient extends Observable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void disconnect() {

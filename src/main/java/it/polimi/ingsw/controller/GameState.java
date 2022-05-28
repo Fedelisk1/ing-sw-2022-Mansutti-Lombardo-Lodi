@@ -1,8 +1,6 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.network.message.Message;
-import it.polimi.ingsw.network.message.NewGameRequest;
 
 import java.util.EnumMap;
 
@@ -27,8 +25,4 @@ public interface GameState {
     void ccPlus2Influence(int cardPosition);
     void ccTempControlProf(int cardPosition);
     void ccTwoAdditionalMoves(int cardPosition);
-
-
-
-
 }

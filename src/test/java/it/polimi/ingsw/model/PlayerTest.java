@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.MissingStudentException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,8 +55,7 @@ class PlayerTest {
 
 
     @Test
-    public void moveOneOfThreeToIsland()
-    {
+    public void moveOneOfThreeToIsland() throws MissingStudentException {
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
         game.getPlayers().get(game.getCurrentPlayer()).moveOneOfThreeToIsland(Color.GREEN,0);
@@ -67,8 +67,7 @@ class PlayerTest {
     }
 
     @Test
-    public void moveOneOfThreeToDiningRoomTest()
-    {
+    public void moveOneOfThreeToDiningRoomTest() throws MissingStudentException {
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
         game.getPlayers().get(game.getCurrentPlayer()).moveOneOfThreeToDiningRoom(Color.GREEN);

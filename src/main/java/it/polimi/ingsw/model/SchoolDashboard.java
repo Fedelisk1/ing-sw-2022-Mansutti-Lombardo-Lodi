@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.InputMismatchException;
+import it.polimi.ingsw.exceptions.MissingStudentException;
+
+import java.util.*;
 
 public class SchoolDashboard {
     private ArrayList<Color> professors;
@@ -12,9 +12,6 @@ public class SchoolDashboard {
     private Game currentGame;
 
 
-
-
-    /**le torri non vengono gestite tramite colore ma tramite proprietario**/
     SchoolDashboard()
     {
         professors= new ArrayList<>();
@@ -22,20 +19,12 @@ public class SchoolDashboard {
         entrance = new EnumMap<>(Color.class);
         diningRoom = new EnumMap<>(Color.class);
 
-        entrance.putIfAbsent(Color.GREEN,0);
-        entrance.putIfAbsent(Color.RED,0);
-        entrance.putIfAbsent(Color.PINK,0);
-        entrance.putIfAbsent(Color.BLUE,0);
-        entrance.putIfAbsent(Color.YELLOW,0);
-
-        diningRoom.putIfAbsent(Color.GREEN,0);
-        diningRoom.putIfAbsent(Color.RED,0);
-        diningRoom.putIfAbsent(Color.PINK,0);
-        diningRoom.putIfAbsent(Color.BLUE,0);
-        diningRoom.putIfAbsent(Color.YELLOW,0);
-
-
+        Arrays.stream(Color.values()).forEach(color -> {
+            entrance.putIfAbsent(color, 0);
+            diningRoom.putIfAbsent(color, 0);
+        });
     }
+
     public void setUp()
     {
         entrance=currentGame.extractFromBag(7);
@@ -72,10 +61,9 @@ public class SchoolDashboard {
      * @throws IllegalArgumentException if there is no student of the chosen color in the entrance
      * @throws NullPointerException if color is null
      */
-    public void removeStudentFromEntrance(Color color) throws NullPointerException
-    {
+    public void removeStudentFromEntrance(Color color) throws MissingStudentException {
         entrance.putIfAbsent(color, 0);
-        if(entrance.get(color)==0) throw new IllegalArgumentException("no students of that color");
+        if(entrance.get(color)==0) throw new MissingStudentException();
         entrance.put(color,entrance.get(color)-1);
     }
 
@@ -112,7 +100,7 @@ public class SchoolDashboard {
      * @throws NullPointerException if color is null
      * @throws IllegalArgumentException if there is no student of the chosen color in the entrance
      */
-    public void moveStudentToDiningRoom(Color color) throws NullPointerException, IllegalArgumentException
+    public void moveStudentToDiningRoom(Color color) throws NullPointerException, MissingStudentException
     {
         removeStudentFromEntrance(color);
         addStudentToDiningRoom(color);
@@ -123,7 +111,7 @@ public class SchoolDashboard {
      * @param color color of the students to move
      * @param quantity how many students to move
      */
-    public void moveStudentsToDiningRoom(Color color, int quantity) {
+    public void moveStudentsToDiningRoom(Color color, int quantity) throws MissingStudentException {
         for (int i = 0; i < quantity; i++)
             moveStudentToDiningRoom(color);
     }
@@ -187,7 +175,7 @@ public class SchoolDashboard {
 
     }
     /**
-     *Adds a professor to the player's school dashboard
+     * Adds a professor to the player's school dashboard
      * @param color professor color
      * @throws IllegalArgumentException if there is already a professor of that color
      * @throws NullPointerException if color is null
@@ -225,10 +213,35 @@ public class SchoolDashboard {
      * @throws IllegalArgumentException if there is no specified color in the entrance
      * @throws IndexOutOfBoundsException if islandIndex is out of range
      */
-    public void moveToIslandGroup(Color color, int islandIndex) throws NullPointerException, IllegalArgumentException, IndexOutOfBoundsException
+    public void moveToIslandGroup(Color color, int islandIndex) throws NullPointerException, MissingStudentException, IndexOutOfBoundsException
     {
         removeStudentFromEntrance(color);
         currentGame.getIslands().get(islandIndex).addStudents(color);
     }
 
+    /**
+     * Allows to check whether the school-dashboard has control over a professor or not.
+     * @param color Color of the professor to check.
+     * @return True if the professor is controlled by the schoolDashboard, false otherwise.
+     */
+    public Boolean hasProfessor(Color color) {
+        return professors.contains(color);
+    }
+
+    /**
+     * Allows to obtain a representation of the dashboard through a {@link Map}.
+     * @return Map representation of the dashboard having the keys:
+     *          - "entrance"
+     *          - "diningRoom"
+     *          - "professors"
+     */
+    public Map<String, Map<Color, Integer>> asMap() {
+        Map<String, Map<Color, Integer>> res = new HashMap<>();
+        res.put("entrance", getEntrance());
+        res.put("diningRoom", getDiningRoom());
+        Map<Color, Integer> profMap = new HashMap<>();
+        Arrays.stream(Color.values()).forEach(c -> profMap.put(c, hasProfessor(c) ? 1 : 0));
+        res.put("professors", profMap);
+        return res;
+    }
 }

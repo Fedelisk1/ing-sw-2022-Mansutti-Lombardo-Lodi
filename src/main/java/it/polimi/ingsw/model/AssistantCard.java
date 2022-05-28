@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model;
 
 public class AssistantCard {
-    private int cardValue;
-    private int maxSteps;
+    private final int cardValue;
+    private final int maxSteps;
 
     public AssistantCard(int cardValue, int maxSteps)
     {
@@ -10,7 +10,7 @@ public class AssistantCard {
         this.maxSteps = maxSteps;
     }
 
-    public int getCardValue() {
+    public int getPriority() {
         return cardValue;
     }
 

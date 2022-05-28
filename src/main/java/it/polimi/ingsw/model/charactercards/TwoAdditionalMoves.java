@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.charactercards;
 
 public class TwoAdditionalMoves extends CharacterCard {
     public TwoAdditionalMoves() {

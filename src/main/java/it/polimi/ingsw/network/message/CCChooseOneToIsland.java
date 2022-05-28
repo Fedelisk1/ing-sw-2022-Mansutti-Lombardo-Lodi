@@ -2,14 +2,16 @@ package it.polimi.ingsw.network.message;
 
 import it.polimi.ingsw.model.Color;
 
-public class CCChooseOneToIsland extends Message{
-    private MessageType messageType;
-    private String nickname;
-    private int islandNumber;
-    private int cardPosition;
-    private Color c;
+import java.io.Serial;
 
-    public CCChooseOneToIsland(String nickname, MessageType messageType, Color c, int islandNumber, int cardPosition) {
+public class CCChooseOneToIsland extends Message{
+    @Serial
+    private static final long serialVersionUID = -5532482880285221121L;
+    private final int islandNumber;
+    private final int cardPosition;
+    private final Color c;
+
+    public CCChooseOneToIsland(String nickname, Color c, int islandNumber, int cardPosition) {
         super(nickname, MessageType.CC_CHOOSE_1_TO_ISLAND);
         this.c=c;
         this.islandNumber=islandNumber;

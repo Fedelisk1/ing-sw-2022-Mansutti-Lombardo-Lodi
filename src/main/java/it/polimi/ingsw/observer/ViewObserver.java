@@ -1,5 +1,7 @@
 package it.polimi.ingsw.observer;
 
+import it.polimi.ingsw.model.Color;
+
 import java.util.Map;
 
 /**
@@ -7,8 +9,11 @@ import java.util.Map;
  */
 public interface ViewObserver {
     void onServerInfoInput(Map<String, String> serverInfo);
-
     void onNicknameInput(String nickname);
-
     void onNewGameParametersInput(int playersNumber, boolean expertMode);
+    void onAssistantCardChosen(int chosenCard);
+    void onStudentMovedToIsland(int island, Color color);
+    void onStudentMovedToDiningRoom(Color color);
+    void onMotherNatureMoved(int steps);
+    void onCloudCardChosen(int card);
 }

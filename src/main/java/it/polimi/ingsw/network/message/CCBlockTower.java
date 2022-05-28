@@ -2,13 +2,15 @@ package it.polimi.ingsw.network.message;
 
 import it.polimi.ingsw.model.Color;
 
+import java.io.Serial;
+
 public class CCBlockTower extends Message{
 
-    private MessageType messageType;
-    private String nickname;
-    private int cardPosition;
+    @Serial
+    private static final long serialVersionUID = 7436449776216444681L;
+    private final int cardPosition;
 
-    public CCBlockTower(String nickname, MessageType messageType, int cardPosition){
+    public CCBlockTower(String nickname, int cardPosition){
         super(nickname, MessageType.CC_BLOCK_TOWER);
         this.cardPosition=cardPosition;
     }

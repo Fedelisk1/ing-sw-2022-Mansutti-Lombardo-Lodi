@@ -1,20 +1,56 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.MissingStudentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.charactercards.*;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.util.EnumMap;
 
 public class Action1State implements GameState{
     private GameController gameController;
     private Game game;
-    int count;
+    int movesCount;
 
     public Action1State(GameController gameController)
     {
-        count=0;
+        movesCount = 1;
         this.gameController=gameController;
         game= gameController.getGame();
+    }
+
+    /**
+     * Performs action1.
+     * @param color color of the student to move
+     * @param islandNumber 1-indexed index of the destination island. If negative, the student will be moved to the dining room.
+     */
+    private void action1(Color color, int islandNumber) {
+        String currentPlayer = game.getCurrentPlayerNick();
+        VirtualView virtualView = gameController.getCurrentPlayerView();
+
+        try {
+            if (islandNumber < 0)
+                game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().moveStudentToDiningRoom(color);
+            else
+                game.getCurrentPlayerInstance().getSchoolDashboard().moveToIslandGroup(color, islandNumber - 1);
+
+            gameController.updateViews();
+            gameController.viewsExceptCurrentPlayer().forEach(v -> v.showStringMessage(currentPlayer + " is playing (action phase 1) ..."));
+
+            //if there are 2 players, after 3 times the move method is called, with 3 players 4 times.
+            if(movesCount == game.getMaxPlayers() + 1) {
+                gameController.changeState(new Action2State(gameController));
+                gameController.getCurrentPlayerView().askActionPhase2(game.getCurrentPlayerInstance().getMaxSteps());
+            } else {
+                movesCount++;
+                virtualView.askActionPhase1(movesCount, game.getIslands().size());
+            }
+
+        } catch (MissingStudentException e) {
+            virtualView.showStringMessage("Chosen color is not available in your entrance!");
+            virtualView.askActionPhase1(movesCount, game.getIslands().size());
+        }
     }
 
     /**
@@ -24,15 +60,7 @@ public class Action1State implements GameState{
      */
     @Override
     public void action1Island(Color color, int islandNumber) {
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().moveToIslandGroup(color, islandNumber);
-        count++;
-
-        //if there are 2 players, after 3 times the move method is called, with 3 players 4 times.
-        if(count==game.getPlayers().size()+1)
-        {
-            gameController.changeState(new Action2State(gameController));
-        }
-
+        action1(color, islandNumber);
     }
 
     /**
@@ -41,17 +69,7 @@ public class Action1State implements GameState{
      */
     @Override
     public void action1DiningRoom(Color color) {
-
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().moveStudentToDiningRoom(color);
-        count++;
-
-        //if there are 2 players, after 3 times the move method is called, with 3 players 4 times.
-        if(count==game.getPlayers().size()+1)
-        {
-            gameController.changeState(new Action2State(gameController));
-        }
-
-
+        action1(color, -1);
     }
 
     @Override
@@ -88,7 +106,11 @@ public class Action1State implements GameState{
     public void ccChoose3ToEntrance(EnumMap<Color,Integer> chosenFromCard , EnumMap<Color,Integer> chosenFromEntrance, int cardPosition)
     {
         Choose3toEntrance chosenCard = (Choose3toEntrance) game.getCharacterCards().get(cardPosition);
-        chosenCard.doEffect(chosenFromCard,chosenFromEntrance);
+        try {
+            chosenCard.doEffect(chosenFromCard,chosenFromEntrance);
+        } catch (MissingStudentException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void ccChooseIsland(int islandNumber,int cardPosition)
@@ -100,7 +122,11 @@ public class Action1State implements GameState{
     public void ccExchange2Students(EnumMap<Color,Integer> chosenFromEntrance,EnumMap<Color,Integer> chosenFromDiningRoom,int cardPosition)
     {
         Exchange2Students chosenCard = (Exchange2Students) game.getCharacterCards().get(cardPosition);
-        chosenCard.doEffect(chosenFromEntrance,chosenFromDiningRoom);
+        try {
+            chosenCard.doEffect(chosenFromEntrance,chosenFromDiningRoom);
+        } catch (MissingStudentException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void ccNoEntryIsland(int islandNumber,int cardPosition)

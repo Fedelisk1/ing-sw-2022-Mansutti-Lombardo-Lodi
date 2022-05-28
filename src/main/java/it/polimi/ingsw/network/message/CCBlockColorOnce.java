@@ -2,14 +2,16 @@ package it.polimi.ingsw.network.message;
 
 import it.polimi.ingsw.model.Color;
 
+import java.io.Serial;
+
 public class CCBlockColorOnce extends Message {
 
-    private MessageType messageType;
-    private String nickname;
-    private Color color;
-    private int cardPosition;
+    @Serial
+    private static final long serialVersionUID = -7417154069659059419L;
+    private final Color color;
+    private final int cardPosition;
 
-    public CCBlockColorOnce(String nickname, MessageType messageType, Color color, int cardPosition) {
+    public CCBlockColorOnce(String nickname, Color color, int cardPosition) {
         super(nickname, MessageType.CC_BLOCK_COLOR_ONCE);
         this.color = color;
         this.cardPosition = cardPosition;

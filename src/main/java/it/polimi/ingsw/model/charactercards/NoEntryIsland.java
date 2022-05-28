@@ -1,7 +1,7 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.charactercards;
 
 public class NoEntryIsland extends CharacterCard {
-    int availableUses = 4;
+    int availableUses;
 
     public NoEntryIsland() {
         availableUses = 4;

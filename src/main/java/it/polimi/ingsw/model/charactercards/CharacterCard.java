@@ -1,5 +1,7 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.charactercards;
 
+
+import it.polimi.ingsw.model.Game;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

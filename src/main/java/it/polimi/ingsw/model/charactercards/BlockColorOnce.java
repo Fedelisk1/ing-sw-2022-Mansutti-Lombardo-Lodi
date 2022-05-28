@@ -1,4 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.charactercards;
+
+import it.polimi.ingsw.model.Color;
 
 public class BlockColorOnce extends CharacterCard {
     public BlockColorOnce() {

@@ -1,8 +1,14 @@
 package it.polimi.ingsw.model;
 
-import java.util.*;
+import it.polimi.ingsw.model.charactercards.*;
+import it.polimi.ingsw.network.message.Lobby;
+import it.polimi.ingsw.observer.Observable;
+import it.polimi.ingsw.view.cli.ColorCli;
 
-public class Game {
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class Game extends Observable {
     private EnumMap<Color, Integer> bag;
     private int motherNaturePosition = 0;
     private final int MAX_ISLANDS = 12;
@@ -14,32 +20,13 @@ public class Game {
     private int totalCoins;
     private ArrayList<CloudCard> cloudCards;
     private ArrayList<Color> unusedProfessors;
-    boolean expertMode;
-    private String gameID;
-    private int maxPlayers;
+    private final boolean expertMode;
+    private final int maxPlayers;
 
 
     public Game(int players, boolean expertMode) {
-        //creates unique identifier for the game instance
-        gameID=UUID.randomUUID().toString();
-
-        if(players > 3) {
-            System.out.println("Maximum player count is 3, players have been set to 3");
-            players = 3;
-        } else if(players < 2) {
-            System.out.println("Minimum player count is 2, game has been set with 2 players");
-            players = 2;
-        }
+        Random rand = new Random();
         maxPlayers = players;
-        islands = new ArrayList<>();
-
-        for(int i = 0; i < MAX_ISLANDS; i++) {
-            IslandGroup ig = new IslandGroup();
-            islands.add(ig);
-        }
-
-        // players init
-
 
         // unused professor init
         unusedProfessors = new ArrayList<>();
@@ -47,23 +34,26 @@ public class Game {
             unusedProfessors.add(c);
 
         // bag init
-        bag= new EnumMap<>(Color.class);
-
-
+        bag = new EnumMap<>(Color.class);
         for (Color c : Color.values())
             bag.put(c, MAX_BAG_STUDENTS / Color.values().length);
 
+        // isalnds init
+        islands = new ArrayList<>();
+        for(int i = 0; i < MAX_ISLANDS; i++) {
+            IslandGroup ig = new IslandGroup();
+            if (i != MAX_ISLANDS / 2 - 1 && i != 0) {
+                Color color = Color.values()[rand.nextInt(Color.values().length)];
+                bag.remove(color, 1);
+                ig.addStudents(color, 1);
+            }
 
-
-        //players and dashboard init
-        this.players = new ArrayList<>();
-        for(int i = 0; i < players; i++) {
-            Player p = new Player();
-            p.setCurrentGame(this);
-            p.getSchoolDashboard().setCurrentGame(this);
-            p.getSchoolDashboard().setUp();
-            this.players.add(p);
+            islands.add(ig);
         }
+
+        // players and dashboard init
+        this.players = new ArrayList<>();
+
         // expertMode init
         if (expertMode) {
             characterCards = new ArrayList<>();
@@ -76,7 +66,7 @@ public class Game {
                 p.initCoins();
             }
         }
-        Random rand = new Random();
+
         currentPlayer = rand.nextInt(players);
 
         //sets game mode
@@ -89,6 +79,18 @@ public class Game {
             this.cloudCards.add(c);
         }
 
+    }
+
+    public void addPlayer(String nickname) {
+        Player p = new Player();
+        p.setCurrentGame(this);
+        p.getSchoolDashboard().setCurrentGame(this);
+        p.getSchoolDashboard().setUp();
+        p.setNickname(nickname);
+        this.players.add(p);
+
+        List<String> nicknames = players.stream().map(Player::getNickname).collect(Collectors.toList());
+        notifyObservers(new Lobby(nicknames, getMaxPlayers()));
     }
 
     public boolean isExpertMode() {
@@ -119,9 +121,9 @@ public class Game {
     }
 
     /**
-     * merges the island in the given index with the next one
-     * @param index index of the first island to merge
-     * @throws IndexOutOfBoundsException when the given index exceets the maximum index
+     * Merges the island in the given index with the next one.
+     * @param index Index of the first island to merge.
+     * @throws IndexOutOfBoundsException When the given index exceeds the maximum index.
      */
     public void mergeIslands(int index) throws IndexOutOfBoundsException {
         IslandGroup first = islands.get(index);
@@ -134,33 +136,10 @@ public class Game {
             index = 0;
         }
 
-        IslandGroup merged = buildUnifiedIsland(first, second);
+        first.merge(second);
 
-        islands.remove(first);
         islands.remove(second);
-
-        islands.add(index, merged);
     }
-
-    /**
-     * returns a new island which is the merge of the two given
-     * @param first first island to merge
-     * @param second second island to merge
-     * @return unified island
-     */
-    private IslandGroup buildUnifiedIsland(IslandGroup first, IslandGroup second) {
-        IslandGroup result = new IslandGroup();
-
-        for(Color c : Color.values()) {
-            result.addStudents(c, first.getStudents(c) + second.getStudents(c));
-        }
-
-        result.incrementIslandCount(first.getIslandCount());
-        result.incrementIslandCount(second.getIslandCount());
-
-        return result;
-    }
-
 
     /**
      * method extract from bag: it converts possible keys into numbers and extracts one of them by
@@ -249,6 +228,10 @@ public class Game {
 
     public Player getCurrentPlayerInstance() {
         return players.get(currentPlayer);
+    }
+
+    public String getCurrentPlayerNick() {
+        return getCurrentPlayerInstance().getNickname();
     }
 
     public void setCurrentPlayer(int currentPlayer) {
@@ -477,6 +460,23 @@ public class Game {
         }
 
         return winner;
+    }
+
+    /**
+     * @return List of the integers indexes of the cloud cards which are full.
+     */
+    public List<Integer> getPlayableCloudCards() {
+        List<Integer> result = new ArrayList<>();
+
+        int i = 0;
+        for (CloudCard cc : cloudCards) {
+            if (! cc.getStudents().isEmpty())
+                result.add(i);
+
+            i++;
+        }
+
+        return result;
     }
 
 }
