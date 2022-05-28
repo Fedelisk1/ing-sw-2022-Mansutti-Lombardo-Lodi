@@ -170,7 +170,7 @@ public class SchoolDashboard {
 
 
     public void removeStudentFromDiningRoom(Color color) throws NullPointerException{
-
+        diningRoom.putIfAbsent(color,0);
         diningRoom.put(color,diningRoom.get(color)-1);
 
     }

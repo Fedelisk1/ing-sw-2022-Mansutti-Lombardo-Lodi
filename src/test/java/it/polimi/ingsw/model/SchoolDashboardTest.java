@@ -123,13 +123,22 @@ class SchoolDashboardTest
     }
 
     @Test
-    public void removeStudentFromDiningRoom()
-    {
+    public void removeStudentFromDiningRoom(){
+        //2 blue students are added for every player
         game.setCurrentPlayer(0);
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.BLUE);
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.BLUE);
+        for(int i=0;i<2;i++){
+            game.setCurrentPlayer(i);
+            game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.BLUE);
+            game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.BLUE);
+        }
+
+        assertEquals(true,game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.BLUE));
+
+        game.setCurrentPlayer(0);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().removeStudentFromDiningRoom(Color.BLUE);
+
         Assertions.assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(Color.BLUE));
+
     }
 
     @Test
