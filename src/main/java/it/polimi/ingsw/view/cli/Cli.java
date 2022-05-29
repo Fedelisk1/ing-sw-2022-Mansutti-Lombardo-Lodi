@@ -238,7 +238,11 @@ public class Cli extends ViewObservable implements View {
                 sd.getProfessors().forEach(color -> ColorCli.printCircles(color, 1));
             }
 
-            System.out.println("\n-------------------------");
+            System.out.println();
+
+            System.out.println("Towers: " + sd.getTowers() + "");
+
+            System.out.println("-------------------------");
         });
 
         System.out.println("\n\n--- Coins ---");

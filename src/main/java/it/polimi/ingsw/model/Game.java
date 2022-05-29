@@ -78,7 +78,6 @@ public class Game extends Observable {
             CloudCard c = new CloudCard(this);
             this.cloudCards.add(c);
         }
-
     }
 
     public void addPlayer(String nickname) {
@@ -126,6 +125,9 @@ public class Game extends Observable {
      * @throws IndexOutOfBoundsException When the given index exceeds the maximum index.
      */
     public void mergeIslands(int index) throws IndexOutOfBoundsException {
+        if (index == motherNaturePosition - 1)
+            motherNaturePosition -= 1;
+
         IslandGroup first = islands.get(index);
         IslandGroup second;
 
@@ -133,7 +135,6 @@ public class Game extends Observable {
             second = islands.get(index + 1);
         } catch (IndexOutOfBoundsException ex) {
             second = islands.get(0);
-            index = 0;
         }
 
         first.merge(second);
@@ -218,6 +219,18 @@ public class Game extends Observable {
 
     public int getMotherNaturePosition() {
         return motherNaturePosition;
+    }
+
+    public IslandGroup getCurrentIsland() {
+        return islands.get(motherNaturePosition);
+    }
+
+    public IslandGroup getPreviousIsland() {
+        return islands.get(Math.floorMod((motherNaturePosition - 1), islands.size()));
+    }
+
+    public IslandGroup getNextIsland() {
+        return islands.get((motherNaturePosition + 1) % islands.size());
     }
 
     public IslandGroup getMotherNatureIsland() {

@@ -70,10 +70,10 @@ public class Action2State implements GameState{
         }
 
         //checks if the next island group in the sequence is occupied by the same player
-        if(game.getIslands().get((game.getMotherNaturePosition()+1)%game.getIslands().size()).getOccupiedBy()==winningPlayer)
+        if(game.getNextIsland().getOccupiedBy() == winningPlayer)
             game.mergeIslands(game.getMotherNaturePosition());
         //also, if the previous island group is occupied by the same player
-        if(game.getIslands().get(Math.floorMod((game.getMotherNaturePosition()-1),game.getIslands().size())).getOccupiedBy()==winningPlayer)
+        if(game.getPreviousIsland().getOccupiedBy() == winningPlayer)
             game.mergeIslands(game.getMotherNaturePosition()-1);
 
         //if there are 3 or less island groups left, game ends.
