@@ -2,12 +2,17 @@ package it.polimi.ingsw.model.charactercards;
 
 import it.polimi.ingsw.exceptions.MissingStudentException;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Game;
 
 import java.util.EnumMap;
 
 public class Exchange2Students extends CharacterCard {
-    public Exchange2Students() {
+    public Exchange2Students(Game currentGame) {
+        this.currentGame = currentGame;
         cost = 1;
+
+        name = "Exchange2Students";
+        description = "You may exchange up to 2 Students between your Entrance and your Dining Room";
     }
 
     /**

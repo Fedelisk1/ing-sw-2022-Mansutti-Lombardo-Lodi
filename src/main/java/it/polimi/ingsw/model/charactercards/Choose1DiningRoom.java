@@ -1,27 +1,29 @@
 package it.polimi.ingsw.model.charactercards;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Game;
 
 import java.util.EnumMap;
 
 public class Choose1DiningRoom extends CharacterCard {
-    private EnumMap<Color, Integer> extracted;
-    private EnumMap<Color, Integer> extractedFromBag;
 
-    public Choose1DiningRoom() {
+    public Choose1DiningRoom(Game currentGame) {
+        this.currentGame = currentGame;
         cost = 2;
-        extracted = new EnumMap<>(Color.class);
-        extractedFromBag = new EnumMap<>(Color.class);
+        students = new EnumMap<>(Color.class);
 
+        name = "Choose1DiningRoom";
+        description = "Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card.";
 
+        init();
     }
 
     public void init() {
-        extracted = currentGame.extractFromBag(4);
+        students = currentGame.extractFromBag(4);
     }
 
-    public EnumMap<Color, Integer> getExtracted() {
-        return extracted;
+    public EnumMap<Color, Integer> getStudents() {
+        return students;
     }
 
     /**
@@ -30,22 +32,24 @@ public class Choose1DiningRoom extends CharacterCard {
      * @param c color of the student
      */
     public void doEffect(Color c) {
-        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
 
-        if (!extracted.containsKey(c)) throw new IllegalArgumentException("Not present");
+        currentGame.getCurrentPlayerInstance().setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
+
+        if (!students.containsKey(c)) throw new IllegalArgumentException("Not present");
 
         cost = 3;
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(c);
-        extracted.put(c, extracted.get(c) - 1);
+        students.put(c, students.get(c) - 1);
 
-        extractedFromBag = currentGame.extractFromBag(1);
+        EnumMap<Color, Integer> replacementStudent = currentGame.extractFromBag(1);
+        //extracted.merge(currentGame.extractFromBag(), 1, Integer::sum);
 
-        for (Color x : extractedFromBag.keySet()) {
-            if (!extracted.containsKey(x))
-                extracted.put(x, 1);
-            else extracted.put(x, extracted.get(x) + 1);
+        for (Color x : replacementStudent.keySet()) {
+            if (!students.containsKey(x))
+                students.put(x, 1);
+            else students.put(x, students.get(x) + 1);
 
-            extractedFromBag.remove(x);
+            replacementStudent.remove(x);
         }
 
     }

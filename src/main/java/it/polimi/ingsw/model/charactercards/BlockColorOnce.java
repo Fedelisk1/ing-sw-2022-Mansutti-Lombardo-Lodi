@@ -1,10 +1,15 @@
 package it.polimi.ingsw.model.charactercards;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Game;
 
 public class BlockColorOnce extends CharacterCard {
-    public BlockColorOnce() {
+    public BlockColorOnce(Game currentGame) {
+        this.currentGame = currentGame;
         cost = 3;
+
+        name = "BlockColorOnce";
+        description = "Choose a color of Student: during the influence calculation this turn, that color adds no influence";
     }
 
     /**

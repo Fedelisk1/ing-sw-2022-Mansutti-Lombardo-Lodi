@@ -1,11 +1,16 @@
 package it.polimi.ingsw.model.charactercards;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 
 public class AllRemoveColor extends CharacterCard {
-    public AllRemoveColor() {
+    public AllRemoveColor(Game currentGame) {
+        this.currentGame = currentGame;
         cost = 3;
+
+        name = "AllRemoveColor";
+        description = "Choose a type of Student: every player (including yourself) must return 2 Students of that type from their Dining Room to the Bag. If any player has fewer than 3 Students of that type, return as many Students as they have";
     }
 
     /**

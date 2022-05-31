@@ -1,23 +1,34 @@
 package it.polimi.ingsw.model.charactercards;
 
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 
 public abstract class CharacterCard {
-    public int cost;
-    public Game currentGame;
+    protected int cost;
+    protected Game currentGame;
+    protected String name;
+    protected String description;
+    protected EnumMap<Color, Integer> students;
 
-
-    public void setCurrentGame(Game currentGame) {
-        this.currentGame = currentGame;
+    public int getCost() {
+        return cost;
     }
-    public void doEffect(){
 
+    public String getName() {
+        return name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public EnumMap<Color, Integer> getStudents() {
+        return students;
+    }
 }
 
 

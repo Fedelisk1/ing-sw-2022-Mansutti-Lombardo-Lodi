@@ -1,24 +1,26 @@
 package it.polimi.ingsw.model.charactercards;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Game;
 
 import java.util.EnumMap;
 
 public class Choose1ToIsland extends CharacterCard {
 
-    private EnumMap<Color, Integer> extracted;
-    private boolean used;
-    private int cost;
-
-
-    public Choose1ToIsland() {
-        extracted = new EnumMap<>(Color.class);
+    public Choose1ToIsland(Game currentGame) {
+        this.currentGame = currentGame;
+        students = new EnumMap<>(Color.class);
 
         cost = 1;
+
+        name = "Choose1ToIsland";
+        description = "Take 1 Student from this card and place it on an island of your choice. Then, draw a student from the Bag and place it on this card.";
+
+        init();
     }
 
     public void init() {
-        extracted = currentGame.extractFromBag(4);
+        students = currentGame.extractFromBag(4);
     }
 
     /**
@@ -34,19 +36,19 @@ public class Choose1ToIsland extends CharacterCard {
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
 
         cost = 2;
-        if (!extracted.containsKey(c)) throw new IllegalArgumentException("Not present");
+        if (!students.containsKey(c)) throw new IllegalArgumentException("Not present");
         else {
-            extracted.put(c, extracted.get(c) - 1);
+            students.put(c, students.get(c) - 1);
 
             currentGame.getIslands().get(islandNumber).addStudents(c);
 
             extractedFromBag = currentGame.extractFromBag(1);
 
             for (Color x : extractedFromBag.keySet()) {
-                if (!extracted.containsKey(x))
-                    extracted.put(x, 1);
+                if (!students.containsKey(x))
+                    students.put(x, 1);
                 else
-                    extracted.put(x, extracted.get(x) + 1);
+                    students.put(x, students.get(x) + 1);
 
                 extractedFromBag.remove(x);
             }
@@ -54,10 +56,10 @@ public class Choose1ToIsland extends CharacterCard {
     }
 
     public void setExtracted(EnumMap<Color, Integer> extracted) {
-        this.extracted = extracted;
+        this.students = extracted;
     }
 
     public EnumMap<Color, Integer> getExtracted() {
-        return extracted;
+        return students;
     }
 }

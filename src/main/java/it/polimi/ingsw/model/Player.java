@@ -26,9 +26,6 @@ public class Player {
         discardPile=new ArrayList<>();
 
     }
-    public void initCoins(){
-        coins=0;
-    }
 
     public String getNickname() {
         return nickname;

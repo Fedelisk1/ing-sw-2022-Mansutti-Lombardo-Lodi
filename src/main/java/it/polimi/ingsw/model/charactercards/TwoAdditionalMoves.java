@@ -1,8 +1,14 @@
 package it.polimi.ingsw.model.charactercards;
 
+import it.polimi.ingsw.model.Game;
+
 public class TwoAdditionalMoves extends CharacterCard {
-    public TwoAdditionalMoves() {
+    public TwoAdditionalMoves(Game currentGame) {
+        this.currentGame = currentGame;
         cost = 1;
+
+        name = "TwoAdditionalMoves";
+        description = "You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you've played.";
     }
 
     /**

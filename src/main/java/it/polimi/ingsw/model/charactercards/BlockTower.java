@@ -1,8 +1,14 @@
 package it.polimi.ingsw.model.charactercards;
 
+import it.polimi.ingsw.model.Game;
+
 public class BlockTower extends CharacterCard {
-    public BlockTower() {
+    public BlockTower(Game currentGame) {
+        this.currentGame = currentGame;
         cost = 3;
+
+        name = "BlockTower";
+        description = "When resolving a Conquering on an island, Towers do not count towards influence.";
     }
 
     /**

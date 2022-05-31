@@ -57,13 +57,6 @@ public class Game extends Observable {
         if (expertMode) {
             characterCards = new ArrayList<>();
             extract3CharacterCard();
-
-            for (CharacterCard c : characterCards) {
-                c.setCurrentGame(this);
-            }
-            for(Player p : getPlayers()){
-                p.initCoins();
-            }
         }
 
         currentPlayer = rand.nextInt(players);
@@ -85,6 +78,8 @@ public class Game extends Observable {
         p.getSchoolDashboard().setCurrentGame(this);
         p.getSchoolDashboard().setUp();
         p.setNickname(nickname);
+        if (expertMode)
+            p.setCoins(1);
         this.players.add(p);
 
         List<String> nicknames = players.stream().map(Player::getNickname).collect(Collectors.toList());
@@ -347,18 +342,18 @@ public class Game extends Observable {
         // loop through extracted numbers
         for(int i = 0;i<3;i++){
             switch (extracted[i]) {
-                case 1 -> characterCards.add(new Choose1ToIsland());
-                case 2 -> characterCards.add(new TempControlProf());
-                case 3 -> characterCards.add(new ChooseIsland());
-                case 4 -> characterCards.add(new BlockTower());
-                case 5 -> characterCards.add(new NoEntryIsland());
-                case 6 -> characterCards.add(new TwoAdditionalMoves());
-                case 7 -> characterCards.add(new Choose3toEntrance());
-                case 8 -> characterCards.add(new Plus2Influence());
-                case 9 -> characterCards.add(new BlockColorOnce());
-                case 10 -> characterCards.add(new Exchange2Students());
-                case 11 -> characterCards.add(new Choose1DiningRoom());
-                case 12 -> characterCards.add(new AllRemoveColor());
+                case 1 -> characterCards.add(new Choose1ToIsland(this));
+                case 2 -> characterCards.add(new TempControlProf(this));
+                case 3 -> characterCards.add(new ChooseIsland(this));
+                case 4 -> characterCards.add(new BlockTower(this));
+                case 5 -> characterCards.add(new NoEntryIsland(this));
+                case 6 -> characterCards.add(new TwoAdditionalMoves(this));
+                case 7 -> characterCards.add(new Choose3toEntrance(this));
+                case 8 -> characterCards.add(new Plus2Influence(this));
+                case 9 -> characterCards.add(new BlockColorOnce(this));
+                case 10 -> characterCards.add(new Exchange2Students(this));
+                case 11 -> characterCards.add(new Choose1DiningRoom(this));
+                case 12 -> characterCards.add(new AllRemoveColor(this));
             }
         }
 

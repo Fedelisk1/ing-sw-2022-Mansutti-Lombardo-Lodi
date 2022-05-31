@@ -1,8 +1,14 @@
 package it.polimi.ingsw.model.charactercards;
 
+import it.polimi.ingsw.model.Game;
+
 public class Plus2Influence extends CharacterCard {
-    public Plus2Influence() {
+    public Plus2Influence(Game currentGame) {
+        this.currentGame = currentGame;
         cost = 2;
+
+        name = "Plus2Influence";
+        description = "During the influence calculation this turn, you count as having 2 more influence";
     }
 
     /**

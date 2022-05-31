@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.CloudCard;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.charactercards.CharacterCard;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,13 +13,14 @@ import java.util.*;
 public class ReducedGame implements Serializable {
     @Serial
     private static final long serialVersionUID = -9013518094037129387L;
-    private List<ReducedIsland> islands;
-    private Map<String, ReducedSchoolDashboard> schoolDashboards;
-    private List<CloudCard> cloudCards;
-    /**
-     * Maps nickname with owned coins.
-     */
-    private Map<String, Integer> coins;
+    private final List<ReducedIsland> islands;
+    private final Map<String, ReducedSchoolDashboard> schoolDashboards;
+    private final List<CloudCard> cloudCards;
+    /** Maps nickname with owned coins. */
+    private final Map<String, Integer> coins;
+    private final boolean expert;
+    private final List<ReducedCharacterCard> characterCards;
+
 
     public ReducedGame(Game game) {
         islands = new ArrayList<>();
@@ -34,6 +36,13 @@ public class ReducedGame implements Serializable {
         }
 
         cloudCards.addAll(game.getCloudCards());
+
+        characterCards = new ArrayList<>();
+
+        expert = game.isExpertMode();
+        if(expert) {
+            game.getCharacterCards().forEach(cc -> characterCards.add(new ReducedCharacterCard(cc)));
+        }
     }
 
     public List<ReducedIsland> getIslands() {
@@ -50,5 +59,13 @@ public class ReducedGame implements Serializable {
 
     public Map<String, Integer> getCoins() {
         return coins;
+    }
+
+    public boolean isExpert() {
+        return expert;
+    }
+
+    public List<ReducedCharacterCard> getCharacterCards() {
+        return characterCards;
     }
 }

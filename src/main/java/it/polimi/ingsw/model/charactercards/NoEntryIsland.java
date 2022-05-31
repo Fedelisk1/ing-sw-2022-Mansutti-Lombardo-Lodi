@@ -1,11 +1,17 @@
 package it.polimi.ingsw.model.charactercards;
 
-public class NoEntryIsland extends CharacterCard {
-    int availableUses;
+import it.polimi.ingsw.model.Game;
 
-    public NoEntryIsland() {
+public class NoEntryIsland extends CharacterCard {
+    private int availableUses;
+
+    public NoEntryIsland(Game currentGame) {
+        this.currentGame = currentGame;
         availableUses = 4;
         cost = 2;
+
+        name = "NoEntryIsland";
+        description = "Place a No Entry tile on an Island of you choice. The first time Mother Nature ends her movement there, put the No Entry tile back onto this card. Do not calculate influence on that island, or place any towers.";
     }
 
     /**
@@ -27,4 +33,7 @@ public class NoEntryIsland extends CharacterCard {
 
     }
 
+    public int getAvailableUses() {
+        return availableUses;
+    }
 }

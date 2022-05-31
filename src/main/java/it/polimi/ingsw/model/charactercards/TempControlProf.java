@@ -1,17 +1,21 @@
 package it.polimi.ingsw.model.charactercards;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
 
 import java.util.ArrayList;
 
 public class TempControlProf extends CharacterCard {
-    private int cost;
-    private ArrayList<Player> playerModified;
+    private final ArrayList<Player> playerModified;
 
-    public TempControlProf() {
+    public TempControlProf(Game currentGame) {
+        this.currentGame = currentGame;
         cost = 2;
         playerModified = new ArrayList<>();
+
+        name = "TempControlProf";
+        description = "During this turn, you take control of any number of Students as the player who currently controls them.";
     }
 
     /**

@@ -149,7 +149,7 @@ public class ClientController implements ViewObserver, Observer {
                 Shutdown shutdown = (Shutdown) message;
                 taskQueue.submit(() -> view.shutdown(shutdown.getContent()));
             }
-            case SERVER_UNREACHABLE -> taskQueue.submit(view::showServerUnreachable);
+            case SERVER_UNREACHABLE -> view.showServerUnreachable();
             case ERROR -> {}
             default -> throw new IllegalStateException("Unexpected value: " + message.getMessageType());
 

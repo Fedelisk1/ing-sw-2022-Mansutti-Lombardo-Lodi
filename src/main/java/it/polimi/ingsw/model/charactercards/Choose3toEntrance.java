@@ -2,22 +2,25 @@ package it.polimi.ingsw.model.charactercards;
 
 import it.polimi.ingsw.exceptions.MissingStudentException;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Game;
 
 import java.util.EnumMap;
 
 public class Choose3toEntrance extends CharacterCard {
-    private EnumMap<Color, Integer> extracted;
-    private int cost;
 
-    public Choose3toEntrance() {
-
-        extracted = new EnumMap<Color, Integer>(Color.class);
-
+    public Choose3toEntrance(Game currentGame) {
+        this.currentGame = currentGame;
+        students = new EnumMap<Color, Integer>(Color.class);
         cost = 1;
+
+        name = "Choose3toEntrance";
+        description = "You may take up to 3 Students from his card and replace them with the same number of Students from your Entrance";
+
+        init();
     }
 
     public void init() {
-        extracted = currentGame.extractFromBag(6);
+        students = currentGame.extractFromBag(6);
     }
 
 
@@ -45,7 +48,7 @@ public class Choose3toEntrance extends CharacterCard {
             while (chosenFromCard.get(c) > 0) {
 
                 chosenFromCard.put(c, chosenFromCard.get(c) - 1);
-                extracted.put(c, extracted.get(c) - 1);
+                students.put(c, students.get(c) - 1);
                 currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(c);
             }
 
@@ -53,10 +56,10 @@ public class Choose3toEntrance extends CharacterCard {
         for (Color c : chosenFromEntrance.keySet()) {
             while (chosenFromEntrance.get(c) > 0) {
                 chosenFromEntrance.put(c, chosenFromEntrance.get(c) - 1);
-                if (extracted.get(c) == null)
-                    extracted.put(c, 1);
+                if (students.get(c) == null)
+                    students.put(c, 1);
                 else
-                    extracted.put(c, extracted.get(c) + 1);
+                    students.put(c, students.get(c) + 1);
                 currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
             }
 
@@ -64,8 +67,8 @@ public class Choose3toEntrance extends CharacterCard {
         }
     }
 
-    public EnumMap<Color, Integer> getExtracted() {
-        return extracted;
+    public EnumMap<Color, Integer> getStudents() {
+        return students;
     }
 
     /**

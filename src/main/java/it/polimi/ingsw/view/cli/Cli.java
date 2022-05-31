@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.Server;
 import it.polimi.ingsw.model.CloudCard;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.reduced.ReducedCharacterCard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedIsland;
 import it.polimi.ingsw.observer.ViewObservable;
@@ -14,7 +15,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Cli extends ViewObservable implements View {
@@ -174,8 +174,6 @@ public class Cli extends ViewObservable implements View {
 
         List<Integer> playable = hand.keySet().stream().filter(card -> !notPlayable.contains(card)).toList();
 
-        System.out.println("playable: " + playable);
-
         playable.forEach(card -> System.out.println("Card priority: " + card + " - Max MN steps: " + hand.get(card)));
 
         int chosenCard = intInput(playable, "Please, choose an assistant card (enter card priority): ");
@@ -257,12 +255,17 @@ public class Cli extends ViewObservable implements View {
             System.out.println("-------------------------");
         });
 
-        System.out.println("\n\n--- Coins ---");
-        game.getCoins().forEach((nick, coins) -> {
-            System.out.print(nick + " -> (" + coins + ") ");
-            ColorCli.printCoins(coins);
-            System.out.println();
-        });
+        if(game.isExpert()) {
+            System.out.println("\n\n--- Coins ---");
+            game.getCoins().forEach((nick, coins) -> {
+                System.out.print(nick + " -> (" + coins + ") ");
+                ColorCli.printCoins(coins);
+                System.out.println();
+            });
+
+            System.out.println("\n\n--- Character Cards ---");
+            displayCharacterCards(game.getCharacterCards());
+        }
 
         i = 1;
         System.out.println("\n\n--- Cloud Cards ---");
@@ -272,6 +275,8 @@ public class Cli extends ViewObservable implements View {
             System.out.println( );
             i++;
         }
+
+        System.out.println();
 
     }
 
@@ -431,5 +436,22 @@ public class Cli extends ViewObservable implements View {
             Thread.currentThread().interrupt();
         }
         return input;
+    }
+
+
+
+    private void displayCharacterCards(List<ReducedCharacterCard> characterCards) {
+        int i = 1;
+        for (ReducedCharacterCard cc : characterCards) {
+            System.out.print(i + ". ");
+            if (cc.getStudents() != null) {
+                cc.getStudents().forEach(ColorCli::printCircles);
+                System.out.print(" ");
+            }
+
+            System.out.println(cc.getDescription());
+
+            i++;
+        }
     }
 }
