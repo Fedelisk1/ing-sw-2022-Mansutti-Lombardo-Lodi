@@ -1,7 +1,9 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.network.message.ErrorMessage;
 import it.polimi.ingsw.network.message.Message;
+import it.polimi.ingsw.network.message.MessageType;
+import it.polimi.ingsw.network.message.PlayerDisconnection;
+import it.polimi.ingsw.network.message.Shutdown;
 import it.polimi.ingsw.observer.Observable;
 
 import java.io.IOException;
@@ -9,8 +11,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.net.SocketTimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Client class to manage messages incoming and outgoing from the client app
@@ -19,27 +21,46 @@ public class SocketClient extends Observable {
     private final Socket socket;
     private final ObjectOutputStream outputStream;
     private final ObjectInputStream inputStream;
-    private static int TIMEOUT = 5000;
+    private final static int TIMEOUT = 10000;
+    private final AtomicBoolean connected;
 
     public SocketClient(String serverAddress, int serverPort) throws IOException {
         this.socket = new Socket();
         this.socket.connect(new InetSocketAddress(serverAddress, serverPort), TIMEOUT);
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
         this.inputStream = new ObjectInputStream(socket.getInputStream());
+
+        connected = new AtomicBoolean(true);
     }
 
     public void readMessage() {
         Thread readerThread = new Thread(() -> {
-            boolean read = true;
-            while (read) {
+            while (connected.get()) {
                 Message message;
                 try {
                     message = (Message) inputStream.readObject();
+                    switch (message.getMessageType()) {
+                        case PING -> {
+
+                        }
+                        case SHUTDOWN_CLIENT -> {
+                            connected.set(false);
+                            notifyObservers(message);
+                        }
+                        default -> notifyObservers(message);
+                    }
+                } catch (SocketTimeoutException timeoutException) {
+                    // client-side network disconnection
+                    message = new Shutdown("You lost connection with the server.");
                     notifyObservers(message);
-                } catch (IOException | ClassNotFoundException e) {
-                    message = new ErrorMessage(null, "Connection lost with the server.");
                     disconnect();
-                    read = false;
+                } catch (IOException e) {
+                    // server has died
+                    message = new Message(Message.SERVER_NICKNAME, MessageType.SERVER_UNREACHABLE);
+                    notifyObservers(message);
+                    disconnect();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
 
             }
@@ -52,16 +73,21 @@ public class SocketClient extends Observable {
             outputStream.writeObject(message);
             outputStream.reset();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
     public void disconnect() {
         try {
             socket.close();
+            connected.set(false);
         } catch (IOException e) {
             // disconnection error
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected() {
+        return connected.get();
     }
 }

@@ -21,4 +21,6 @@ public interface View {
     void askActionPhase3(List<Integer> alloweValues);
 
     void showStringMessage(String content);
+    void shutdown(String message);
+    void showServerUnreachable();
 }

@@ -188,6 +188,18 @@ public class Cli extends ViewObservable implements View {
     }
 
     @Override
+    public void shutdown(String message) {
+        System.out.println(message);
+        System.exit(1);
+    }
+
+    @Override
+    public void showServerUnreachable() {
+        System.out.println("Server unreachable");
+        System.exit(1);
+    }
+
+    @Override
     public void showPlayedAssistantCard(String player, int card) {
         System.out.println(player + " has chosen assistant card " + card);
     }

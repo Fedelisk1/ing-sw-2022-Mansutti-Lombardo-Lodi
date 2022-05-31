@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Handles the communication messages between the server and the client server side.
+ * Handles the communication messages between the server and the client server side, making its methods' invocation
+ * completely network-transparent for the caller.
  */
 public class VirtualView implements View, Observer {
-    private ClientHandler clientHandler;
+    private final ClientHandler clientHandler;
 
     public VirtualView(ClientHandler clientHandler) {
         this.clientHandler = clientHandler;
@@ -56,6 +57,16 @@ public class VirtualView implements View, Observer {
     @Override
     public void showStringMessage(String content) {
         clientHandler.sendMessage(new StringMessage(content));
+    }
+
+    @Override
+    public void shutdown(String message) {
+        clientHandler.sendMessage(new Shutdown(message));
+    }
+
+    @Override
+    public void showServerUnreachable() {
+
     }
 
     @Override

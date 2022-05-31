@@ -2,6 +2,7 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.network.ClientHandler;
+import it.polimi.ingsw.view.cli.Cli;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,6 +11,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Server's main method.
+ */
 public class Server {
     public final static int DEFAULT_PORT = 12345;
     public final static int SERVER_TIMEOUT = 5000;
@@ -27,6 +31,7 @@ public class Server {
 
         try {
             serverSocket = new ServerSocket(port);
+            //serverSocket.setSoTimeout(SERVER_TIMEOUT);
         } catch (IOException e) {
             System.out.println("error opening socket");
             System.exit(-1);
@@ -39,18 +44,22 @@ public class Server {
         while (true) {
             try {
                 Socket client = serverSocket.accept();
-                //serverSocket.setSoTimeout(SERVER_TIMEOUT);
 
-                //new ObjectOutputStream(client.getOutputStream()).writeObject(new Lobby("SERVER", Arrays.asList("aa", "bb"), 3));;
+
 
                 clientsCount++;
-                System.out.println("client " + clientsCount + " connected " + client.getInetAddress());
+                System.out.println("client " + clientsCount + " connected from " + client.getInetAddress());
 
-                new Thread(new ClientHandler(client, nickControllerMap), "clientHandler_" + clientsCount).start();
-                //new Thread(() -> {lobby.allocateClient(client);}, "clientHandlerThread_" + clientsCount);
+                ClientHandler clientHandler = new ClientHandler(client, nickControllerMap);
+
+
+                // asynchronously handle the newly connected client
+                new Thread(clientHandler, "clientHandler_" + clientsCount).start();
+
+                // start server-side heartbeat
+                new Thread(new HeartBeatServer(clientHandler)).start();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("connection hangup");
             }
         }
     }

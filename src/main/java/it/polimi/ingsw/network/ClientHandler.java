@@ -10,15 +10,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
+/**
+ * Handles interaction between server and a specific client.
+ */
 public class ClientHandler implements Runnable {
-    Map<String, GameController> nickControllerMap;
-    Socket client;
-    final Object inputLock;
-    final Object outputLock;
-    ObjectOutputStream output;
-    ObjectInputStream input;
-    boolean connected;
+    private final Map<String, GameController> nickControllerMap;
+    private final Socket client;
+    private final Object inputLock;
+    private final Object outputLock;
+    private ObjectOutputStream output;
+    private ObjectInputStream input;
+    private boolean connected;
+    private static final int TIMEOUT = 10000;
+    private String nickname;
 
     public ClientHandler(Socket client, Map<String, GameController> nickControllerMap) {
         this.client = client;
@@ -32,19 +38,39 @@ public class ClientHandler implements Runnable {
             this.output = new ObjectOutputStream(client.getOutputStream());
             output.flush();
             this.input = new ObjectInputStream(client.getInputStream());
+            client.setSoTimeout(5000);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     @Override
     public void run() {
         try {
             handleClient();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            connected = false;
+
+            if (nickname == null) {
+                System.out.println(threadName() + " client disconnected");
+            } else {
+                System.out.println(threadName() + " " + nickname + " disconnected");
+
+                GameController controller = nickControllerMap.get(nickname);
+
+                if (controller != null)
+                    controller.handleDisconnection(nickname);
+
+                nickControllerMap.remove(nickname);
+            }
+
             disconnect();
-            //throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -52,24 +78,31 @@ public class ClientHandler implements Runnable {
         while (connected) {
             synchronized (inputLock) {
                 System.out.println(threadName() + " waiting for message..." );
+
                 Object readObject = input.readObject();
-                System.out.print(threadName() + " message arrived: " );
+                if (! (readObject instanceof Message))
+                    break;
+
                 Message msgIn = (Message) readObject;
-                //System.out.print(msgIn);
-                System.out.println(msgIn.getMessageType());
-                if (msgIn != null)
-                    if (msgIn.getMessageType() == MessageType.LOGIN_REQUEST) {
+
+                System.out.println(threadName() + " message arrived: " + msgIn.getMessageType());
+
+                switch (msgIn.getMessageType()) {
+                    case PING -> {
+                        // ping from server arrived
+                    }
+                    case LOGIN_REQUEST -> {
                         System.out.println("handle login for " + msgIn.getNickname());
                         handleLogin(msgIn.getNickname());
-
-                    } else if (msgIn.getMessageType() == MessageType.NEW_GAME_REQUEST) {
-
+                    }
+                    case NEW_GAME_REQUEST -> {
                         handleNewGameRequest((NewGameRequest) msgIn);
-
-                    } else {
-                        // forward message to the proper controller
+                    }
+                    default -> {
+                        // forward message to the controller
                         nickControllerMap.get(msgIn.getNickname()).onMessageArrived(msgIn);
                     }
+                }
             }
         }
     }
@@ -87,6 +120,8 @@ public class ClientHandler implements Runnable {
             } catch (NoGameAvailableExcpetion e) {
                 gameId = -1;
             }
+
+            this.nickname = nickname;
 
             System.out.println(threadName() + "login ok, gameId = " + gameId);
             sendMessage(new LoginOutcome(true, gameId));
@@ -145,7 +180,6 @@ public class ClientHandler implements Runnable {
             try {
                 output.writeObject(message);
                 output.reset();
-                output.reset();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -160,6 +194,10 @@ public class ClientHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     private String threadName() {

@@ -9,17 +9,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Game extends Observable {
-    private EnumMap<Color, Integer> bag;
+    private final EnumMap<Color, Integer> bag;
     private int motherNaturePosition = 0;
     private final int MAX_ISLANDS = 12;
     private final int MAX_BAG_STUDENTS = 130;
-    private ArrayList<IslandGroup> islands;
-    private ArrayList<Player> players;
+    private final ArrayList<IslandGroup> islands;
+    private final ArrayList<Player> players;
     private int currentPlayer;
     private ArrayList<CharacterCard> characterCards;
     private int totalCoins;
-    private ArrayList<CloudCard> cloudCards;
-    private ArrayList<Color> unusedProfessors;
+    private final ArrayList<CloudCard> cloudCards;
+    private final ArrayList<Color> unusedProfessors;
     private final boolean expertMode;
     private final int maxPlayers;
 
@@ -30,8 +30,7 @@ public class Game extends Observable {
 
         // unused professor init
         unusedProfessors = new ArrayList<>();
-        for(Color c : Color.values())
-            unusedProfessors.add(c);
+        unusedProfessors.addAll(Arrays.asList(Color.values()));
 
         // bag init
         bag = new EnumMap<>(Color.class);
@@ -148,7 +147,6 @@ public class Game extends Observable {
      * If there are not enough students throw IllegalArgumentException
      * @param student describes how many students we need to extract
      * @return a new EnumMap with the extracted students
-     *
      */
 
     public EnumMap<Color,Integer> extractFromBag(int student) {
@@ -172,7 +170,7 @@ public class Game extends Observable {
     }
 
     public int studentsInBag(Color color) {
-        return bag.containsKey(color) ? bag.get(color) : 0;
+        return bag.getOrDefault(color, 0);
     }
 
     public int studentsInBag() {
@@ -317,22 +315,22 @@ public class Game extends Observable {
 
     private int[] extract3Numbers() {
         Random random = new Random();
-        int tempAr[];
+        int[] tempAr;
         tempAr = new int[3];
-        int casuale = 0;
+        int randomNumber = 0;
 
-        casuale = random.nextInt(12);
-        tempAr[0] = casuale +1;
+        randomNumber = random.nextInt(12);
+        tempAr[0] = randomNumber +1;
 
         do {
-            casuale = random.nextInt(12);
-            tempAr[1] = casuale +1;
+            randomNumber = random.nextInt(12);
+            tempAr[1] = randomNumber +1;
 
         } while (tempAr[1] == tempAr[0]);
 
         do {
-            casuale = random.nextInt(12);
-            tempAr[2] = casuale +1;
+            randomNumber = random.nextInt(12);
+            tempAr[2] = randomNumber +1;
 
         } while (tempAr[2] == tempAr[1] || tempAr[2] == tempAr[0]);
 
@@ -348,43 +346,19 @@ public class Game extends Observable {
 
         // loop through extracted numbers
         for(int i = 0;i<3;i++){
-            switch (extracted[i]){
-                case 1:
-                    characterCards.add(new Choose1ToIsland());
-                    break;
-                case 2:
-                    characterCards.add(new TempControlProf());
-                    break;
-                case 3:
-                    characterCards.add(new ChooseIsland());
-                    break;
-                case 4:
-                    characterCards.add(new BlockTower());
-                    break;
-                case 5:
-                    characterCards.add(new NoEntryIsland());
-                    break;
-                case 6:
-                    characterCards.add(new TwoAdditionalMoves());
-                    break;
-                case 7:
-                    characterCards.add(new Choose3toEntrance());
-                    break;
-                case 8:
-                    characterCards.add(new Plus2Influence());
-                    break;
-                case 9:
-                    characterCards.add(new BlockColorOnce());
-                    break;
-                case 10:
-                    characterCards.add(new Exchange2Students());
-                    break;
-                case 11:
-                    characterCards.add(new Choose1DiningRoom());
-                    break;
-                case 12:
-                    characterCards.add(new AllRemoveColor());
-                    break;
+            switch (extracted[i]) {
+                case 1 -> characterCards.add(new Choose1ToIsland());
+                case 2 -> characterCards.add(new TempControlProf());
+                case 3 -> characterCards.add(new ChooseIsland());
+                case 4 -> characterCards.add(new BlockTower());
+                case 5 -> characterCards.add(new NoEntryIsland());
+                case 6 -> characterCards.add(new TwoAdditionalMoves());
+                case 7 -> characterCards.add(new Choose3toEntrance());
+                case 8 -> characterCards.add(new Plus2Influence());
+                case 9 -> characterCards.add(new BlockColorOnce());
+                case 10 -> characterCards.add(new Exchange2Students());
+                case 11 -> characterCards.add(new Choose1DiningRoom());
+                case 12 -> characterCards.add(new AllRemoveColor());
             }
         }
 
@@ -442,7 +416,7 @@ public class Game extends Observable {
 
     /**
      * finds the player with the highest amount of towers used and, if tied, the player with the most professors
-     * @return
+     * @return winning player
      */
     public Player winner()
     {

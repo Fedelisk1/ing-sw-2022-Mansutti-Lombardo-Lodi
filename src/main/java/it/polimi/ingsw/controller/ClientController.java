@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.HeartBeatClient;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.network.SocketClient;
 import it.polimi.ingsw.network.message.*;
@@ -17,9 +18,9 @@ import java.util.concurrent.Executors;
  * Handles messages communication with server to achieve a correct game flow client side.
  */
 public class ClientController implements ViewObserver, Observer {
-    private View view;
+    private final View view;
     private SocketClient client;
-    private ExecutorService taskQueue;
+    private final ExecutorService taskQueue;
     private String nickname;
     private int gameId;
 
@@ -35,6 +36,9 @@ public class ClientController implements ViewObserver, Observer {
             client = new SocketClient(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
             client.addObserver(this);
             client.readMessage();
+
+            // start Heartbeat task
+            new Thread(new HeartBeatClient(client)).start();
         } catch (IOException | NumberFormatException e) {
             connectionOk = false;
         }
@@ -89,7 +93,8 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onMessageArrived(Message message) {
         switch (message.getMessageType()) {
-            case LOGIN_OUTCOME:
+            case PING -> System.out.println("ping from server");
+            case LOGIN_OUTCOME -> {
                 LoginOutcome loginOutcome = (LoginOutcome) message;
 
                 if (loginOutcome.isSuccess())
@@ -100,52 +105,54 @@ public class ClientController implements ViewObserver, Observer {
                         loginOutcome.getGameId() == -1,
                         nickname
                 ));
-                break;
-            case LOBBY:
+            }
+            case LOBBY -> {
                 Lobby lobbyMessage = (Lobby) message;
                 //view.showLobby(lobbyMessage.getNicknames(), lobbyMessage.getPlayers());
                 taskQueue.submit(() -> view.showLobby(lobbyMessage.getNicknames(), lobbyMessage.getPlayers()));
-                break;
-
-            case GAME_START:
+            }
+            case GAME_START -> {
                 GameStart gameStart = (GameStart) message;
 
-                break;
-            case STRING_MESSAGE:
+            }
+            case STRING_MESSAGE -> {
                 StringMessage stringMessage = (StringMessage) message;
                 //view.showStringMessage(stringMessage.getContent());
                 taskQueue.submit(() -> view.showStringMessage(stringMessage.getContent()));
-                break;
-            case ASK_ASSISTANT_CARD:
+            }
+            case ASK_ASSISTANT_CARD -> {
                 AskAssistantCard askAssistantCard = (AskAssistantCard) message;
                 //view.askAssistantCard(askAssistantCard.getHand(), askAssistantCard.getNotPlayable());
                 taskQueue.submit(() -> view.askAssistantCard(askAssistantCard.getHand(), askAssistantCard.getNotPlayable()));
-                break;
-            case ASSISTANT_CARD_PLAYED:
+            }
+            case ASSISTANT_CARD_PLAYED -> {
                 AssistantCardPlayed assistantCardPlayed = (AssistantCardPlayed) message;
                 taskQueue.submit(() -> view.showPlayedAssistantCard(assistantCardPlayed.getWhoPlayed(), assistantCardPlayed.getPlayedCard()));
-                break;
-            case ASK_ACTION_PHASE_1:
+            }
+            case ASK_ACTION_PHASE_1 -> {
                 AskActionPhase1 askActionPhase1 = (AskActionPhase1) message;
                 taskQueue.submit(() -> view.askActionPhase1(askActionPhase1.getCount(), askActionPhase1.getMaxIsland()));
-                break;
-            case ASK_ACTION_PHASE_2:
+            }
+            case ASK_ACTION_PHASE_2 -> {
                 AskActionPhase2 askActionPhase2 = (AskActionPhase2) message;
                 taskQueue.submit(() -> view.askActionPhase2(askActionPhase2.getMaxMNSteps()));
-                break;
-            case ASK_ACTION_PHASE_3:
+            }
+            case ASK_ACTION_PHASE_3 -> {
                 AskActionPhase3 askActionPhase3 = (AskActionPhase3) message;
                 taskQueue.submit(() -> view.askActionPhase3(askActionPhase3.getAlloweValues()));
-                break;
-            case UPDATE:
+            }
+            case UPDATE -> {
                 Update update = (Update) message;
                 taskQueue.submit(() -> view.update(update.getReducedGame()));
-            case ERROR:
+            }
+            case SHUTDOWN_CLIENT -> {
+                Shutdown shutdown = (Shutdown) message;
+                taskQueue.submit(() -> view.shutdown(shutdown.getContent()));
+            }
+            case SERVER_UNREACHABLE -> taskQueue.submit(view::showServerUnreachable);
+            case ERROR -> {}
+            default -> throw new IllegalStateException("Unexpected value: " + message.getMessageType());
 
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + message.getMessageType());
         }
     }
-
 }

@@ -10,14 +10,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Handles the flow of the game serer side
+ * Handles the flow of the game serer side.
  */
 public class GameController implements Observer {
-    private Game game;
-    private Map<String, VirtualView> nickVirtualViewMap;
+    private final Game game;
+    private final Map<String, VirtualView> nickVirtualViewMap;
     private GameState state;
     private int playerActionCount;
-    private int gameId;
+    private final int gameId;
 
     public GameController(int playersNumber, boolean expertMode, int gameId)
     {
@@ -28,13 +28,15 @@ public class GameController implements Observer {
         playerActionCount=0;
     }
 
+    /**
+     * Adds a player to the game.
+     * @param nickname Player's nickname.
+     * @param virtualView Player's virtualview.
+     */
     public void addPlayer(String nickname, VirtualView virtualView) {
         nickVirtualViewMap.put(nickname, virtualView);
         game.addPlayer(nickname);
         game.addObserver(virtualView);
-
-        //if (game.getPlayersCount() == game.getMaxPlayers())
-            //startGame();
     }
 
     public List<String> getNicknames() {
@@ -57,7 +59,7 @@ public class GameController implements Observer {
     }
 
     private String gameLogHeader() {
-        return "[game_" + getId() + "]";
+        return "[Game" + getId() + "]";
     }
 
     public void startGame()
@@ -168,29 +170,43 @@ public class GameController implements Observer {
     public void clearPlayerActionCount() {
         this.playerActionCount = 0;
     }
+
     public void addPlayerActionCount() {
         this.playerActionCount++;
     }
+
     public int getPlayerActionCount() {
         return playerActionCount;
     }
 
     /**
      * Allows to check if the game can still be joined (the maximum number of players has not been reached yet).
-     * @return
+     * @return true if the game can be joined, false otherwise.
      */
     public boolean canBeJoined() {
         return (game.getPlayersCount() < game.getMaxPlayers());
     }
 
+    /**
+     * Broadcasts a string message to all the views.
+     * @param content String message to display.
+     */
     private void broadcastMessage(String content) {
         nickVirtualViewMap.values().forEach(virtualView -> virtualView.showStringMessage(content));
     }
 
+    /**
+     * Broadcasts a string message to all the views except the provided one.
+     * @param content String message to display.
+     */
     public void broadcastExceptCurrentPlayer(String content) {
         viewsExceptCurrentPlayer().forEach(virtualView -> virtualView.showStringMessage(content));
     }
 
+    /**
+     * Asks current Player to play an assistant card, providing possible values.
+     * @param notPlayable List integers representing priorities of not playable character cards.
+     */
     public void askAssistantCard(List<Integer> notPlayable) {
         notPlayable = notPlayable == null ? new ArrayList<>() : notPlayable;
 
@@ -237,9 +253,17 @@ public class GameController implements Observer {
     }
 
     /**
-     * Updates the client's views.
+     * Broadcasts clients views with up-to-date content.
      */
     public void updateViews() {
         getViews().forEach(vv -> vv.update(new ReducedGame(this.game)));
+    }
+
+    /**
+     * Shows disconnection message to clients.
+     */
+    public void handleDisconnection(String nicknameDisconnected) {
+        nickVirtualViewMap.remove(nicknameDisconnected);
+        getViews().forEach(vv -> vv.shutdown(nicknameDisconnected + " has disconnected"));
     }
 }
