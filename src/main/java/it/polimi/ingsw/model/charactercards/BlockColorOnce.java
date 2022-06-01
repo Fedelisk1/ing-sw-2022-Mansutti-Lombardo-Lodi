@@ -8,6 +8,7 @@ public class BlockColorOnce extends CharacterCard {
         this.currentGame = currentGame;
         cost = 3;
 
+        type = CharacterCardType.BLOCK_COLOR_ONCE;
         name = "BlockColorOnce";
         description = "Choose a color of Student: during the influence calculation this turn, that color adds no influence";
     }

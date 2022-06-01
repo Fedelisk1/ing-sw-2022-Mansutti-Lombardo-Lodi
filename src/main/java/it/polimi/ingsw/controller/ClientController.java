@@ -8,7 +8,6 @@ import it.polimi.ingsw.observer.Observer;
 import it.polimi.ingsw.observer.ViewObserver;
 import it.polimi.ingsw.view.View;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +21,6 @@ public class ClientController implements ViewObserver, Observer {
     private SocketClient client;
     private final ExecutorService taskQueue;
     private String nickname;
-    private int gameId;
 
     public ClientController(View view) {
         this.view = view;
@@ -84,6 +82,16 @@ public class ClientController implements ViewObserver, Observer {
         client.sendMessage(new ChooseCloudCard(nickname, card));
     }
 
+    @Override
+    public void onCCChosen(int card) {
+        client.sendMessage(new PlayCharacterCard(nickname, card));
+    }
+
+    @Override
+    public void onCCAllRemoveColorInput(Color color) {
+        client.sendMessage(new CCAllRemoveColorReply(nickname, color));
+    }
+
 
     /**
      * Dispatch messages received from the server.
@@ -96,9 +104,6 @@ public class ClientController implements ViewObserver, Observer {
             case PING -> System.out.println("ping from server");
             case LOGIN_OUTCOME -> {
                 LoginOutcome loginOutcome = (LoginOutcome) message;
-
-                if (loginOutcome.isSuccess())
-                    this.gameId = loginOutcome.getGameId();
 
                 taskQueue.submit(() -> view.showLoginOutcome(
                         loginOutcome.isSuccess(),
@@ -140,6 +145,9 @@ public class ClientController implements ViewObserver, Observer {
             case ASK_ACTION_PHASE_3 -> {
                 AskActionPhase3 askActionPhase3 = (AskActionPhase3) message;
                 taskQueue.submit(() -> view.askActionPhase3(askActionPhase3.getAlloweValues()));
+            }
+            case ASK_CC_ALL_REMOVE_COLOR_INPUT-> {
+                taskQueue.submit(view::askCCAllRemoveColorInput);
             }
             case UPDATE -> {
                 Update update = (Update) message;

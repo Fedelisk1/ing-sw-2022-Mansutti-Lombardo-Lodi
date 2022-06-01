@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.observer.Observer;
-import it.polimi.ingsw.view.cli.Cli;
 
 import java.util.List;
 import java.util.Map;
@@ -92,5 +91,10 @@ public class VirtualView implements View, Observer {
     @Override
     public void askActionPhase3(List<Integer> alloweValues) {
         clientHandler.sendMessage(new AskActionPhase3(alloweValues));
+    }
+
+    @Override
+    public void askCCAllRemoveColorInput() {
+        clientHandler.sendMessage(new AskCCAllRemoveColorInput());
     }
 }

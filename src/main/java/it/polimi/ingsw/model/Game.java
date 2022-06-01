@@ -56,7 +56,10 @@ public class Game extends Observable {
         // expertMode init
         if (expertMode) {
             characterCards = new ArrayList<>();
-            extract3CharacterCard();
+            characterCards.add(new AllRemoveColor(this));
+            characterCards.add(new AllRemoveColor(this));
+            characterCards.add(new AllRemoveColor(this));
+            //extract3CharacterCard();
         }
 
         currentPlayer = rand.nextInt(players);
@@ -94,6 +97,11 @@ public class Game extends Observable {
     {
         return players;
     }
+
+    public List<Player> getPlayersExceptCurrent() {
+        return players.stream().filter(p -> !p.equals(getCurrentPlayerInstance())).toList();
+    }
+
 
 
     /**
@@ -248,6 +256,10 @@ public class Game extends Observable {
         return characterCards;
     }
 
+    public CharacterCard getCharacterCard(int index) {
+        return characterCards.get(index);
+    }
+
     public ArrayList<CloudCard> getCloudCards() {
         return cloudCards;
     }
@@ -373,6 +385,23 @@ public class Game extends Observable {
         return unusedProfessors;
     }
 
+    /**
+     * Adds a professor to the unused professors of the game, if it is not already present.
+     * @param color color of the professor to be added.
+     */
+    public void addUnusedProfessor(Color color) {
+        if (! unusedProfessors.contains(color))
+            unusedProfessors.add(color);
+    }
+
+    /**
+     * Removes a professor from the unused professors of the game, if present.
+     * @param color color of the professor to be removed.
+     */
+    public void removeUnusedProfessor(Color color) {
+        unusedProfessors.remove(color);
+    }
+
 
     /**
      * calculates the player with maximum influence, that is the eligible owner for islandGroup
@@ -461,6 +490,28 @@ public class Game extends Observable {
         }
 
         return result;
+    }
+
+    /**
+     * Allows to get a Character Card of the game based on its {@link CharacterCardType}.
+     * @param type {@link CharacterCardType} of the character card to retrieve.
+     * @return {@link CharacterCard} corresponding to the given type.
+     * @throws IllegalArgumentException if the given type does not match any character card in the game instance.
+     */
+    public CharacterCard getCharacterCard(CharacterCardType type) throws IllegalArgumentException {
+        int index = -1;
+
+        for (int i = 0; i < characterCards.size(); i++) {
+            if (characterCards.get(i).getType() == type) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1)
+            throw new IllegalArgumentException("Given type is not present in this game instance.");
+        else
+            return characterCards.get(index);
     }
 
 }

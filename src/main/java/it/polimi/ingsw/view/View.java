@@ -20,6 +20,9 @@ public interface View {
     void askActionPhase2(int maxMNStpes);
     void askActionPhase3(List<Integer> alloweValues);
 
+    // character
+    void askCCAllRemoveColorInput();
+
     void showStringMessage(String content);
     void shutdown(String message);
     void showServerUnreachable();

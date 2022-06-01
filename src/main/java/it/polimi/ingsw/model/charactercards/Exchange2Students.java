@@ -11,6 +11,7 @@ public class Exchange2Students extends CharacterCard {
         this.currentGame = currentGame;
         cost = 1;
 
+        type = CharacterCardType.EXCHANGE_2_STUDENTS;
         name = "Exchange2Students";
         description = "You may exchange up to 2 Students between your Entrance and your Dining Room";
     }

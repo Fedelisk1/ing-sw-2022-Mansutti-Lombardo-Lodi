@@ -2,6 +2,7 @@ package it.polimi.ingsw.observer;
 
 import it.polimi.ingsw.model.Color;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,4 +17,8 @@ public interface ViewObserver {
     void onStudentMovedToDiningRoom(Color color);
     void onMotherNatureMoved(int steps);
     void onCloudCardChosen(int card);
+
+    void onCCChosen(int card);
+
+    void onCCAllRemoveColorInput(Color color);
 }

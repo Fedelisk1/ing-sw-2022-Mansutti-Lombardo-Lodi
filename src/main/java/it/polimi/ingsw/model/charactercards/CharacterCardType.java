@@ -1,0 +1,16 @@
+package it.polimi.ingsw.model.charactercards;
+
+public enum CharacterCardType {
+    ALL_REMOVE_COLOR,
+    BLOCK_COLOR_ONCE,
+    BLOCK_TOWER,
+    CHOOSE_1_DINING_ROOM,
+    CHOOSE_1_TO_ISLAND,
+    CHOOSE_3_TO_ENTRANCE,
+    CHOOSE_ISLAND,
+    EXCHANGE_2_STUDENTS,
+    NO_ENTRY_ISLAND,
+    PLUS_2_INFLUENCE,
+    TEMP_CONTROL_PROF,
+    TWO_ADDITIONAL_MOVES
+}

@@ -9,6 +9,7 @@ public class AllRemoveColor extends CharacterCard {
         this.currentGame = currentGame;
         cost = 3;
 
+        type = CharacterCardType.ALL_REMOVE_COLOR;
         name = "AllRemoveColor";
         description = "Choose a type of Student: every player (including yourself) must return 2 Students of that type from their Dining Room to the Bag. If any player has fewer than 3 Students of that type, return as many Students as they have";
     }
@@ -36,10 +37,6 @@ public class AllRemoveColor extends CharacterCard {
                     p.getSchoolDashboard().removeStudentFromDiningRoom(c);
             } else if (numberOfStudents == 1)
                 p.getSchoolDashboard().removeStudentFromDiningRoom(c);
-
         }
-
     }
-
-
 }

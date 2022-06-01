@@ -7,6 +7,7 @@ public class BlockTower extends CharacterCard {
         this.currentGame = currentGame;
         cost = 3;
 
+        type = CharacterCardType.BLOCK_TOWER;
         name = "BlockTower";
         description = "When resolving a Conquering on an island, Towers do not count towards influence.";
     }

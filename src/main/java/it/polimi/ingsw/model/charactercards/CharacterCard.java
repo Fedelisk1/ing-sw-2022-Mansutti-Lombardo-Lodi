@@ -13,6 +13,7 @@ public abstract class CharacterCard {
     protected String name;
     protected String description;
     protected EnumMap<Color, Integer> students;
+    protected CharacterCardType type;
 
     public int getCost() {
         return cost;
@@ -28,6 +29,10 @@ public abstract class CharacterCard {
 
     public EnumMap<Color, Integer> getStudents() {
         return students;
+    }
+
+    public CharacterCardType getType() {
+        return type;
     }
 }
 

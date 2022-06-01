@@ -14,6 +14,7 @@ public class TempControlProf extends CharacterCard {
         cost = 2;
         playerModified = new ArrayList<>();
 
+        type = CharacterCardType.TEMP_CONTROL_PROF;
         name = "TempControlProf";
         description = "During this turn, you take control of any number of Students as the player who currently controls them.";
     }

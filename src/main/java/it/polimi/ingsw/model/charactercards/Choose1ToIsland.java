@@ -13,6 +13,7 @@ public class Choose1ToIsland extends CharacterCard {
 
         cost = 1;
 
+        type = CharacterCardType.CHOOSE_1_TO_ISLAND;
         name = "Choose1ToIsland";
         description = "Take 1 Student from this card and place it on an island of your choice. Then, draw a student from the Bag and place it on this card.";
 

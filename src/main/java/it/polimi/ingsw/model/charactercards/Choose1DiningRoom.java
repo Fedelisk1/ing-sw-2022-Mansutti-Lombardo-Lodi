@@ -12,6 +12,7 @@ public class Choose1DiningRoom extends CharacterCard {
         cost = 2;
         students = new EnumMap<>(Color.class);
 
+        type = CharacterCardType.CHOOSE_1_DINING_ROOM;
         name = "Choose1DiningRoom";
         description = "Take 1 Student from this card and place it in your Dining Room. Then, draw a new Student from the Bag and place it on this card.";
 

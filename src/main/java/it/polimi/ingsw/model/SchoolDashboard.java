@@ -5,10 +5,10 @@ import it.polimi.ingsw.exceptions.MissingStudentException;
 import java.util.*;
 
 public class SchoolDashboard {
-    private ArrayList<Color> professors;
+    private final ArrayList<Color> professors;
     private int towers;
     private EnumMap<Color,Integer> entrance;
-    private EnumMap<Color,Integer> diningRoom;
+    private final EnumMap<Color,Integer> diningRoom;
     private Game currentGame;
 
 
@@ -94,6 +94,10 @@ public class SchoolDashboard {
         return diningRoom;
     }
 
+    public int getDiningRoom(Color color) {
+        return diningRoom.getOrDefault(color, 0);
+    }
+
     /**
      *moves student from entrance to dining room
      * @param color student color
@@ -163,17 +167,20 @@ public class SchoolDashboard {
         if(hasMoreStudents)
         {
             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
-            currentGame.getUnusedProfessors().remove(color);
+            currentGame.removeUnusedProfessor(color);
         }
 
     }
 
-
-    public void removeStudentFromDiningRoom(Color color) throws NullPointerException{
+    /**
+     * Removes a student from dining romm.
+     * @param color color of the student to remove.
+     */
+    public void removeStudentFromDiningRoom(Color color) {
         diningRoom.putIfAbsent(color,0);
-        diningRoom.put(color,diningRoom.get(color)-1);
-
+        diningRoom.put(color, diningRoom.get(color) - 1);
     }
+
     /**
      * Adds a professor to the player's school dashboard
      * @param color professor color

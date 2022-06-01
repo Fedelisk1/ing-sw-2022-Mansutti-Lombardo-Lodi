@@ -77,15 +77,15 @@ public class ClientHandler implements Runnable {
     private void handleClient() throws IOException, ClassNotFoundException {
         while (connected) {
             synchronized (inputLock) {
-                System.out.println(threadName() + " waiting for message..." );
+                //System.out.println(threadName() + " waiting for message..." );
 
                 Object readObject = input.readObject();
-                if (! (readObject instanceof Message))
+
+                if (! (readObject instanceof Message msgIn))
                     break;
 
-                Message msgIn = (Message) readObject;
-
-                System.out.println(threadName() + " message arrived: " + msgIn.getMessageType());
+                if(msgIn.getMessageType() != MessageType.PING)
+                    System.out.println(threadName() + " message arrived: " + msgIn.getMessageType());
 
                 switch (msgIn.getMessageType()) {
                     case PING -> {
@@ -95,9 +95,7 @@ public class ClientHandler implements Runnable {
                         System.out.println("handle login for " + msgIn.getNickname());
                         handleLogin(msgIn.getNickname());
                     }
-                    case NEW_GAME_REQUEST -> {
-                        handleNewGameRequest((NewGameRequest) msgIn);
-                    }
+                    case NEW_GAME_REQUEST -> handleNewGameRequest((NewGameRequest) msgIn);
                     default -> {
                         // forward message to the controller
                         nickControllerMap.get(msgIn.getNickname()).onMessageArrived(msgIn);

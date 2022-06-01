@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedIsland;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
+import jdk.dynalink.NamedOperation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,11 +16,11 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Cli extends ViewObservable implements View {
     private final Scanner input;
-
 
     public Cli() {
         input = new Scanner(System.in);
@@ -58,7 +59,6 @@ public class Cli extends ViewObservable implements View {
         System.out.println(" ▀▀▀ .▀  ▀▀▀▀ ▀  ▀ ▀▀ █▪ ▀▀▀   ▀ •  ▀▀▀▀ ");
         System.out.println();
 
-        // ask server info
         askServerInfo();
     }
 
@@ -238,7 +238,7 @@ public class Cli extends ViewObservable implements View {
                 Arrays.stream(Color.values()).forEach(c -> {
                     ColorCli.printCircles(c, sd.getDiningRoom().get(c));
                     if (sd.getDiningRoom().get(c) > 0)
-                        System.out.print("\n               ");
+                        System.out.print("\n");
                 });
             }
 
@@ -272,7 +272,7 @@ public class Cli extends ViewObservable implements View {
         for (CloudCard cc : game.getCloudCards()) {
             System.out.print("Cloud Card " + i + " -> ");
             cc.getStudents().forEach(ColorCli::printCircles);
-            System.out.println( );
+            System.out.println();
             i++;
         }
 
@@ -282,30 +282,60 @@ public class Cli extends ViewObservable implements View {
 
     @Override
     public void askActionPhase1(int count, int maxIsland) {
-        String destination = strInput(Arrays.asList("i", "dr"), "Action Phase 1 - Move "
-                + count + ": where do you want to move your student? (enter I for island or DR for Dining Room) ");
+        String destination = strInput(Arrays.asList("i", "dr", "cc"), "Action Phase 1 - Move "
+                + count + ": where do you want to move your student? (enter \"I\" for island or \"DR\" for Dining Room; if you wish to play a Character Card, enter \"CC\") ");
 
-        Color color = colorInput();
-        System.out.println("Chosen color: " + color);
         if (destination.equalsIgnoreCase("i")) {
+            Color color = colorInput();
+
             int island = intInput(1, maxIsland, new ArrayList<>(), "Enter island number: ");
             notifyObservers((o) -> o.onStudentMovedToIsland(island, color));
-        } else {
+        } else if (destination.equalsIgnoreCase("dr")) {
+            Color color = colorInput();
+
             notifyObservers(o -> o.onStudentMovedToDiningRoom(color));
+        } else {
+            askCharacterCard();
         }
     }
 
     @Override
     public void askActionPhase2(int maxMNSteps) {
-        int steps = intInput(1, maxMNSteps, "Please enter how many steps you want to move Mother Nature: ");
-        notifyObservers(o -> o.onMotherNatureMoved(steps));
+        List<String> allowedStr = new ArrayList<>();
+        IntStream.rangeClosed(1, maxMNSteps).forEach(i -> allowedStr.add(i + ""));
+        allowedStr.add("cc");
+
+        System.out.println("allowed: " + allowedStr);
+
+        String input = strInput(allowedStr, "Please enter how many steps you want to move Mother Nature, ore enter \"CC\" if you wish to play a Character Card");
+        try {
+            int mnSteps = Integer.parseInt(input);
+            notifyObservers(o -> o.onMotherNatureMoved(mnSteps));
+        } catch (NumberFormatException e) {
+            askCharacterCard();
+        }
     }
 
     @Override
     public void askActionPhase3(List<Integer> alloweValues) {
-        System.out.println("allowed: "+ alloweValues);
-        int chosenCard = intInput(alloweValues, "Please, choose a cloud card to refill your School Dashboard's entrance: ");
-        notifyObservers(o -> o.onCloudCardChosen(chosenCard));
+        List<String> allowedStr = new ArrayList<>(alloweValues.stream().map(Object::toString).toList());
+        allowedStr.add("cc");
+
+        System.out.println("allowed: " + allowedStr);
+
+        String input = strInput(allowedStr, "Please, enter a cloud card's number to refill your School Dashboard's entrance, or enter \"CC\" if you wish to play a Character Caard: ");
+
+        if (input.equalsIgnoreCase("cc"))
+            askCharacterCard();
+        else
+            notifyObservers(o -> o.onCloudCardChosen(Integer.parseInt(input)));
+    }
+
+    @Override
+    public void askCCAllRemoveColorInput() {
+        Color color = colorInput();
+
+        notifyObservers(o -> o.onCCAllRemoveColorInput(color));
     }
 
     /**
@@ -409,8 +439,12 @@ public class Cli extends ViewObservable implements View {
     }
 
     private Color colorInput() {
+        return colorInput("Please choose a color ");
+    }
+
+    private Color colorInput(String prompt) {
         List<String> allowedColors = Arrays.stream(Color.values()).map(Color::toString).toList();
-        String input = strInput(allowedColors, "Please choose a color " + allowedColors + ": ");
+        String input = strInput(allowedColors, prompt + allowedColors + ": ");
         return Color.valueOf(input.toUpperCase());
     }
 
@@ -453,5 +487,11 @@ public class Cli extends ViewObservable implements View {
 
             i++;
         }
+    }
+
+    private void askCharacterCard() {
+        int chosenCard = intInput(1, 3, "Please enter the number of the Character Card to play: ");
+
+        notifyObservers(o -> o.onCCChosen(chosenCard));
     }
 }

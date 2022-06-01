@@ -7,6 +7,7 @@ public class ChooseIsland extends CharacterCard {
         this.currentGame = currentGame;
         cost = 3;
 
+        type = CharacterCardType.CHOOSE_ISLAND;
         name = "ChooseIsland";
         description = "Choose an Island and resolve the Island as if Mother Nature hav ended her movement there. Mother Nature will still move and the Isalnd where she ends her movement will also be resolved.";
     }
@@ -15,7 +16,7 @@ public class ChooseIsland extends CharacterCard {
      * Check if the attribute occupiedBy is different from null ,and then check if the influence is major than the player and eventually
      * place the tower, else place the tower and set occupiedBy with the currentPlayer
      *
-     * @param islandNumber
+     * @param islandNumber index of the island on which apply the effect.
      */
 
     public void doEffect(int islandNumber) {

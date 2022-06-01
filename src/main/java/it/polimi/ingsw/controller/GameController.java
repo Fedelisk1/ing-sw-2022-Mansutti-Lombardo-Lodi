@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.charactercards.*;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.observer.Observer;
@@ -114,54 +116,62 @@ public class GameController implements Observer {
                 ChooseCloudCard msg5 = (ChooseCloudCard) message;
                 state.action3(msg5.getCloudCard());
             }
+            case PLAY_CHARACTER_CARD -> {
+                PlayCharacterCard playCharacterCard = (PlayCharacterCard) message;
+                handleCharacterCardRequest(playCharacterCard.getChosenCard());
+            }
             case CC_ALL_REMOVE_COLOR -> {
                 CCAllRemoveColor msg6 = (CCAllRemoveColor) message;
-                state.ccAllRemoveColor(msg6.getColor(), msg6.getCardPosition());
+                playCCAllRemoveColor(msg6.getColor());
             }
-            case CC_BLOCK_COLOR_ONCE -> {
-                CCBlockColorOnce msg7 = (CCBlockColorOnce) message;
-                state.ccBlockColorOnce(msg7.getColor(), msg7.getCardPosition());
+            case CC_ALL_REMOVE_COLOR_REPLY -> {
+                CCAllRemoveColorReply ccAllRemoveColorReply = (CCAllRemoveColorReply) message;
+                playCCAllRemoveColor(ccAllRemoveColorReply.getColor());
             }
-            case CC_BLOCK_TOWER -> {
-                CCBlockTower msg14 = (CCBlockTower) message;
-                state.ccBlockTower(msg14.getCardPosition());
-            }
-            case CC_CHOOSE_1_DINING_ROOM -> {
-                CCChoose1DiningRoom msg8 = (CCChoose1DiningRoom) message;
-                state.ccChoose1DiningRoom(msg8.getColor(), msg8.getCardPosition());
-            }
-            case CC_CHOOSE_1_TO_ISLAND -> {
-                CCChooseOneToIsland msg9 = (CCChooseOneToIsland) message;
-                state.ccChoose1ToIsland(msg9.getColor(), msg9.getIslandNumber(), msg9.getCardPosition());
-            }
-            case CC_CHOOSE_3_TO_ENTRANCE -> {
-                CCChoose3ToEntrance msg10 = (CCChoose3ToEntrance) message;
-                state.ccChoose3ToEntrance(msg10.getChosenFromCard(), msg10.getChosenFromEntrance(), msg10.getCardPosition());
-            }
-            case CC_CHOOSE_ISLAND -> {
-                CCChooseIsland msg11 = (CCChooseIsland) message;
-                state.ccChooseIsland(msg11.getIslnumb(), msg11.getCardPosition());
-            }
-            case CC_EXCHANGE_2_STUDENTS -> {
-                CCExchange2Students msg12 = (CCExchange2Students) message;
-                state.ccExchange2Students(msg12.getChosenFromEntrance(), msg12.getChosenFromDiningRoom(), msg12.getCardPosition());
-            }
-            case CC_NO_ENTRY_ISLAND -> {
-                CCNoEntryIsland msg13 = (CCNoEntryIsland) message;
-                state.ccNoEntryIsland(msg13.getIslNumb(), msg13.getCardPosition());
-            }
-            case CC_PLUS_2_INFLUENCE -> {
-                CCPlus2Influence msg15 = (CCPlus2Influence) message;
-                state.ccPlus2Influence(msg15.getCardPosition());
-            }
-            case CC_TEMP_CONTROL_PROF -> {
-                CCTempControlProf msg16 = (CCTempControlProf) message;
-                state.ccTempControlProf(msg16.getCardPosition());
-            }
-            case CC_TWO_ADDITIONAL_MOVES -> {
-                CCTwoAdditionalMoves msg17 = (CCTwoAdditionalMoves) message;
-                state.ccTwoAdditionalMoves(msg17.getCardPosition());
-            }
+//            case CC_BLOCK_COLOR_ONCE -> {
+//                CCBlockColorOnce msg7 = (CCBlockColorOnce) message;
+//                state.ccBlockColorOnce(msg7.getColor(), msg7.getCardPosition());
+//            }
+//            case CC_BLOCK_TOWER -> {
+//                CCBlockTower msg14 = (CCBlockTower) message;
+//                state.ccBlockTower(msg14.getCardPosition());
+//            }
+//            case CC_CHOOSE_1_DINING_ROOM -> {
+//                CCChoose1DiningRoom msg8 = (CCChoose1DiningRoom) message;
+//                state.ccChoose1DiningRoom(msg8.getColor(), msg8.getCardPosition());
+//            }
+//            case CC_CHOOSE_1_TO_ISLAND -> {
+//                CCChooseOneToIsland msg9 = (CCChooseOneToIsland) message;
+//                state.ccChoose1ToIsland(msg9.getColor(), msg9.getIslandNumber(), msg9.getCardPosition());
+//            }
+//            case CC_CHOOSE_3_TO_ENTRANCE -> {
+//                CCChoose3ToEntrance msg10 = (CCChoose3ToEntrance) message;
+//                state.ccChoose3ToEntrance(msg10.getChosenFromCard(), msg10.getChosenFromEntrance(), msg10.getCardPosition());
+//            }
+//            case CC_CHOOSE_ISLAND -> {
+//                CCChooseIsland msg11 = (CCChooseIsland) message;
+//                state.ccChooseIsland(msg11.getIslnumb(), msg11.getCardPosition());
+//            }
+//            case CC_EXCHANGE_2_STUDENTS -> {
+//                CCExchange2Students msg12 = (CCExchange2Students) message;
+//                state.ccExchange2Students(msg12.getChosenFromEntrance(), msg12.getChosenFromDiningRoom(), msg12.getCardPosition());
+//            }
+//            case CC_NO_ENTRY_ISLAND -> {
+//                CCNoEntryIsland msg13 = (CCNoEntryIsland) message;
+//                state.ccNoEntryIsland(msg13.getIslNumb(), msg13.getCardPosition());
+//            }
+//            case CC_PLUS_2_INFLUENCE -> {
+//                CCPlus2Influence msg15 = (CCPlus2Influence) message;
+//                state.ccPlus2Influence(msg15.getCardPosition());
+//            }
+//            case CC_TEMP_CONTROL_PROF -> {
+//                CCTempControlProf msg16 = (CCTempControlProf) message;
+//                state.ccTempControlProf(msg16.getCardPosition());
+//            }
+//            case CC_TWO_ADDITIONAL_MOVES -> {
+//                CCTwoAdditionalMoves msg17 = (CCTwoAdditionalMoves) message;
+//                state.ccTwoAdditionalMoves(msg17.getCardPosition());
+//            }
             default -> throw new IllegalStateException("Protocol violation: unexpected " + message.getMessageType());
         }
 
@@ -234,7 +244,7 @@ public class GameController implements Observer {
     public List<VirtualView> viewsExcept(String excludedNick) {
         return nickVirtualViewMap.keySet().stream()
                 .filter(nick -> !nick.equals(excludedNick))
-                .map(nick -> nickVirtualViewMap.get(nick))
+                .map(nickVirtualViewMap::get)
                 .collect(Collectors.toList());
     }
 
@@ -266,4 +276,94 @@ public class GameController implements Observer {
         nickVirtualViewMap.remove(nicknameDisconnected);
         getViews().forEach(vv -> vv.shutdown(nicknameDisconnected + " has disconnected"));
     }
+
+    private void handleCharacterCardRequest(int chosenCard) {
+        CharacterCard card = game.getCharacterCard(chosenCard);
+
+        broadcastMessage(game.getCurrentPlayerNick() + " is activating Character Card " + chosenCard + "... ");
+
+        switch (card.getType()) {
+            case ALL_REMOVE_COLOR -> {
+                getCurrentPlayerView().askCCAllRemoveColorInput();
+            }
+            case BLOCK_COLOR_ONCE -> {
+
+            }
+            case CHOOSE_1_DINING_ROOM -> {
+
+            }
+            case CHOOSE_1_TO_ISLAND -> {
+                System.out.println("Ask color and island number");
+            }
+            case BLOCK_TOWER -> {
+                BlockTower blockTower = (BlockTower) card;
+                blockTower.doEffect();
+            }
+            case CHOOSE_3_TO_ENTRANCE -> {
+                System.out.println("Ask 3 from card, ask 3 from entrance");
+            }
+            case CHOOSE_ISLAND -> {
+                System.out.println("ask island number");
+            }
+            case EXCHANGE_2_STUDENTS -> {
+                System.out.println("ask from entrance, ask from dr");
+            }
+            case NO_ENTRY_ISLAND -> {
+                System.out.println("ask island number.");
+            }
+            case PLUS_2_INFLUENCE -> {
+                Plus2Influence plus2Influence = (Plus2Influence) card;
+                plus2Influence.doEffect();
+            }
+            case TEMP_CONTROL_PROF -> {
+                TempControlProf tempControlProf = (TempControlProf) card;
+                tempControlProf.doEffect();
+            }
+            case TWO_ADDITIONAL_MOVES -> {
+                TwoAdditionalMoves twoAdditionalMoves = (TwoAdditionalMoves) card;
+                twoAdditionalMoves.doEffect();
+            }
+        }
+    }
+
+    private void playCCAllRemoveColor(Color color) {
+        if(color != null) {
+            AllRemoveColor card = (AllRemoveColor) game.getCharacterCard(CharacterCardType.ALL_REMOVE_COLOR);
+            card.doEffect(color);
+        } else {
+            getCurrentPlayerView().askCCAllRemoveColorInput();
+        }
+
+        restoreGameFlow();
+    }
+
+    private void restoreGameFlow() {
+        updateViews();
+
+        if(state instanceof Action1State) {
+            askActionPhase1();
+        } else if(state instanceof Action2State) {
+            askActionPhase2();
+        } else if(state instanceof Action3State) {
+            askActionPhase3();
+        }
+    }
+
+    public void askActionPhase1() {
+        if(state instanceof Action1State) {
+            int action1Moves = ((Action1State) state).getMovesCount();
+            if (action1Moves <= 3) {
+                getCurrentPlayerView().askActionPhase1(action1Moves, game.getIslands().size());
+            }
+        }
+    }
+
+    public void askActionPhase2() {
+        getCurrentPlayerView().askActionPhase2(game.getCurrentPlayerInstance().getMaxSteps());
+    }
+
+    public void askActionPhase3() {
+        getCurrentPlayerView().askActionPhase3(game.getPlayableCloudCards().stream().map(i -> i+1).toList());
+    }
+
 }

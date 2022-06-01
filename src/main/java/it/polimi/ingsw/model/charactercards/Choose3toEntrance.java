@@ -10,9 +10,10 @@ public class Choose3toEntrance extends CharacterCard {
 
     public Choose3toEntrance(Game currentGame) {
         this.currentGame = currentGame;
-        students = new EnumMap<Color, Integer>(Color.class);
+        students = new EnumMap<>(Color.class);
         cost = 1;
 
+        type = CharacterCardType.CHOOSE_3_TO_ENTRANCE;
         name = "Choose3toEntrance";
         description = "You may take up to 3 Students from his card and replace them with the same number of Students from your Entrance";
 
@@ -35,10 +36,9 @@ public class Choose3toEntrance extends CharacterCard {
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
 
         cost = 2;
-        EnumMap<Color, Integer> support1 = new EnumMap<>(Color.class);
-        EnumMap<Color, Integer> support2 = new EnumMap<>(Color.class);
-        support1 = chosenFromCard.clone();
-        support2 = chosenFromEntrance.clone();
+        EnumMap<Color, Integer> support1 = chosenFromCard.clone();
+        EnumMap<Color, Integer> support2 = chosenFromEntrance.clone();
+
         if (totalNumberofStudent(support1) != totalNumberofStudent(support2))
             throw new IllegalArgumentException("different number of selected students");
 

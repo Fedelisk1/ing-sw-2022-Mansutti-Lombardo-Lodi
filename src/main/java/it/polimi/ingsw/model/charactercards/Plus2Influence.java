@@ -7,6 +7,7 @@ public class Plus2Influence extends CharacterCard {
         this.currentGame = currentGame;
         cost = 2;
 
+        type = CharacterCardType.PLUS_2_INFLUENCE;
         name = "Plus2Influence";
         description = "During the influence calculation this turn, you count as having 2 more influence";
     }

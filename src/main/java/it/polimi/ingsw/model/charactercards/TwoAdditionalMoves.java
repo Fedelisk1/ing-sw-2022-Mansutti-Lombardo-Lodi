@@ -7,6 +7,7 @@ public class TwoAdditionalMoves extends CharacterCard {
         this.currentGame = currentGame;
         cost = 1;
 
+        type = CharacterCardType.TWO_ADDITIONAL_MOVES;
         name = "TwoAdditionalMoves";
         description = "You may move Mother Nature up to 2 additional Islands than is indicated by the Assistant card you've played.";
     }

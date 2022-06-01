@@ -9,7 +9,7 @@ import it.polimi.ingsw.network.message.NewGameRequest;
 import java.util.EnumMap;
 
 public class InitialState implements GameState{
-    private GameController gameController;
+    private final GameController gameController;
 
     public InitialState(GameController gameController)
     {
@@ -59,64 +59,64 @@ public class InitialState implements GameState{
     }
 
     @Override
-    public void ccAllRemoveColor(Color color, int cardPosition) {
+    public void ccAllRemoveColor(Color color) {
 
     }
-
-    @Override
-    public void ccBlockColorOnce(Color color, int cardPosition) {
-
-    }
-
-    @Override
-    public void ccBlockTower(int cardPosition) {
-
-    }
-
-    @Override
-    public void ccChoose1DiningRoom(Color color, int cardPosition) {
-
-    }
-
-    @Override
-    public void ccChoose1ToIsland(Color color, int islandNumber, int cardPosition) {
-
-    }
-
-    @Override
-    public void ccChoose3ToEntrance(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance, int cardPosition) {
-
-    }
-
-    @Override
-    public void ccChooseIsland(int islandNumber, int cardPosition) {
-
-    }
-
-    @Override
-    public void ccExchange2Students(EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom, int cardPosition) {
-
-    }
-
-    @Override
-    public void ccNoEntryIsland(int islandNumber, int cardPosition) {
-
-    }
-
-    @Override
-    public void ccPlus2Influence(int cardPosition) {
-
-    }
-
-    @Override
-    public void ccTempControlProf(int cardPosition) {
-
-    }
-
-    @Override
-    public void ccTwoAdditionalMoves(int cardPosition) {
-
-    }
+//
+//    @Override
+//    public void ccBlockColorOnce(Color color, int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccBlockTower(int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccChoose1DiningRoom(Color color, int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccChoose1ToIsland(Color color, int islandNumber, int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccChoose3ToEntrance(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance, int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccChooseIsland(int islandNumber, int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccExchange2Students(EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom, int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccNoEntryIsland(int islandNumber, int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccPlus2Influence(int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccTempControlProf(int cardPosition) {
+//
+//    }
+//
+//    @Override
+//    public void ccTwoAdditionalMoves(int cardPosition) {
+//
+//    }
 
 
 }

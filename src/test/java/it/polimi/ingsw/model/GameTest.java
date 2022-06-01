@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -15,6 +16,8 @@ class GameTest {
     @BeforeEach
     public void init() {
         g = new Game(2, true);
+        g.addPlayer("p1");
+        g.addPlayer("p2");
     }
 
     @Test
@@ -45,7 +48,7 @@ class GameTest {
     @Test
     public void testMergeIslands_index11() {
         ArrayList<IslandGroup> beforeMerge1To10 = null;
-        ArrayList<IslandGroup> afterMerge1To10 = null;
+        ArrayList<IslandGroup> afterMerge0To9 = null;
 
         try {
             beforeMerge1To10 = new ArrayList<>(g.getIslands().subList(1, 11));
@@ -53,18 +56,34 @@ class GameTest {
             fail();
         }
 
+        int i = 0;
+        for (IslandGroup x : g.getIslands()) {
+            System.out.println(i);
+            Arrays.stream(Color.values()).sequential().forEach(c -> System.out.print(c + " " + x.getStudents(c) + " | "));
+            System.out.println();
+            i++;
+        }
+
         assertEquals(12, g.getIslands().size());
 
         g.mergeIslands(11);
 
         try {
-            afterMerge1To10 = new ArrayList<>(g.getIslands().subList(1, 11));
+            afterMerge0To9 = new ArrayList<>(g.getIslands().subList(0, 10));
         } catch (IndexOutOfBoundsException ex) {
             fail();
         }
 
+        i = 0;
+        for (IslandGroup x : g.getIslands()) {
+            System.out.println(i);
+            Arrays.stream(Color.values()).sequential().forEach(c -> System.out.print(c + " " + x.getStudents(c) + " | "));
+            System.out.println();
+            i++;
+        }
+
         assertEquals(11, g.getIslands().size());
-        assertEquals(beforeMerge1To10, afterMerge1To10);
+        assertEquals(beforeMerge1To10, afterMerge0To9);
     }
 
     @Test
@@ -130,7 +149,9 @@ class GameTest {
 
         assertEquals(3,g.countInfluence(g.getPlayers().get(g.getCurrentPlayer()),g.getIslands().get(0)));
 
-        g= new Game(2,false);
+        g = new Game(2,false);
+        g.addPlayer("p1");
+        g.addPlayer("p2");
 
         g.getPlayers().get(g.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
         g.getPlayers().get(g.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);

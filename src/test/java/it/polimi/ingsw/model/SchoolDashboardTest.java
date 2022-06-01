@@ -14,6 +14,9 @@ class SchoolDashboardTest
     public void setUp()
     {
         game = new Game(3, true);
+        game.addPlayer("p1");
+        game.addPlayer("p2");
+        game.addPlayer("p3");
     }
     @Test
     public void RemoveTowersTest()
@@ -33,13 +36,13 @@ class SchoolDashboardTest
     @Test
     public void addTowersShouldThrowRuntimeExceptionWhenMoreThan8Test()
     {
-        Assertions.assertThrows(IllegalArgumentException.class, () ->{ game.getPlayers().get(1).getSchoolDashboard().addTowers(1);});
+        Assertions.assertThrows(IllegalArgumentException.class, () -> game.getPlayers().get(1).getSchoolDashboard().addTowers(1));
     }
 
     @Test
     public void addTowersShouldThrowRuntimeExceptionWhenNegativeTest()
     {
-        Assertions.assertThrows(IllegalArgumentException.class, () ->{ game.getPlayers().get(1).getSchoolDashboard().addTowers(-1);});
+        Assertions.assertThrows(IllegalArgumentException.class, () -> game.getPlayers().get(1).getSchoolDashboard().addTowers(-1));
     }
 
     @Test
@@ -52,7 +55,7 @@ class SchoolDashboardTest
     @Test
     public void addStudentToEntranceShouldThrowRuntimeExceptionWhenNullTest()
     {
-        Assertions.assertThrows(NullPointerException.class, () -> {game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(null);});
+        Assertions.assertThrows(NullPointerException.class, () -> game.getPlayers().get(1).getSchoolDashboard().addStudentToEntrance(null));
     }
 
     @Test
@@ -70,7 +73,7 @@ class SchoolDashboardTest
     @Test
     public void removeStudentFromEntranceShouldThrowRuntimeExceptionWhenNullTest()
     {
-        Assertions.assertThrows(NullPointerException.class, () -> {game.getPlayers().get(1).getSchoolDashboard().removeStudentFromEntrance(null);});
+        Assertions.assertThrows(NullPointerException.class, () -> game.getPlayers().get(1).getSchoolDashboard().removeStudentFromEntrance(null));
     }
     @Test
     public void addStudentToEntrance()
@@ -103,6 +106,7 @@ class SchoolDashboardTest
     {
         //one yellow student is added to player 1 dining room
         game.setCurrentPlayer(1);
+
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
 
@@ -132,7 +136,7 @@ class SchoolDashboardTest
             game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToDiningRoom(Color.BLUE);
         }
 
-        assertEquals(true,game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.BLUE));
+        assertTrue(game.getPlayers().get(0).getSchoolDashboard().getProfessors().contains(Color.BLUE));
 
         game.setCurrentPlayer(0);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().removeStudentFromDiningRoom(Color.BLUE);

@@ -14,6 +14,9 @@ class PlayerTest {
     public void setUp()
     {
         game = new Game(3, true);
+        game.addPlayer("p1");
+        game.addPlayer("p2");
+        game.addPlayer("p3");
     }
 
     @Test
