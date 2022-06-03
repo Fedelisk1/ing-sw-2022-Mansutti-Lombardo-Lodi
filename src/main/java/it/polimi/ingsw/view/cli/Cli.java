@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.Server;
 import it.polimi.ingsw.model.CloudCard;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.reduced.ReducedCharacterCard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedIsland;
@@ -358,6 +359,31 @@ public class Cli extends ViewObservable implements View {
         notifyObservers(o -> o.onCCChose1ToIslandInput(color, island));
     }
 
+    @Override
+    public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance) {
+        EnumMap<Color, Integer> chosenFromCard = new EnumMap<>(Color.class);
+        EnumMap<Color, Integer> chosenFromEntrance = new EnumMap<>(Color.class);
+        Color chosenColor;
+
+        List<String> order = new ArrayList<>(Arrays.asList("first", "second", "third"));
+
+        for (int i = 0; i < 3; i++) {
+            chosenColor = colorOrStringInput(allowedFromCC, "s", "Please choose the " + order.get(i) + " student from the CARD; enter \"S\" if you don't want to swap students anymore ");
+
+            if(chosenColor == null)
+                break;
+
+            allowedFromCC.remove(chosenColor);
+            chosenFromCard.put(chosenColor, chosenFromCard.getOrDefault(chosenColor, 0) + 1);
+
+            chosenColor = colorInput(allowedFromEntrance, "Please choose a student from your ENTRANCE to be replaced with a " + chosenColor + " one ");
+            allowedFromEntrance.remove(chosenColor);
+            chosenFromEntrance.put(chosenColor, chosenFromEntrance.getOrDefault(chosenColor, 0) + 1);
+        }
+
+        notifyObservers(o -> o.onCCChoose3ToEntranceInput(chosenFromCard, chosenFromEntrance));
+    }
+
     /**
      * Asks an integer input to the user, providing input validation based on the allowedValues list
      * parameter: until the input is not contained into the list an error message is displayed
@@ -463,9 +489,26 @@ public class Cli extends ViewObservable implements View {
     }
 
     private Color colorInput(List<Color> allowed) {
-        List<String> allowedColors = allowed.stream().map(Color::toString).toList();
-        String input = strInput(allowedColors, "Please choose a color " + allowedColors + ": ");
-        return Color.valueOf(input.toUpperCase());
+        return colorInput(allowed, "Please choose a color ");
+    }
+
+    private Color colorInput(List<Color> allowed, String prompt) {
+        return colorOrStringInput(allowed, null, prompt);
+    }
+
+    private Color colorOrStringInput(List<Color> allowed, String string, String prompt) {
+        List<String> allowedStrings = new ArrayList<>(allowed.stream().map(Color::toString).toList());
+        Set<String> allowedColorsSet = new HashSet<>(allowedStrings);
+
+        if (string != null)
+            allowedStrings.add(string);
+
+        String input = strInput(allowedStrings, prompt + allowedColorsSet + ": ");
+
+        if (input.equals(string))
+            return null;
+        else
+            return Color.valueOf(input.toUpperCase());
     }
 
     private String readLine() {
@@ -510,7 +553,7 @@ public class Cli extends ViewObservable implements View {
     }
 
     private void askCharacterCard() {
-        int chosenCard = intInput(1, 3, "Please enter the number of the Character Card to play: ");
+        int chosenCard = intInput(1, Game.CHARACTER_CARDS, "Please enter the number of the Character Card to play: ");
 
         notifyObservers(o -> o.onCCChosen(chosenCard));
     }

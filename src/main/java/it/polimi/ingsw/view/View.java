@@ -28,6 +28,7 @@ public interface View {
     void askCCBlockColorOnceInput();
     void askCCChoose1DiningRoomInput(List<Color> allowedValues);
     void askCCChoose1ToIslandInput(List<Color> allowedColors, int maxIsland);
+    void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance);
 
     void showStringMessage(String content);
     void shutdown(String message);

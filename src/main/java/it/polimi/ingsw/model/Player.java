@@ -100,6 +100,10 @@ public class Player {
         this.coins = coins;
     }
 
+    public void removeCoins(int coins) {
+        this.coins -= coins;
+    }
+
     public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, MissingStudentException
     {
         try {

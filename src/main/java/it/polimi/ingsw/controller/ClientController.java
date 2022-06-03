@@ -9,6 +9,7 @@ import it.polimi.ingsw.observer.ViewObserver;
 import it.polimi.ingsw.view.View;
 
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -107,6 +108,11 @@ public class ClientController implements ViewObserver, Observer {
         client.sendMessage(new CCChoose1ToIslandReply(nickname, color, island));
     }
 
+    @Override
+    public void onCCChoose3ToEntranceInput(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance) {
+        client.sendMessage(new CCChoose3ToEntranceReply(nickname, chosenFromCard, chosenFromEntrance));
+    }
+
 
     /**
      * Dispatch messages received from the server.
@@ -174,6 +180,10 @@ public class ClientController implements ViewObserver, Observer {
             case ASK_CC_CHOOSE_1_TO_ISLAND_INPUT -> {
                 AskCCChoose1ToIslandInput choose1ToIslandInput = (AskCCChoose1ToIslandInput) message;
                 taskQueue.submit(() -> view.askCCChoose1ToIslandInput(choose1ToIslandInput.getAllowedColors(), choose1ToIslandInput.getMaxIsland()));
+            }
+            case ASK_CC_CHOOSE_3_TO_ENTRANCE_INPUT -> {
+                AskCCChoose3ToEntranceInput ccChoose3ToEntranceInput = (AskCCChoose3ToEntranceInput) message;
+                taskQueue.submit(() -> view.askCCChoose3ToEntranceInput(ccChoose3ToEntranceInput.getAllowedFromCard(), ccChoose3ToEntranceInput.getAllowedFromEntrance()));
             }
             case UPDATE -> {
                 Update update = (Update) message;

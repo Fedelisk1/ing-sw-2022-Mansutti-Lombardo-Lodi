@@ -50,9 +50,19 @@ public class SchoolDashboard {
         return towers;
     }
 
-    public EnumMap<Color, Integer> getEntrance()
-    {
+    public EnumMap<Color, Integer> getEntrance() {
         return entrance;
+    }
+
+    public List<Color> entranceAsList() {
+        List<Color> res = new ArrayList<>();
+
+        for (Color c : entrance.keySet()) {
+            for (int i = 0; i < entrance.get(c); i++)
+                res.add(c);
+        }
+
+        return res;
     }
 
     /**

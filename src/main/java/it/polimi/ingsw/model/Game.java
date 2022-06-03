@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.charactercards.*;
 import it.polimi.ingsw.network.message.Lobby;
 import it.polimi.ingsw.observer.Observable;
-import it.polimi.ingsw.view.cli.ColorCli;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,6 +12,7 @@ public class Game extends Observable {
     private int motherNaturePosition = 0;
     private final int MAX_ISLANDS = 12;
     private final int MAX_BAG_STUDENTS = 130;
+    public static final int CHARACTER_CARDS = 12;
     private final ArrayList<IslandGroup> islands;
     private final ArrayList<Player> players;
     private int currentPlayer;
@@ -56,10 +56,8 @@ public class Game extends Observable {
         // expertMode init
         if (expertMode) {
             characterCards = new ArrayList<>();
-            characterCards.add(new AllRemoveColor(this));
-            characterCards.add(new BlockColorOnce(this));
-            characterCards.add(new Choose1ToIsland(this));
-            //extract3CharacterCard();
+
+            extract3CharacterCard();
         }
 
         currentPlayer = rand.nextInt(players);
@@ -320,54 +318,38 @@ public class Game extends Observable {
      * @return array with three different numbers from 0 to 11
      */
 
-    private int[] extract3Numbers() {
-        Random random = new Random();
-        int[] tempAr;
-        tempAr = new int[3];
-        int randomNumber = 0;
+    private List<Integer> extract3Numbers() {
+        List<Integer> res = new ArrayList<>();
 
-        randomNumber = random.nextInt(12);
-        tempAr[0] = randomNumber +1;
+        for (int i = 0; i < 12; i++)
+            res.add(i);
 
-        do {
-            randomNumber = random.nextInt(12);
-            tempAr[1] = randomNumber +1;
+        Collections.shuffle(res);
 
-        } while (tempAr[1] == tempAr[0]);
-
-        do {
-            randomNumber = random.nextInt(12);
-            tempAr[2] = randomNumber +1;
-
-        } while (tempAr[2] == tempAr[1] || tempAr[2] == tempAr[0]);
-
-        return tempAr;
+        return res.subList(0, CHARACTER_CARDS);
     }
 
     public void extract3CharacterCard(){
-        ArrayList<CharacterCard> allCharacterCards= new ArrayList<>();
-        int[] extracted;
-
         // extract 3 random numbers
-        extracted=extract3Numbers();
+        List<Integer> extracted = extract3Numbers();
 
         // loop through extracted numbers
-        for(int i = 0;i<3;i++){
-            switch (extracted[i]) {
-                case 1 -> characterCards.add(new Choose1ToIsland(this));
-                case 2 -> characterCards.add(new TempControlProf(this));
-                case 3 -> characterCards.add(new ChooseIsland(this));
-                case 4 -> characterCards.add(new BlockTower(this));
-                case 5 -> characterCards.add(new NoEntryIsland(this));
-                case 6 -> characterCards.add(new TwoAdditionalMoves(this));
-                case 7 -> characterCards.add(new Choose3toEntrance(this));
-                case 8 -> characterCards.add(new Plus2Influence(this));
-                case 9 -> characterCards.add(new BlockColorOnce(this));
-                case 10 -> characterCards.add(new Exchange2Students(this));
-                case 11 -> characterCards.add(new Choose1DiningRoom(this));
-                case 12 -> characterCards.add(new AllRemoveColor(this));
+        for (int i : extracted)
+            switch (i) {
+                case 0 -> characterCards.add(new Choose1ToIsland(this));
+                case 1 -> characterCards.add(new TempControlProf(this));
+                case 2 -> characterCards.add(new ChooseIsland(this));
+                case 3 -> characterCards.add(new BlockTower(this));
+                case 4 -> characterCards.add(new NoEntryIsland(this));
+                case 5 -> characterCards.add(new TwoAdditionalMoves(this));
+                case 6 -> characterCards.add(new Choose3toEntrance(this));
+                case 7 -> characterCards.add(new Plus2Influence(this));
+                case 8 -> characterCards.add(new BlockColorOnce(this));
+                case 9 -> characterCards.add(new Exchange2Students(this));
+                case 10 -> characterCards.add(new Choose1DiningRoom(this));
+                case 11 -> characterCards.add(new AllRemoveColor(this));
             }
-        }
+
 
     }
 

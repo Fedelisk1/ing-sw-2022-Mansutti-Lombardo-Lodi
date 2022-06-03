@@ -78,6 +78,11 @@ public class ClientHandler implements Runnable {
         while (connected) {
             synchronized (inputLock) {
                 //System.out.println(threadName() + " waiting for message..." );
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 Object readObject = input.readObject();
 

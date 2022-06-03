@@ -15,7 +15,7 @@ public class Choose3toEntrance extends CharacterCard {
 
         type = CharacterCardType.CHOOSE_3_TO_ENTRANCE;
         name = "Choose3toEntrance";
-        description = "You may take up to 3 Students from his card and replace them with the same number of Students from your Entrance";
+        description = "You may take up to 3 Students from this card and replace them with the same number of Students from your Entrance";
 
         init();
     }
@@ -32,8 +32,8 @@ public class Choose3toEntrance extends CharacterCard {
      * @param chosenFromEntrance represent the students chosen from the entrance
      */
 
-    public void doEffect(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance) throws MissingStudentException {
-        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
+    public void doEffect(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance) {
+        currentGame.getCurrentPlayerInstance().removeCoins(cost);
 
         cost = 2;
         EnumMap<Color, Integer> support1 = chosenFromCard.clone();
@@ -56,11 +56,13 @@ public class Choose3toEntrance extends CharacterCard {
         for (Color c : chosenFromEntrance.keySet()) {
             while (chosenFromEntrance.get(c) > 0) {
                 chosenFromEntrance.put(c, chosenFromEntrance.get(c) - 1);
-                if (students.get(c) == null)
-                    students.put(c, 1);
-                else
-                    students.put(c, students.get(c) + 1);
-                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeStudentFromEntrance(c);
+
+                students.merge(c, 1, Integer::sum);
+                try {
+                    currentGame.getCurrentPlayerInstance().getSchoolDashboard().removeStudentFromEntrance(c);
+                } catch (MissingStudentException e) {
+                    e.printStackTrace();
+                }
             }
 
 

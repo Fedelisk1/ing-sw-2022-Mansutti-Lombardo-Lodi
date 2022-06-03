@@ -2,6 +2,7 @@ package it.polimi.ingsw.observer;
 
 import it.polimi.ingsw.model.Color;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,4 +25,5 @@ public interface ViewObserver {
     void onCCBlockColorOnceInput(Color color);
     void onCCChoose1DiningRoomInput(Color color);
     void onCCChose1ToIslandInput(Color color, int island);
+    void onCCChoose3ToEntranceInput(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance);
 }

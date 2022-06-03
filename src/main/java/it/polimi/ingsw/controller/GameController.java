@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.MissingStudentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.charactercards.*;
@@ -135,6 +136,10 @@ public class GameController implements Observer {
             case CC_CHOOSE_1_TO_ISLAND_REPLY -> {
                 CCChoose1ToIslandReply ccChoose1ToIslandReply = (CCChoose1ToIslandReply) message;
                 playCCChoose1ToIsland(ccChoose1ToIslandReply.getColor(), ccChoose1ToIslandReply.getIsland() - 1);
+            }
+            case CC_CHOOSE_3_TO_ENTRANCE_REPLY -> {
+                CCChoose3ToEntranceReply choose3ToEntranceReply = (CCChoose3ToEntranceReply) message;
+                playCCChoose3ToEntrance(choose3ToEntranceReply.getChosenFromCard(), choose3ToEntranceReply.getChosenFromEntrance());
             }
 //            case CC_BLOCK_COLOR_ONCE -> {
 //                CCBlockColorOnce msg7 = (CCBlockColorOnce) message;
@@ -320,6 +325,8 @@ public class GameController implements Observer {
             }
             case CHOOSE_3_TO_ENTRANCE -> {
                 System.out.println("Ask 3 from card, ask 3 from entrance");
+                Choose3toEntrance choose3toEntrance = (Choose3toEntrance) card;
+                getCurrentPlayerView().askCCChoose3ToEntranceInput(card.allowedColors(), game.getCurrentPlayerInstance().getSchoolDashboard().entranceAsList());
             }
             case CHOOSE_ISLAND -> {
                 System.out.println("ask island number");
@@ -373,6 +380,13 @@ public class GameController implements Observer {
     private void playCCChoose1ToIsland(Color color, int island) {
         Choose1ToIsland choose1ToIsland = (Choose1ToIsland) game.getCharacterCard(CharacterCardType.CHOOSE_1_TO_ISLAND);
         choose1ToIsland.doEffect(color, island);
+
+        restoreGameFlow();
+    }
+
+    private void playCCChoose3ToEntrance(EnumMap<Color, Integer> fromCard, EnumMap<Color, Integer> fromEntrance) {
+        Choose3toEntrance choose3toEntrance = (Choose3toEntrance) game.getCharacterCard(CharacterCardType.CHOOSE_3_TO_ENTRANCE);
+        choose3toEntrance.doEffect(fromCard, fromEntrance);
 
         restoreGameFlow();
     }
