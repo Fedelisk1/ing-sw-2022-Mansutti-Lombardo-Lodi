@@ -97,6 +97,11 @@ public class ClientController implements ViewObserver, Observer {
         client.sendMessage(new CCBlockColorOnceReply(nickname, color));
     }
 
+    @Override
+    public void onCCChoose1DiningRoomInput(Color color) {
+        client.sendMessage(new CCChoose1DiningRoomReply(nickname, color));
+    }
+
 
     /**
      * Dispatch messages received from the server.
@@ -156,6 +161,10 @@ public class ClientController implements ViewObserver, Observer {
             }
             case ASK_CC_BLOCK_COLOR_ONCE_INPUT -> {
                 taskQueue.submit(view::askCCBlockColorOnceInput);
+            }
+            case ASK_CC_CHOOSE_1_DINING_ROOM_INPUT -> {
+                AskCCChoose1DiningRoomInput askCCChoose1DiningRoomInput = (AskCCChoose1DiningRoomInput) message;
+                taskQueue.submit(() -> view.askCCChoose1DiningRoomInput(askCCChoose1DiningRoomInput.getAllowedValues()));
             }
             case UPDATE -> {
                 Update update = (Update) message;

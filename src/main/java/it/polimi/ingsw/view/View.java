@@ -1,9 +1,12 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * View interface implemented by the views (cli and gui)
@@ -23,6 +26,7 @@ public interface View {
     // character
     void askCCAllRemoveColorInput();
     void askCCBlockColorOnceInput();
+    void askCCChoose1DiningRoomInput(List<Color> allowedValues);
 
     void showStringMessage(String content);
     void shutdown(String message);

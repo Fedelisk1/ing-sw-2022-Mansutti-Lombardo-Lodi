@@ -58,7 +58,7 @@ public class Game extends Observable {
             characterCards = new ArrayList<>();
             characterCards.add(new AllRemoveColor(this));
             characterCards.add(new BlockColorOnce(this));
-            characterCards.add(new AllRemoveColor(this));
+            characterCards.add(new Choose1DiningRoom(this));
             //extract3CharacterCard();
         }
 
@@ -82,7 +82,7 @@ public class Game extends Observable {
         p.getSchoolDashboard().setUp();
         p.setNickname(nickname);
         if (expertMode)
-            p.setCoins(1);
+            p.setCoins(20);
         this.players.add(p);
 
         List<String> nicknames = players.stream().map(Player::getNickname).collect(Collectors.toList());

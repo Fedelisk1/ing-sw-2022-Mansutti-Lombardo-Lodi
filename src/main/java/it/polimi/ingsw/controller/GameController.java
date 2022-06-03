@@ -128,6 +128,10 @@ public class GameController implements Observer {
                 CCBlockColorOnceReply ccBlockColorOnceReply = (CCBlockColorOnceReply) message;
                 playCCBlockColorOnce(ccBlockColorOnceReply.getColor());
             }
+            case CC_CHOOSE_1_DINING_ROOM_REPLY -> {
+                CCChoose1DiningRoomReply ccChoose1DiningRoomReply = (CCChoose1DiningRoomReply) message;
+                playCCChoose1DiningRoom(ccChoose1DiningRoomReply.getColor());
+            }
 //            case CC_BLOCK_COLOR_ONCE -> {
 //                CCBlockColorOnce msg7 = (CCBlockColorOnce) message;
 //                state.ccBlockColorOnce(msg7.getColor(), msg7.getCardPosition());
@@ -278,9 +282,18 @@ public class GameController implements Observer {
     }
 
     private void handleCharacterCardRequest(int chosenCard) {
-        CharacterCard card = game.getCharacterCard(chosenCard);
+        CharacterCard card = game.getCharacterCard(chosenCard - 1);
 
-        broadcastMessage(game.getCurrentPlayerNick() + " is activating Character Card " + chosenCard + "... ");
+        int playerCoins = game.getCurrentPlayerInstance().getCoins();
+        int cardCost = card.getCost();
+
+        if (playerCoins < cardCost) {
+            getCurrentPlayerView().showStringMessage("You need " + (cardCost - playerCoins) + " more coins to activate this card");
+            restoreGameFlow();
+            return;
+        }
+
+        broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is activating Character Card " + chosenCard + "... ");
 
         switch (card.getType()) {
             case ALL_REMOVE_COLOR -> {
@@ -290,7 +303,8 @@ public class GameController implements Observer {
                 getCurrentPlayerView().askCCBlockColorOnceInput();
             }
             case CHOOSE_1_DINING_ROOM -> {
-
+                Choose1DiningRoom choose1DiningRoom = (Choose1DiningRoom) card;
+                getCurrentPlayerView().askCCChoose1DiningRoomInput(choose1DiningRoom.getStudents().keySet().stream().toList());
             }
             case CHOOSE_1_TO_ISLAND -> {
                 System.out.println("Ask color and island number");
@@ -339,6 +353,13 @@ public class GameController implements Observer {
 
     private void playCCBlockColorOnce(Color color) {
         BlockColorOnce card = (BlockColorOnce) game.getCharacterCard(CharacterCardType.BLOCK_COLOR_ONCE);
+        card.doEffect(color);
+
+        restoreGameFlow();
+    }
+
+    private void playCCChoose1DiningRoom(Color color) {
+        Choose1DiningRoom card = (Choose1DiningRoom) game.getCharacterCard(CharacterCardType.CHOOSE_1_DINING_ROOM);
         card.doEffect(color);
 
         restoreGameFlow();

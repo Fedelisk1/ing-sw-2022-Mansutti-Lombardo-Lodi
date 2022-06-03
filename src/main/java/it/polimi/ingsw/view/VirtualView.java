@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.ClientHandler;
@@ -7,6 +8,7 @@ import it.polimi.ingsw.observer.Observer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Handles the communication messages between the server and the client server side, making its methods' invocation
@@ -101,5 +103,10 @@ public class VirtualView implements View, Observer {
     @Override
     public void askCCBlockColorOnceInput() {
         clientHandler.sendMessage(new AskCCBlockColorOnceInput());
+    }
+
+    @Override
+    public void askCCChoose1DiningRoomInput(List<Color> allowedValues) {
+        clientHandler.sendMessage(new AskCCChoose1DiningRoomInput(allowedValues));
     }
 }

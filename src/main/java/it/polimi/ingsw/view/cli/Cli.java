@@ -344,6 +344,12 @@ public class Cli extends ViewObservable implements View {
         notifyObservers(o -> o.onCCBlockColorOnceInput(color));
     }
 
+    @Override
+    public void askCCChoose1DiningRoomInput(List<Color> allowedValues) {
+        Color color = colorInput(allowedValues);
+        notifyObservers(o -> o.onCCChoose1DiningRoomInput(color));
+    }
+
     /**
      * Asks an integer input to the user, providing input validation based on the allowedValues list
      * parameter: until the input is not contained into the list an error message is displayed
@@ -445,12 +451,12 @@ public class Cli extends ViewObservable implements View {
     }
 
     private Color colorInput() {
-        return colorInput("Please choose a color ");
+        return colorInput(List.of(Color.values()));
     }
 
-    private Color colorInput(String prompt) {
-        List<String> allowedColors = Arrays.stream(Color.values()).map(Color::toString).toList();
-        String input = strInput(allowedColors, prompt + allowedColors + ": ");
+    private Color colorInput(List<Color> allowed) {
+        List<String> allowedColors = allowed.stream().map(Color::toString).toList();
+        String input = strInput(allowedColors, "Please choose a color " + allowedColors + ": ");
         return Color.valueOf(input.toUpperCase());
     }
 

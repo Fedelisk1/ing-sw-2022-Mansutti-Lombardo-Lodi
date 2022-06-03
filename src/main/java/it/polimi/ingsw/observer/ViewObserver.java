@@ -22,4 +22,5 @@ public interface ViewObserver {
 
     void onCCAllRemoveColorInput(Color color);
     void onCCBlockColorOnceInput(Color color);
+    void onCCChoose1DiningRoomInput(Color color);
 }
