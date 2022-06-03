@@ -132,6 +132,10 @@ public class GameController implements Observer {
                 CCChoose1DiningRoomReply ccChoose1DiningRoomReply = (CCChoose1DiningRoomReply) message;
                 playCCChoose1DiningRoom(ccChoose1DiningRoomReply.getColor());
             }
+            case CC_CHOOSE_1_TO_ISLAND_REPLY -> {
+                CCChoose1ToIslandReply ccChoose1ToIslandReply = (CCChoose1ToIslandReply) message;
+                playCCChoose1ToIsland(ccChoose1ToIslandReply.getColor(), ccChoose1ToIslandReply.getIsland() - 1);
+            }
 //            case CC_BLOCK_COLOR_ONCE -> {
 //                CCBlockColorOnce msg7 = (CCBlockColorOnce) message;
 //                state.ccBlockColorOnce(msg7.getColor(), msg7.getCardPosition());
@@ -302,16 +306,17 @@ public class GameController implements Observer {
             case BLOCK_COLOR_ONCE -> {
                 getCurrentPlayerView().askCCBlockColorOnceInput();
             }
-            case CHOOSE_1_DINING_ROOM -> {
-                Choose1DiningRoom choose1DiningRoom = (Choose1DiningRoom) card;
-                getCurrentPlayerView().askCCChoose1DiningRoomInput(choose1DiningRoom.getStudents().keySet().stream().toList());
-            }
-            case CHOOSE_1_TO_ISLAND -> {
-                System.out.println("Ask color and island number");
-            }
             case BLOCK_TOWER -> {
                 BlockTower blockTower = (BlockTower) card;
                 blockTower.doEffect();
+            }
+            case CHOOSE_1_DINING_ROOM -> {
+                Choose1DiningRoom choose1DiningRoom = (Choose1DiningRoom) card;
+                getCurrentPlayerView().askCCChoose1DiningRoomInput(choose1DiningRoom.allowedColors());
+            }
+            case CHOOSE_1_TO_ISLAND -> {
+                Choose1ToIsland choose1ToIsland = (Choose1ToIsland) card;
+                getCurrentPlayerView().askCCChoose1ToIslandInput(card.allowedColors(), game.getIslands().size() + 1);
             }
             case CHOOSE_3_TO_ENTRANCE -> {
                 System.out.println("Ask 3 from card, ask 3 from entrance");
@@ -365,6 +370,13 @@ public class GameController implements Observer {
         restoreGameFlow();
     }
 
+    private void playCCChoose1ToIsland(Color color, int island) {
+        Choose1ToIsland choose1ToIsland = (Choose1ToIsland) game.getCharacterCard(CharacterCardType.CHOOSE_1_TO_ISLAND);
+        choose1ToIsland.doEffect(color, island);
+
+        restoreGameFlow();
+    }
+
     private void restoreGameFlow() {
         updateViews();
 
@@ -382,16 +394,19 @@ public class GameController implements Observer {
             int action1Moves = ((Action1State) state).getMovesCount();
             if (action1Moves <= 3) {
                 getCurrentPlayerView().askActionPhase1(action1Moves, game.getIslands().size());
+                broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 1, move " + action1Moves + ")...");
             }
         }
     }
 
     public void askActionPhase2() {
         getCurrentPlayerView().askActionPhase2(game.getCurrentPlayerInstance().getMaxSteps());
+        broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 2)...");
     }
 
     public void askActionPhase3() {
         getCurrentPlayerView().askActionPhase3(game.getPlayableCloudCards().stream().map(i -> i+1).toList());
+        broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 3)...");
     }
 
 }

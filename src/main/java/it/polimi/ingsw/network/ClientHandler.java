@@ -121,7 +121,7 @@ public class ClientHandler implements Runnable {
 
             this.nickname = nickname;
 
-            System.out.println(threadName() + "login ok, gameId = " + gameId);
+            System.out.println(threadName() + " login ok, gameId = " + gameId);
             sendMessage(new LoginOutcome(true, gameId));
             if (gameId != -1) {
                 sendMessage(new Lobby(availableGame.getNicknames(), availableGame.getMaxPlayers()));

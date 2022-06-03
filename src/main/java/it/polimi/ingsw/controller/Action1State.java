@@ -36,7 +36,7 @@ public class Action1State implements GameState{
                 game.getCurrentPlayerInstance().getSchoolDashboard().moveToIslandGroup(color, islandNumber - 1);
 
             gameController.updateViews();
-            gameController.viewsExceptCurrentPlayer().forEach(v -> v.showStringMessage(currentPlayer + " is playing (action phase 1) ..."));
+            //gameController.viewsExceptCurrentPlayer().forEach(v -> v.showStringMessage(currentPlayer + " is playing (action phase 1) ..."));
 
             //if there are 2 players, after 3 times the move method is called, with 3 players 4 times.
             if(movesCount == game.getMaxPlayers() + 1) {
@@ -44,7 +44,8 @@ public class Action1State implements GameState{
                 gameController.askActionPhase2();
             } else {
                 movesCount++;
-                virtualView.askActionPhase1(movesCount, game.getIslands().size());
+                //virtualView.askActionPhase1(movesCount, game.getIslands().size());
+                gameController.askActionPhase1();
             }
 
         } catch (MissingStudentException e) {

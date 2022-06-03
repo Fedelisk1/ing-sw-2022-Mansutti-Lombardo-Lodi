@@ -350,6 +350,14 @@ public class Cli extends ViewObservable implements View {
         notifyObservers(o -> o.onCCChoose1DiningRoomInput(color));
     }
 
+    @Override
+    public void askCCChoose1ToIslandInput(List<Color> allowedColors, int maxIsland) {
+        Color color = colorInput(allowedColors);
+        int island = intInput(1, maxIsland, "Please, enter destinaiton island: ");
+
+        notifyObservers(o -> o.onCCChose1ToIslandInput(color, island));
+    }
+
     /**
      * Asks an integer input to the user, providing input validation based on the allowedValues list
      * parameter: until the input is not contained into the list an error message is displayed

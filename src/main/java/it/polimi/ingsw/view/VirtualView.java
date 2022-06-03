@@ -8,7 +8,6 @@ import it.polimi.ingsw.observer.Observer;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Handles the communication messages between the server and the client server side, making its methods' invocation
@@ -108,5 +107,10 @@ public class VirtualView implements View, Observer {
     @Override
     public void askCCChoose1DiningRoomInput(List<Color> allowedValues) {
         clientHandler.sendMessage(new AskCCChoose1DiningRoomInput(allowedValues));
+    }
+
+    @Override
+    public void askCCChoose1ToIslandInput(List<Color> allowedColors, int maxIsland) {
+        clientHandler.sendMessage(new AskCCChoose1ToIslandInput(allowedColors, maxIsland));
     }
 }

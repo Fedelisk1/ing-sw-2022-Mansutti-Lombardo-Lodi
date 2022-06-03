@@ -23,4 +23,5 @@ public interface ViewObserver {
     void onCCAllRemoveColorInput(Color color);
     void onCCBlockColorOnceInput(Color color);
     void onCCChoose1DiningRoomInput(Color color);
+    void onCCChose1ToIslandInput(Color color, int island);
 }

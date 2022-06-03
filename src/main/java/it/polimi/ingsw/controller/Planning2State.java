@@ -74,7 +74,6 @@ public class Planning2State implements GameState{
             String currentNick = game.getCurrentPlayerNick();
             gameController.getCurrentPlayerView().update(new ReducedGame(game));
             gameController.askActionPhase1();
-            gameController.broadcastMessage(currentNick + " is playing (action phase)...", currentNick);
         }
 
         count++;

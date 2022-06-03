@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Game;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 
 public abstract class CharacterCard {
     protected int cost;
@@ -29,6 +30,10 @@ public abstract class CharacterCard {
 
     public EnumMap<Color, Integer> getStudents() {
         return students;
+    }
+
+    public List<Color> allowedColors() {
+        return students.keySet().stream().toList();
     }
 
     public CharacterCardType getType() {

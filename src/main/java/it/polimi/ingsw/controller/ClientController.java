@@ -102,6 +102,11 @@ public class ClientController implements ViewObserver, Observer {
         client.sendMessage(new CCChoose1DiningRoomReply(nickname, color));
     }
 
+    @Override
+    public void onCCChose1ToIslandInput(Color color, int island) {
+        client.sendMessage(new CCChoose1ToIslandReply(nickname, color, island));
+    }
+
 
     /**
      * Dispatch messages received from the server.
@@ -166,13 +171,17 @@ public class ClientController implements ViewObserver, Observer {
                 AskCCChoose1DiningRoomInput askCCChoose1DiningRoomInput = (AskCCChoose1DiningRoomInput) message;
                 taskQueue.submit(() -> view.askCCChoose1DiningRoomInput(askCCChoose1DiningRoomInput.getAllowedValues()));
             }
+            case ASK_CC_CHOOSE_1_TO_ISLAND_INPUT -> {
+                AskCCChoose1ToIslandInput choose1ToIslandInput = (AskCCChoose1ToIslandInput) message;
+                taskQueue.submit(() -> view.askCCChoose1ToIslandInput(choose1ToIslandInput.getAllowedColors(), choose1ToIslandInput.getMaxIsland()));
+            }
             case UPDATE -> {
                 Update update = (Update) message;
                 taskQueue.submit(() -> view.update(update.getReducedGame()));
             }
             case SHUTDOWN_CLIENT -> {
                 Shutdown shutdown = (Shutdown) message;
-                taskQueue.submit(() -> view.shutdown(shutdown.getContent()));
+                view.shutdown(shutdown.getContent());
             }
             case SERVER_UNREACHABLE -> view.showServerUnreachable();
             case ERROR -> {}

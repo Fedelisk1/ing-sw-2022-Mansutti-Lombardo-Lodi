@@ -58,7 +58,7 @@ public class Game extends Observable {
             characterCards = new ArrayList<>();
             characterCards.add(new AllRemoveColor(this));
             characterCards.add(new BlockColorOnce(this));
-            characterCards.add(new Choose1DiningRoom(this));
+            characterCards.add(new Choose1ToIsland(this));
             //extract3CharacterCard();
         }
 
