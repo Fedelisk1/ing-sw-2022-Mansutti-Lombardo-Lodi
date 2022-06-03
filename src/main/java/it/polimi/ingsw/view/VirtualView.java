@@ -97,4 +97,9 @@ public class VirtualView implements View, Observer {
     public void askCCAllRemoveColorInput() {
         clientHandler.sendMessage(new AskCCAllRemoveColorInput());
     }
+
+    @Override
+    public void askCCBlockColorOnceInput() {
+        clientHandler.sendMessage(new AskCCBlockColorOnceInput());
+    }
 }

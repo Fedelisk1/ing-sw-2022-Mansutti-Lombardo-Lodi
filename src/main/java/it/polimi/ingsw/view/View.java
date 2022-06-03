@@ -22,6 +22,7 @@ public interface View {
 
     // character
     void askCCAllRemoveColorInput();
+    void askCCBlockColorOnceInput();
 
     void showStringMessage(String content);
     void shutdown(String message);

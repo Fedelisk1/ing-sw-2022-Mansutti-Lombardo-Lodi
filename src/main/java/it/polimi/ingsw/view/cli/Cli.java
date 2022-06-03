@@ -338,6 +338,12 @@ public class Cli extends ViewObservable implements View {
         notifyObservers(o -> o.onCCAllRemoveColorInput(color));
     }
 
+    @Override
+    public void askCCBlockColorOnceInput() {
+        Color color = colorInput();
+        notifyObservers(o -> o.onCCBlockColorOnceInput(color));
+    }
+
     /**
      * Asks an integer input to the user, providing input validation based on the allowedValues list
      * parameter: until the input is not contained into the list an error message is displayed

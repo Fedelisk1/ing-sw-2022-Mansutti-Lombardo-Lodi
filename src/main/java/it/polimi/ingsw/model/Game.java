@@ -57,7 +57,7 @@ public class Game extends Observable {
         if (expertMode) {
             characterCards = new ArrayList<>();
             characterCards.add(new AllRemoveColor(this));
-            characterCards.add(new AllRemoveColor(this));
+            characterCards.add(new BlockColorOnce(this));
             characterCards.add(new AllRemoveColor(this));
             //extract3CharacterCard();
         }

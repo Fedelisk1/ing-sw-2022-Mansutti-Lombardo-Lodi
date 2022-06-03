@@ -120,13 +120,13 @@ public class GameController implements Observer {
                 PlayCharacterCard playCharacterCard = (PlayCharacterCard) message;
                 handleCharacterCardRequest(playCharacterCard.getChosenCard());
             }
-            case CC_ALL_REMOVE_COLOR -> {
-                CCAllRemoveColor msg6 = (CCAllRemoveColor) message;
-                playCCAllRemoveColor(msg6.getColor());
-            }
             case CC_ALL_REMOVE_COLOR_REPLY -> {
                 CCAllRemoveColorReply ccAllRemoveColorReply = (CCAllRemoveColorReply) message;
                 playCCAllRemoveColor(ccAllRemoveColorReply.getColor());
+            }
+            case CC_BLOCK_COLOR_ONCE_REPLY -> {
+                CCBlockColorOnceReply ccBlockColorOnceReply = (CCBlockColorOnceReply) message;
+                playCCBlockColorOnce(ccBlockColorOnceReply.getColor());
             }
 //            case CC_BLOCK_COLOR_ONCE -> {
 //                CCBlockColorOnce msg7 = (CCBlockColorOnce) message;
@@ -287,7 +287,7 @@ public class GameController implements Observer {
                 getCurrentPlayerView().askCCAllRemoveColorInput();
             }
             case BLOCK_COLOR_ONCE -> {
-
+                getCurrentPlayerView().askCCBlockColorOnceInput();
             }
             case CHOOSE_1_DINING_ROOM -> {
 
@@ -333,6 +333,13 @@ public class GameController implements Observer {
         } else {
             getCurrentPlayerView().askCCAllRemoveColorInput();
         }
+
+        restoreGameFlow();
+    }
+
+    private void playCCBlockColorOnce(Color color) {
+        BlockColorOnce card = (BlockColorOnce) game.getCharacterCard(CharacterCardType.BLOCK_COLOR_ONCE);
+        card.doEffect(color);
 
         restoreGameFlow();
     }

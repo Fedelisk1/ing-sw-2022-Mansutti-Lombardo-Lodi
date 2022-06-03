@@ -92,6 +92,11 @@ public class ClientController implements ViewObserver, Observer {
         client.sendMessage(new CCAllRemoveColorReply(nickname, color));
     }
 
+    @Override
+    public void onCCBlockColorOnceInput(Color color) {
+        client.sendMessage(new CCBlockColorOnceReply(nickname, color));
+    }
+
 
     /**
      * Dispatch messages received from the server.
@@ -148,6 +153,9 @@ public class ClientController implements ViewObserver, Observer {
             }
             case ASK_CC_ALL_REMOVE_COLOR_INPUT-> {
                 taskQueue.submit(view::askCCAllRemoveColorInput);
+            }
+            case ASK_CC_BLOCK_COLOR_ONCE_INPUT -> {
+                taskQueue.submit(view::askCCBlockColorOnceInput);
             }
             case UPDATE -> {
                 Update update = (Update) message;

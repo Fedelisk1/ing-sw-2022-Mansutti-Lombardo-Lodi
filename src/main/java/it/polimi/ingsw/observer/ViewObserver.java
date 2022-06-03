@@ -21,4 +21,5 @@ public interface ViewObserver {
     void onCCChosen(int card);
 
     void onCCAllRemoveColorInput(Color color);
+    void onCCBlockColorOnceInput(Color color);
 }
