@@ -484,12 +484,12 @@ public class Cli extends ViewObservable implements View {
         return input;
     }
 
-
-
     private void displayCharacterCards(List<ReducedCharacterCard> characterCards) {
         int i = 1;
         for (ReducedCharacterCard cc : characterCards) {
             System.out.print(i + ". ");
+            ColorCli.printCoins(cc.getCost());
+            System.out.print(" ");
             if (cc.getStudents() != null) {
                 cc.getStudents().forEach(ColorCli::printCircles);
                 System.out.print(" ");

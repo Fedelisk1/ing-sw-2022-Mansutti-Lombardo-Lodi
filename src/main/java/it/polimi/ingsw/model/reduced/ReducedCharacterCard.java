@@ -15,6 +15,7 @@ public class ReducedCharacterCard implements Serializable {
     private final String name;
     private final String description;
     private final EnumMap<Color, Integer> students;
+    private final int cost;
 
 
     public ReducedCharacterCard(CharacterCard characterCard) {
@@ -25,6 +26,7 @@ public class ReducedCharacterCard implements Serializable {
 
         name = characterCard.getName();
         description = characterCard.getDescription();
+        cost = characterCard.getCost();
     }
 
     public String getName() {
@@ -37,5 +39,9 @@ public class ReducedCharacterCard implements Serializable {
 
     public EnumMap<Color, Integer> getStudents() {
         return students;
+    }
+
+    public int getCost() {
+        return cost;
     }
 }

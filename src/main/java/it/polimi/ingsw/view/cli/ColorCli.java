@@ -44,6 +44,6 @@ public enum ColorCli {
     }
 
     public static void printCoins(int quantity) {
-        IntStream.rangeClosed(1, quantity).forEach(i -> System.out.print("\uD83D\uDCB5"));
+        IntStream.rangeClosed(1, quantity).forEach(i -> System.out.print("\uD83D\uDCB5 "));
     }
 }
