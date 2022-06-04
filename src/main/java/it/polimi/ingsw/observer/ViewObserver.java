@@ -26,4 +26,7 @@ public interface ViewObserver {
     void onCCChoose1DiningRoomInput(Color color);
     void onCCChose1ToIslandInput(Color color, int island);
     void onCCChoose3ToEntranceInput(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance);
+    void onCCChooseIslandInput(int chosenIsland);
+    void onCCExchange2StudentsInput(EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom);
+    void onCCNoEntryIslandInput(int chosenIsland);
 }

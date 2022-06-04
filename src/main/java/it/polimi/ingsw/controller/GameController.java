@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.exceptions.MissingStudentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.charactercards.*;
@@ -140,6 +139,18 @@ public class GameController implements Observer {
             case CC_CHOOSE_3_TO_ENTRANCE_REPLY -> {
                 CCChoose3ToEntranceReply choose3ToEntranceReply = (CCChoose3ToEntranceReply) message;
                 playCCChoose3ToEntrance(choose3ToEntranceReply.getChosenFromCard(), choose3ToEntranceReply.getChosenFromEntrance());
+            }
+            case CC_CHOOSE_ISLAND_REPLY -> {
+                CCChooseIslandReply ccChooseIslandReply = (CCChooseIslandReply) message;
+                playCCChooseIsland(ccChooseIslandReply.getChosenIsland());
+            }
+            case CC_EXCHANGE_2_STUDENTS_REPLY -> {
+                CCExchange2StudentsReply ccExchange2StudentsReply = (CCExchange2StudentsReply) message;
+                playCCExchange2Students(ccExchange2StudentsReply.getChosenFromEntrance(), ccExchange2StudentsReply.getChosenFromDiningRoom());
+            }
+            case CC_NO_ENTRY_ISLAND_REPLY -> {
+                CCNoEntryIslandReply ccNoEntryIslandReply = (CCNoEntryIslandReply) message;
+                playCCNoEntryIsland(ccNoEntryIslandReply.getIsland());
             }
 //            case CC_BLOCK_COLOR_ONCE -> {
 //                CCBlockColorOnce msg7 = (CCBlockColorOnce) message;
@@ -324,30 +335,36 @@ public class GameController implements Observer {
                 getCurrentPlayerView().askCCChoose1ToIslandInput(card.allowedColors(), game.getIslands().size() + 1);
             }
             case CHOOSE_3_TO_ENTRANCE -> {
-                System.out.println("Ask 3 from card, ask 3 from entrance");
-                Choose3toEntrance choose3toEntrance = (Choose3toEntrance) card;
                 getCurrentPlayerView().askCCChoose3ToEntranceInput(card.allowedColors(), game.getCurrentPlayerInstance().getSchoolDashboard().entranceAsList());
             }
             case CHOOSE_ISLAND -> {
-                System.out.println("ask island number");
+                getCurrentPlayerView().askCCChooseIslandInput(game.getIslands().size()  + 1);
             }
             case EXCHANGE_2_STUDENTS -> {
-                System.out.println("ask from entrance, ask from dr");
+                List<Color> entrance = game.getCurrentPlayerInstance().getSchoolDashboard().entranceAsList();
+                List<Color> dr = game.getCurrentPlayerInstance().getSchoolDashboard().diningRoomAsList();
+                getCurrentPlayerView().askCCExchange2StudentsInput(entrance, dr);
             }
             case NO_ENTRY_ISLAND -> {
-                System.out.println("ask island number.");
+                getCurrentPlayerView().askCCNoEntryIslandInput(game.getIslands().size());
             }
             case PLUS_2_INFLUENCE -> {
                 Plus2Influence plus2Influence = (Plus2Influence) card;
                 plus2Influence.doEffect();
+
+                restoreGameFlow();
             }
             case TEMP_CONTROL_PROF -> {
                 TempControlProf tempControlProf = (TempControlProf) card;
                 tempControlProf.doEffect();
+
+                restoreGameFlow();
             }
             case TWO_ADDITIONAL_MOVES -> {
                 TwoAdditionalMoves twoAdditionalMoves = (TwoAdditionalMoves) card;
                 twoAdditionalMoves.doEffect();
+
+                restoreGameFlow();
             }
         }
     }
@@ -387,6 +404,27 @@ public class GameController implements Observer {
     private void playCCChoose3ToEntrance(EnumMap<Color, Integer> fromCard, EnumMap<Color, Integer> fromEntrance) {
         Choose3toEntrance choose3toEntrance = (Choose3toEntrance) game.getCharacterCard(CharacterCardType.CHOOSE_3_TO_ENTRANCE);
         choose3toEntrance.doEffect(fromCard, fromEntrance);
+
+        restoreGameFlow();
+    }
+
+    private void playCCChooseIsland(int chosenIsland) {
+        ChooseIsland card = (ChooseIsland) game.getCharacterCard(CharacterCardType.CHOOSE_ISLAND);
+        card.doEffect(chosenIsland);
+
+        restoreGameFlow();
+    }
+
+    private void playCCExchange2Students(EnumMap<Color, Integer> fromEntrance, EnumMap<Color, Integer> fromDiningRoom) {
+        Exchange2Students card = (Exchange2Students) game.getCharacterCard(CharacterCardType.EXCHANGE_2_STUDENTS);
+        card.doEffect(fromEntrance, fromDiningRoom);
+
+        restoreGameFlow();
+    }
+
+    private void playCCNoEntryIsland(int island) {
+        NoEntryIsland card = (NoEntryIsland) game.getCharacterCard(CharacterCardType.NO_ENTRY_ISLAND);
+        card.doEffect(island);
 
         restoreGameFlow();
     }

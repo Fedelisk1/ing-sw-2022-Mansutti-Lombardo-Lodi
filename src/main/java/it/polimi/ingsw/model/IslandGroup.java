@@ -1,28 +1,30 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.charactercards.CharacterCardType;
+import it.polimi.ingsw.model.charactercards.NoEntryIsland;
+
 import java.util.EnumMap;
 
 public class IslandGroup {
     private int islandCount = 1;
     private Player occupiedBy;
     private final EnumMap<Color, Integer> students = new EnumMap<>(Color.class);
-    private boolean blockColorOnce_CC=false;
+    private boolean blockColorOnce_CC = false;
     private Color blockedColor;
-    private boolean plus2Influence_CC=false;
-    private boolean blockTower_CC=false;
-    private boolean noEntryIsland=false;
+    private boolean plus2Influence_CC = false;
+    private boolean blockTower_CC = false;
+    private int noEntryTiles = 0;
+    private final Game game;
 
     /**
      * Island constructor. Initializes the island with 0 students for each color
      */
 
-    public IslandGroup() {
+    public IslandGroup(Game game) {
         for (Color c : Color.values())
             students.put(c, 0);
-    }
 
-    public IslandGroup(int islandCount) {
-        this.islandCount = islandCount;
+        this.game = game;
     }
 
     /**
@@ -74,8 +76,8 @@ public class IslandGroup {
         return blockTower_CC;
     }
 
-    public boolean isNoEntryIsland() {
-        return noEntryIsland;
+    public int getNoEntryTiles() {
+        return noEntryTiles;
     }
 
     public void setBlockColorOnce_CC(boolean blockColorOnce_CC) {
@@ -90,8 +92,14 @@ public class IslandGroup {
         this.blockTower_CC = blockTower_CC;
     }
 
-    public void setNoEntryIsland(boolean noEntryIsland) {
-        this.noEntryIsland = noEntryIsland;
+    public void addNoEntryTile() {
+        noEntryTiles++;
+    }
+
+    public void removeNoEntryTile() {
+        ((NoEntryIsland) game.getCharacterCard(CharacterCardType.NO_ENTRY_ISLAND)).addNoEntryTile();
+
+        noEntryTiles--;
     }
 
     public void setBlockedColor(Color blockedColor) {
@@ -107,10 +115,26 @@ public class IslandGroup {
      * @param with Island to merge. It is supposed to have the same owner as the current island.
      */
     public void merge(IslandGroup with) {
+        noEntryTiles += with.noEntryTiles;
 
         for(Color c : Color.values())
             addStudents(c, with.getStudents(c));
 
         incrementIslandCount(with.getIslandCount());
+    }
+
+    public void resolve() {
+        Player higherInfluence = game.playerWithHigherInfluence(this);
+        if (islandCount == 0) {
+            if (higherInfluence != null) {
+                higherInfluence.getSchoolDashboard().removeTowers(1);
+                setOccupiedBy(higherInfluence);
+            }
+        } else {
+            if (! higherInfluence.equals(occupiedBy)) {
+                occupiedBy.getSchoolDashboard().addTowers(islandCount);
+                higherInfluence.getSchoolDashboard().removeTowers(islandCount);
+            }
+        }
     }
 }

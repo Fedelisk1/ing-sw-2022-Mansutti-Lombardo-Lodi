@@ -216,12 +216,20 @@ public class Cli extends ViewObservable implements View {
                 island.getStudents().forEach(ColorCli::printCircles);
             System.out.println();
 
+            String attributes = "";
+
             if (island.isMotherNature())
-                System.out.println("[MotherNature]");
+                attributes += "[MotherNature] ";
+
+            if (island.getNoEntryTiles() > 0)
+                attributes += ColorCli.noEntryTiles(island.getNoEntryTiles()) + " ";
 
             String occupier = island.getOccupierNick();
             if (occupier != null && !occupier.equals(""))
-                System.out.println("[" + island.getTowers() + " " + occupier + "'s tower(s)]");
+                attributes += "[" + island.getTowers() + " " + occupier + "'s tower(s)]";
+
+            if(! attributes.equals(""))
+                System.out.println(attributes);
 
             i++;
             System.out.println("-------------------------");
@@ -239,7 +247,7 @@ public class Cli extends ViewObservable implements View {
                 Arrays.stream(Color.values()).forEach(c -> {
                     ColorCli.printCircles(c, sd.getDiningRoom().get(c));
                     if (sd.getDiningRoom().get(c) > 0)
-                        System.out.print("\n");
+                        System.out.print("\n               ");
                 });
             }
 
@@ -382,6 +390,45 @@ public class Cli extends ViewObservable implements View {
         }
 
         notifyObservers(o -> o.onCCChoose3ToEntranceInput(chosenFromCard, chosenFromEntrance));
+    }
+
+    @Override
+    public void askCCChooseIslandInput(int maxIsland) {
+        int chosenIsland = intInput(1, maxIsland, "Please, choose an island on which apply the effect: ");
+
+        notifyObservers(o -> o.onCCChooseIslandInput(chosenIsland));
+    }
+
+    @Override
+    public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom) {
+        EnumMap<Color, Integer> chosenFromEntrance = new EnumMap<>(Color.class);
+        EnumMap<Color, Integer> chosenFromDiningRoom = new EnumMap<>(Color.class);
+        Color chosenColor;
+
+        List<String> order = new ArrayList<>(Arrays.asList("first", "second", "third"));
+
+        for (int i = 0; i < 2; i++) {
+            chosenColor = colorOrStringInput(entrance, "s", "Please choose the " + order.get(i) + " student from your ENTRANCE; enter \"S\" if you don't want to swap students anymore ");
+
+            if(chosenColor == null)
+                break;
+
+            entrance.remove(chosenColor);
+            chosenFromEntrance.put(chosenColor, chosenFromEntrance.getOrDefault(chosenColor, 0) + 1);
+
+            chosenColor = colorInput(diningRoom, "Please choose a student from your DINING ROOM to be replaced with a " + chosenColor + " from entrance ");
+            diningRoom.remove(chosenColor);
+            chosenFromDiningRoom.put(chosenColor, chosenFromDiningRoom.getOrDefault(chosenColor, 0) + 1);
+        }
+
+        notifyObservers(o -> o.onCCExchange2StudentsInput(chosenFromEntrance, chosenFromDiningRoom));
+    }
+
+    @Override
+    public void askCCNoEntryIslandInput(int maxIsland) {
+        int chosenIsland = intInput(1, maxIsland, "Please, choose an island on which apply the effect: ");
+
+        notifyObservers(o -> o.onCCNoEntryIslandInput(chosenIsland));
     }
 
     /**
@@ -540,7 +587,10 @@ public class Cli extends ViewObservable implements View {
         for (ReducedCharacterCard cc : characterCards) {
             System.out.print(i + ". ");
             ColorCli.printCoins(cc.getCost());
-            System.out.print(" ");
+
+            if (cc.getNoEntryTiles() > 0)
+                System.out.print(ColorCli.noEntryTiles(cc.getNoEntryTiles()) + " ");
+
             if (cc.getStudents() != null) {
                 cc.getStudents().forEach(ColorCli::printCircles);
                 System.out.print(" ");

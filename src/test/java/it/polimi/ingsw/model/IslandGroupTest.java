@@ -8,7 +8,7 @@ class IslandGroupTest {
 
     @Test
     public void testIslandGroup() {
-        IslandGroup ig = new IslandGroup();
+        IslandGroup ig = new IslandGroup(new Game(2, false));
 
         ig.addStudents(Color.BLUE, 4);
         ig.addStudents(Color.RED, 2);

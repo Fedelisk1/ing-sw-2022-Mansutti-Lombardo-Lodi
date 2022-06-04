@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.charactercards.*;
-import it.polimi.ingsw.network.message.Lobby;
 import it.polimi.ingsw.observer.Observable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game extends Observable {
     private final EnumMap<Color, Integer> bag;
@@ -40,7 +38,7 @@ public class Game extends Observable {
         // isalnds init
         islands = new ArrayList<>();
         for(int i = 0; i < MAX_ISLANDS; i++) {
-            IslandGroup ig = new IslandGroup();
+            IslandGroup ig = new IslandGroup(this);
             if (i != MAX_ISLANDS / 2 - 1 && i != 0) {
                 Color color = Color.values()[rand.nextInt(Color.values().length)];
                 bag.remove(color, 1);
@@ -83,8 +81,8 @@ public class Game extends Observable {
             p.setCoins(20);
         this.players.add(p);
 
-        List<String> nicknames = players.stream().map(Player::getNickname).collect(Collectors.toList());
-        notifyObservers(new Lobby(nicknames, getMaxPlayers()));
+        //List<String> nicknames = players.stream().map(Player::getNickname).collect(Collectors.toList());
+        //notifyObservers(new Lobby(nicknames, getMaxPlayers()));
     }
 
     public boolean isExpertMode() {
@@ -265,30 +263,30 @@ public class Game extends Observable {
     /**
      * This method calculates the influence
      * @param player is the player
-     * @param isl is the island
+     * @param island is the island
      * @return the calculation of the influence
      */
 
-    public int countInfluence(Player player, IslandGroup isl){
+    public int countInfluence(Player player, IslandGroup island){
         if(expertMode) {
-            if (isl.isBlockColorOnce_CC()) {
-                int x = countInfluenceTowers(player, isl) + countInfluenceStudents(player, isl) - isl.getStudents(isl.getBlockedColor());
-                isl.setBlockedColor(null);
-                isl.setBlockColorOnce_CC(false);
+            if (island.isBlockColorOnce_CC()) {
+                int x = countInfluenceTowers(player, island) + countInfluenceStudents(player, island) - island.getStudents(island.getBlockedColor());
+                island.setBlockedColor(null);
+                island.setBlockColorOnce_CC(false);
                 return x;
-            } else if (isl.isPlus2Influence_CC()) {
-                isl.setPlus2Influence_CC(false);
-                return countInfluenceStudents(player, isl) + countInfluenceTowers(player, isl) + 2;
-            } else if (isl.isNoEntryIsland()) {
-                isl.setNoEntryIsland(false);
+            } else if (island.isPlus2Influence_CC()) {
+                island.setPlus2Influence_CC(false);
+                return countInfluenceStudents(player, island) + countInfluenceTowers(player, island) + 2;
+            } else if (island.getNoEntryTiles() > 0) {
+                island.removeNoEntryTile();
                 return 0;
-            } else if (isl.isBlockTower_CC()) {
-                isl.setBlockTower_CC(false);
-                return countInfluenceStudents(player, isl);
+            } else if (island.isBlockTower_CC()) {
+                island.setBlockTower_CC(false);
+                return countInfluenceStudents(player, island);
             }
-            else return countInfluenceTowers(player,isl)+countInfluenceStudents(player,isl);
+            else return countInfluenceTowers(player,island)+countInfluenceStudents(player,island);
         }
-        else return countInfluenceTowers(player,isl)+countInfluenceStudents(player,isl);
+        else return countInfluenceTowers(player,island)+countInfluenceStudents(player,island);
 
     }
 

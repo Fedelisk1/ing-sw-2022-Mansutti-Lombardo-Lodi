@@ -3,11 +3,11 @@ package it.polimi.ingsw.model.charactercards;
 import it.polimi.ingsw.model.Game;
 
 public class NoEntryIsland extends CharacterCard {
-    private int availableUses;
+    private int noEntryTiles;
 
     public NoEntryIsland(Game currentGame) {
         this.currentGame = currentGame;
-        availableUses = 4;
+        noEntryTiles = 4;
         cost = 2;
 
         type = CharacterCardType.NO_ENTRY_ISLAND;
@@ -24,17 +24,20 @@ public class NoEntryIsland extends CharacterCard {
 
         cost = 3;
 
-        if (availableUses > 0) {
+        if (noEntryTiles > 0) {
 
-            availableUses = availableUses - 1;
-            currentGame.getIslands().get(islNumb).setNoEntryIsland(true);
+            noEntryTiles = noEntryTiles - 1;
+            currentGame.getIslands().get(islNumb).addNoEntryTile();
 
 
         } else throw new IllegalArgumentException("Maximum number of effect uses");
 
     }
 
-    public int getAvailableUses() {
-        return availableUses;
+    public int getNoEntryTiles() {
+        return noEntryTiles;
+    }
+    public void addNoEntryTile() {
+        noEntryTiles++;
     }
 }

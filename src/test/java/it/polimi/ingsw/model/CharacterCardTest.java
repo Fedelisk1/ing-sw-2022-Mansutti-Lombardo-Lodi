@@ -132,12 +132,12 @@ class NoEntryIslandTest{
 
         assertEquals(2,p.getCost());
 
-        assertEquals(false,game.getIslands().get(islNumb).isNoEntryIsland());
+        assertEquals(false,game.getIslands().get(islNumb).getNoEntryTiles());
         p.doEffect(islNumb);
-        assertEquals(true,game.getIslands().get(islNumb).isNoEntryIsland());
+        assertEquals(true,game.getIslands().get(islNumb).getNoEntryTiles());
         assertEquals(0,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(islNumb)));
-        assertEquals(false,game.getIslands().get(islNumb).isNoEntryIsland());
-        assertEquals(3,p.getAvailableUses());
+        assertEquals(false,game.getIslands().get(islNumb).getNoEntryTiles());
+        assertEquals(3,p.getNoEntryTiles());
         assertEquals(3,p.getCost());
 
     }

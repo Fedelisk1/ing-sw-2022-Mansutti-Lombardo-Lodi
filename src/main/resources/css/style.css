@@ -1,0 +1,10 @@
+
+.background {
+    -fx-background-image: url("../images/eriantys_banner_no_items.png");
+
+}
+
+.connectToServer {
+    -fx-background-color: rgba(100, 100, 100, .7);
+
+}

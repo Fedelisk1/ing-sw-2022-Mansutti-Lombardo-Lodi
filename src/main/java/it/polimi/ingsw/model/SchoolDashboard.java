@@ -108,6 +108,17 @@ public class SchoolDashboard {
         return diningRoom.getOrDefault(color, 0);
     }
 
+    public List<Color> diningRoomAsList() {
+        List<Color> res = new ArrayList<>();
+
+        for (Color c : diningRoom.keySet()) {
+            for (int i = 0; i < diningRoom.get(c); i++)
+                res.add(c);
+        }
+
+        return res;
+    }
+
     /**
      *moves student from entrance to dining room
      * @param color student color

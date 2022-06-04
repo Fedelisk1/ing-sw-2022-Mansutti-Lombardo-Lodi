@@ -29,8 +29,12 @@ public interface View {
     void askCCChoose1DiningRoomInput(List<Color> allowedValues);
     void askCCChoose1ToIslandInput(List<Color> allowedColors, int maxIsland);
     void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance);
+    void askCCChooseIslandInput(int maxIsland);
+    void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom);
+    void askCCNoEntryIslandInput(int maxIsland);
 
     void showStringMessage(String content);
     void shutdown(String message);
     void showServerUnreachable();
+
 }

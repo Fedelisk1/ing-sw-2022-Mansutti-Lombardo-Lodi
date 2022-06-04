@@ -118,4 +118,19 @@ public class VirtualView implements View, Observer {
     public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance) {
         clientHandler.sendMessage(new AskCCChoose3ToEntranceInput(allowedFromCC, allowedFromEntrance));
     }
+
+    @Override
+    public void askCCChooseIslandInput(int maxIsland) {
+        clientHandler.sendMessage(new AskCCChooseIslandInput(maxIsland));
+    }
+
+    @Override
+    public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom) {
+        clientHandler.sendMessage(new AskCCExchange2StudentsInput(entrance, diningRoom));
+    }
+
+    @Override
+    public void askCCNoEntryIslandInput(int maxIsland) {
+        clientHandler.sendMessage(new AskCCNoEntryIslandInput(maxIsland));
+    }
 }

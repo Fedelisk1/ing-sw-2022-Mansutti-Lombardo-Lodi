@@ -30,6 +30,7 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onServerInfoInput(Map<String, String> serverInfo) {
+        System.out.println("connection");
         boolean connectionOk = true;
         try {
             client = new SocketClient(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
@@ -113,6 +114,21 @@ public class ClientController implements ViewObserver, Observer {
         client.sendMessage(new CCChoose3ToEntranceReply(nickname, chosenFromCard, chosenFromEntrance));
     }
 
+    @Override
+    public void onCCChooseIslandInput(int chosenIsland) {
+        client.sendMessage(new CCChooseIslandReply(nickname, chosenIsland));
+    }
+
+    @Override
+    public void onCCExchange2StudentsInput(EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom) {
+        client.sendMessage(new CCExchange2StudentsReply(nickname, chosenFromEntrance, chosenFromDiningRoom));
+    }
+
+    @Override
+    public void onCCNoEntryIslandInput(int chosenIsland) {
+        client.sendMessage(new CCNoEntryIslandReply(nickname, chosenIsland));
+    }
+
 
     /**
      * Dispatch messages received from the server.
@@ -184,6 +200,18 @@ public class ClientController implements ViewObserver, Observer {
             case ASK_CC_CHOOSE_3_TO_ENTRANCE_INPUT -> {
                 AskCCChoose3ToEntranceInput ccChoose3ToEntranceInput = (AskCCChoose3ToEntranceInput) message;
                 taskQueue.submit(() -> view.askCCChoose3ToEntranceInput(ccChoose3ToEntranceInput.getAllowedFromCard(), ccChoose3ToEntranceInput.getAllowedFromEntrance()));
+            }
+            case ASK_CC_CHOOSE_ISLAND_INPUT -> {
+                AskCCChooseIslandInput askCCChooseIslandInput = (AskCCChooseIslandInput) message;
+                taskQueue.submit(() -> view.askCCChooseIslandInput(askCCChooseIslandInput.getMaxIsland()));
+            }
+            case ASK_CC_EXCHANGE_2_STUDENTS_INPUT -> {
+                AskCCExchange2StudentsInput askCCExchange2StudentsInput = (AskCCExchange2StudentsInput) message;
+                taskQueue.submit(() -> view.askCCExchange2StudentsInput(askCCExchange2StudentsInput.getEntrance(), askCCExchange2StudentsInput.getDiningRoom()));
+            }
+            case ASK_CC_NO_ENTRY_ISLAND_INPUT -> {
+                AskCCNoEntryIslandInput askCCNoEntryIslandInput = (AskCCNoEntryIslandInput) message;
+                taskQueue.submit(() -> view.askCCNoEntryIslandInput(askCCNoEntryIslandInput.getMaxIsland()));
             }
             case UPDATE -> {
                 Update update = (Update) message;

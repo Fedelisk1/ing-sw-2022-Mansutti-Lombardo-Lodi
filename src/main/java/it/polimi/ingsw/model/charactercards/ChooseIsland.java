@@ -9,7 +9,7 @@ public class ChooseIsland extends CharacterCard {
 
         type = CharacterCardType.CHOOSE_ISLAND;
         name = "ChooseIsland";
-        description = "Choose an Island and resolve the Island as if Mother Nature hav ended her movement there. Mother Nature will still move and the Isalnd where she ends her movement will also be resolved.";
+        description = "Choose an Island and resolve the Island as if Mother Nature had ended her movement there. Mother Nature will still move and the Island where she ends her movement will also be resolved.";
     }
 
     /**
@@ -24,6 +24,7 @@ public class ChooseIsland extends CharacterCard {
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
 
         cost = 4;
+
         //se l'isola è occupata da un giocatore diverso dal corrente
         if (currentGame.getIslands().get(islandNumber).getOccupiedBy() != null &&
                 currentGame.getIslands().get(islandNumber).getOccupiedBy() != currentGame.getPlayers().get(currentGame.getCurrentPlayer())) {

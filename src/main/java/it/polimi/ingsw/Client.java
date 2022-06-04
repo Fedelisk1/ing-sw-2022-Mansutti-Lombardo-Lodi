@@ -2,6 +2,13 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.ClientController;
 import it.polimi.ingsw.view.cli.Cli;
+import it.polimi.ingsw.view.gui.Gui;
+import it.polimi.ingsw.view.gui.GuiManager;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class Client {
     public static void main(String[] args) {
@@ -22,7 +29,10 @@ public class Client {
             cli.addObserver(cc);
             cli.begin();
         } else {
-            // TODO: start JaxaFX thread
+            new Thread(Gui::main).start();
+            GuiManager gui = new GuiManager();
+            ClientController cc = new ClientController(gui);
+            gui.addObserver(cc);
         }
     }
 }

@@ -22,7 +22,7 @@ public class Exchange2Students extends CharacterCard {
      * @param chosenFromEntrance   are the cards chosen from the entrance
      * @param chosenFromDiningRoom are the cards chosen from the dining room
      */
-    public void doEffect(EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom) throws MissingStudentException {
+    public void doEffect(EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom) {
 
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
 
