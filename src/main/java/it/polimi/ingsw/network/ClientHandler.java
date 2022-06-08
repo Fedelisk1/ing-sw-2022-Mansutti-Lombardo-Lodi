@@ -23,7 +23,7 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private boolean connected;
-    private static final int TIMEOUT = 10000;
+    private static final int TIMEOUT = 20000;
     private String nickname;
 
     public ClientHandler(Socket client, Map<String, GameController> nickControllerMap) {
@@ -38,7 +38,7 @@ public class ClientHandler implements Runnable {
             this.output = new ObjectOutputStream(client.getOutputStream());
             output.flush();
             this.input = new ObjectInputStream(client.getInputStream());
-            client.setSoTimeout(5000);
+            client.setSoTimeout(10000);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,11 +78,6 @@ public class ClientHandler implements Runnable {
         while (connected) {
             synchronized (inputLock) {
                 //System.out.println(threadName() + " waiting for message..." );
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
                 Object readObject = input.readObject();
 
@@ -97,7 +92,7 @@ public class ClientHandler implements Runnable {
                         // ping from server arrived
                     }
                     case LOGIN_REQUEST -> {
-                        System.out.println("handle login for " + msgIn.getNickname());
+                        System.out.println(threadName() + " handle login for " + msgIn.getNickname());
                         handleLogin(msgIn.getNickname());
                     }
                     case NEW_GAME_REQUEST -> handleNewGameRequest((NewGameRequest) msgIn);
@@ -129,7 +124,6 @@ public class ClientHandler implements Runnable {
             System.out.println(threadName() + " login ok, gameId = " + gameId);
             sendMessage(new LoginOutcome(true, gameId));
             if (gameId != -1) {
-                sendMessage(new Lobby(availableGame.getNicknames(), availableGame.getMaxPlayers()));
                 availableGame.startGame();
             }
 
@@ -174,8 +168,6 @@ public class ClientHandler implements Runnable {
         nickControllerMap.put(nickname, newGame);
 
         newGame.addPlayer(nickname, view);
-
-        sendMessage(new Lobby(Arrays.asList(nickname), players));
     }
 
     public void sendMessage(Message message) {

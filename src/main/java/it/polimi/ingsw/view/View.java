@@ -19,9 +19,9 @@ public interface View {
     void askAssistantCard(Map<Integer, Integer> hand, List<Integer> notPlayable);
     void showPlayedAssistantCard(String player, int card);
     void update(ReducedGame game);
-    void askActionPhase1(int count, int maxIsland);
-    void askActionPhase2(int maxMNStpes);
-    void askActionPhase3(List<Integer> alloweValues);
+    void askActionPhase1(int count, int maxIsland, boolean expert);
+    void askActionPhase2(int maxMNStpes, boolean expert);
+    void askActionPhase3(List<Integer> alloweValues, boolean expert);
 
     // character
     void askCCAllRemoveColorInput();

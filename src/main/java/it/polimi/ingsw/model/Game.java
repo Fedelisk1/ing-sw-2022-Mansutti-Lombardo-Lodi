@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.charactercards.*;
 import it.polimi.ingsw.observer.Observable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game extends Observable {
     private final EnumMap<Color, Integer> bag;
@@ -80,9 +81,6 @@ public class Game extends Observable {
         if (expertMode)
             p.setCoins(20);
         this.players.add(p);
-
-        //List<String> nicknames = players.stream().map(Player::getNickname).collect(Collectors.toList());
-        //notifyObservers(new Lobby(nicknames, getMaxPlayers()));
     }
 
     public boolean isExpertMode() {

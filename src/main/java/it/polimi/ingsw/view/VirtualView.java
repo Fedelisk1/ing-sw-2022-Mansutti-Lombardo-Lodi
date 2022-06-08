@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.ClientHandler;
@@ -8,6 +9,7 @@ import it.polimi.ingsw.observer.Observer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Handles the communication messages between the server and the client server side, making its methods' invocation
@@ -46,7 +48,7 @@ public class VirtualView implements View, Observer {
 
     @Override
     public void showLobby(List<String> nicknames, int players) {
-
+        clientHandler.sendMessage(new Lobby(nicknames, players));
     }
 
     @Override
@@ -80,18 +82,18 @@ public class VirtualView implements View, Observer {
     }
 
     @Override
-    public void askActionPhase1(int count, int maxIsland) {
-        clientHandler.sendMessage(new AskActionPhase1(count, maxIsland));
+    public void askActionPhase1(int count, int maxIsland, boolean expert) {
+        clientHandler.sendMessage(new AskActionPhase1(count, maxIsland, expert));
     }
 
     @Override
-    public void askActionPhase2(int maxSteps) {
-        clientHandler.sendMessage(new AskActionPhase2(maxSteps));
+    public void askActionPhase2(int maxSteps, boolean expert) {
+        clientHandler.sendMessage(new AskActionPhase2(maxSteps, expert));
     }
 
     @Override
-    public void askActionPhase3(List<Integer> alloweValues) {
-        clientHandler.sendMessage(new AskActionPhase3(alloweValues));
+    public void askActionPhase3(List<Integer> alloweValues, boolean expert) {
+        clientHandler.sendMessage(new AskActionPhase3(alloweValues, expert));
     }
 
     @Override

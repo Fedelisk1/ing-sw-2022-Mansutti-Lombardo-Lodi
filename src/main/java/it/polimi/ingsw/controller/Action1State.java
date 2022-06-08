@@ -50,7 +50,7 @@ public class Action1State implements GameState{
 
         } catch (MissingStudentException e) {
             virtualView.showStringMessage("Chosen color is not available in your entrance!");
-            virtualView.askActionPhase1(movesCount, game.getIslands().size());
+            virtualView.askActionPhase1(movesCount, game.getIslands().size(), game.isExpertMode());
         }
     }
 

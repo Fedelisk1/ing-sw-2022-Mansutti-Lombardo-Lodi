@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class HeartBeatServer extends TimerTask implements Runnable {
-    private final int PERIOD = 5000;
+    private final int PERIOD = 10000;
     private final ClientHandler clientHandler;
     private final Message message;
 

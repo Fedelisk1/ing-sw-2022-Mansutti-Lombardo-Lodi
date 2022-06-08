@@ -102,17 +102,17 @@ public class GuiManager extends ViewObservable implements View{
     }
 
     @Override
-    public void askActionPhase1(int count, int maxIsland) {
+    public void askActionPhase1(int count, int maxIsland, boolean expert) {
 
     }
 
     @Override
-    public void askActionPhase2(int maxMNStpes) {
+    public void askActionPhase2(int maxMNStpes, boolean expert) {
 
     }
 
     @Override
-    public void askActionPhase3(List<Integer> alloweValues) {
+    public void askActionPhase3(List<Integer> alloweValues, boolean expert) {
 
     }
 

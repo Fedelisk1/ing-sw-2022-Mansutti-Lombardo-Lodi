@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.charactercards.*;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.network.message.*;
@@ -39,6 +40,9 @@ public class GameController implements Observer {
         nickVirtualViewMap.put(nickname, virtualView);
         game.addPlayer(nickname);
         game.addObserver(virtualView);
+
+        List<String> nicknames = game.getPlayers().stream().map(Player::getNickname).collect(Collectors.toList());
+        getViews().forEach(vv -> vv.showLobby(nicknames, getMaxPlayers()));
     }
 
     public List<String> getNicknames() {
@@ -445,19 +449,19 @@ public class GameController implements Observer {
         if(state instanceof Action1State) {
             int action1Moves = ((Action1State) state).getMovesCount();
             if (action1Moves <= 3) {
-                getCurrentPlayerView().askActionPhase1(action1Moves, game.getIslands().size());
+                getCurrentPlayerView().askActionPhase1(action1Moves, game.getIslands().size(), getGame().isExpertMode());
                 broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 1, move " + action1Moves + ")...");
             }
         }
     }
 
     public void askActionPhase2() {
-        getCurrentPlayerView().askActionPhase2(game.getCurrentPlayerInstance().getMaxSteps());
+        getCurrentPlayerView().askActionPhase2(game.getCurrentPlayerInstance().getMaxSteps(), game.isExpertMode());
         broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 2)...");
     }
 
     public void askActionPhase3() {
-        getCurrentPlayerView().askActionPhase3(game.getPlayableCloudCards().stream().map(i -> i+1).toList());
+        getCurrentPlayerView().askActionPhase3(game.getPlayableCloudCards().stream().map(i -> i+1).toList(), game.isExpertMode());
         broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 3)...");
     }
 

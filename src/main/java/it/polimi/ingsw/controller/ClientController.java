@@ -30,7 +30,6 @@ public class ClientController implements ViewObserver, Observer {
 
     @Override
     public void onServerInfoInput(Map<String, String> serverInfo) {
-        System.out.println("connection");
         boolean connectionOk = true;
         try {
             client = new SocketClient(serverInfo.get("address"), Integer.parseInt(serverInfo.get("port")));
@@ -173,15 +172,15 @@ public class ClientController implements ViewObserver, Observer {
             }
             case ASK_ACTION_PHASE_1 -> {
                 AskActionPhase1 askActionPhase1 = (AskActionPhase1) message;
-                taskQueue.submit(() -> view.askActionPhase1(askActionPhase1.getCount(), askActionPhase1.getMaxIsland()));
+                taskQueue.submit(() -> view.askActionPhase1(askActionPhase1.getCount(), askActionPhase1.getMaxIsland(), askActionPhase1.isExpert()));
             }
             case ASK_ACTION_PHASE_2 -> {
                 AskActionPhase2 askActionPhase2 = (AskActionPhase2) message;
-                taskQueue.submit(() -> view.askActionPhase2(askActionPhase2.getMaxMNSteps()));
+                taskQueue.submit(() -> view.askActionPhase2(askActionPhase2.getMaxMNSteps(), askActionPhase2.isExpert()));
             }
             case ASK_ACTION_PHASE_3 -> {
                 AskActionPhase3 askActionPhase3 = (AskActionPhase3) message;
-                taskQueue.submit(() -> view.askActionPhase3(askActionPhase3.getAlloweValues()));
+                taskQueue.submit(() -> view.askActionPhase3(askActionPhase3.getAlloweValues(), askActionPhase3.isExpert()));
             }
             case ASK_CC_ALL_REMOVE_COLOR_INPUT-> {
                 taskQueue.submit(view::askCCAllRemoveColorInput);

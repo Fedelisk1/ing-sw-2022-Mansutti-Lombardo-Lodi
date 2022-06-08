@@ -16,7 +16,6 @@ import java.util.Map;
  */
 public class Server {
     public final static int DEFAULT_PORT = 12345;
-    public final static int SERVER_TIMEOUT = 5000;
 
     public static void main(String[] args) {
         int port = DEFAULT_PORT;
@@ -31,7 +30,6 @@ public class Server {
 
         try {
             serverSocket = new ServerSocket(port);
-            //serverSocket.setSoTimeout(SERVER_TIMEOUT);
         } catch (IOException e) {
             System.out.println("error opening socket");
             System.exit(-1);
@@ -44,8 +42,6 @@ public class Server {
         while (true) {
             try {
                 Socket client = serverSocket.accept();
-
-
 
                 clientsCount++;
                 System.out.println("client " + clientsCount + " connected from " + client.getInetAddress());

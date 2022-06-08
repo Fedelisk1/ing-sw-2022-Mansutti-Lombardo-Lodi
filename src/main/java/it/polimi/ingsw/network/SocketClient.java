@@ -21,7 +21,7 @@ public class SocketClient extends Observable {
     private final Socket socket;
     private final ObjectOutputStream outputStream;
     private final ObjectInputStream inputStream;
-    private final static int TIMEOUT = 10000;
+    private final static int TIMEOUT = 20000;
     private final AtomicBoolean connected;
 
     public SocketClient(String serverAddress, int serverPort) throws IOException {

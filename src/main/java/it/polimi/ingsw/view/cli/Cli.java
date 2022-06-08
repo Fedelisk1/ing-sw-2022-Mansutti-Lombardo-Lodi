@@ -290,9 +290,16 @@ public class Cli extends ViewObservable implements View {
     }
 
     @Override
-    public void askActionPhase1(int count, int maxIsland) {
-        String destination = strInput(Arrays.asList("i", "dr", "cc"), "Action Phase 1 - Move "
-                + count + ": where do you want to move your student? (enter \"I\" for island or \"DR\" for Dining Room; if you wish to play a Character Card, enter \"CC\") ");
+    public void askActionPhase1(int count, int maxIsland, boolean expert) {
+        List<String> allowed = Arrays.asList("i", "dr");
+
+        String prompt = "Action Phase 1 - Move " + count + ": where do you want to move your student? Please, enter \"I\" for island or \"DR\" for Dining Room";
+        if (expert) {
+            prompt += "; if you wish to play a Character Card, enter \"CC\" ";
+            allowed.add("cc");
+        }
+
+        String destination = strInput(allowed, prompt);
 
         if (destination.equalsIgnoreCase("i")) {
             Color color = colorInput();
@@ -309,14 +316,19 @@ public class Cli extends ViewObservable implements View {
     }
 
     @Override
-    public void askActionPhase2(int maxMNSteps) {
+    public void askActionPhase2(int maxMNSteps, boolean expert) {
         List<String> allowedStr = new ArrayList<>();
         IntStream.rangeClosed(1, maxMNSteps).forEach(i -> allowedStr.add(i + ""));
-        allowedStr.add("cc");
 
-        System.out.println("allowed: " + allowedStr);
+        //System.out.println("allowed: " + allowedStr);
 
-        String input = strInput(allowedStr, "Please enter how many steps you want to move Mother Nature, ore enter \"CC\" if you wish to play a Character Card");
+        String prompt = "Please enter how many steps you want to move Mother Nature";
+        if (expert) {
+            prompt += ", or enter \"CC\" if you wish to play a Character Card";
+            allowedStr.add("cc");
+        }
+
+        String input = strInput(allowedStr, prompt);
         try {
             int mnSteps = Integer.parseInt(input);
             notifyObservers(o -> o.onMotherNatureMoved(mnSteps));
@@ -326,13 +338,18 @@ public class Cli extends ViewObservable implements View {
     }
 
     @Override
-    public void askActionPhase3(List<Integer> alloweValues) {
+    public void askActionPhase3(List<Integer> alloweValues, boolean expert) {
+        String prompt = "Please, enter a cloud card's number to refill your School Dashboard's entrance";
+
         List<String> allowedStr = new ArrayList<>(alloweValues.stream().map(Object::toString).toList());
-        allowedStr.add("cc");
+        if(expert) {
+            prompt += ", or enter \"CC\" if you wish to play a Character Caard";
+            allowedStr.add("cc");
+        }
 
         System.out.println("allowed: " + allowedStr);
 
-        String input = strInput(allowedStr, "Please, enter a cloud card's number to refill your School Dashboard's entrance, or enter \"CC\" if you wish to play a Character Caard: ");
+        String input = strInput(allowedStr, prompt);
 
         if (input.equalsIgnoreCase("cc"))
             askCharacterCard();
