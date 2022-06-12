@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.HeartBeatClient;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.network.SocketClient;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.observer.Observer;
@@ -56,6 +57,11 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onNewGameParametersInput(int playersNumber, boolean expertMode) {
         client.sendMessage(new NewGameRequest(this.nickname, playersNumber, expertMode));
+    }
+
+    @Override
+    public void onWizardChosen(Wizard wizard) {
+        client.sendMessage(new ChooseWizard(nickname, wizard));
     }
 
     @Override
@@ -137,24 +143,28 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onMessageArrived(Message message) {
         switch (message.getMessageType()) {
-            case PING -> System.out.println("ping from server");
+            case PING -> {}
             case LOGIN_OUTCOME -> {
                 LoginOutcome loginOutcome = (LoginOutcome) message;
 
                 taskQueue.submit(() -> view.showLoginOutcome(
                         loginOutcome.isSuccess(),
                         loginOutcome.getGameId() == -1,
-                        nickname
+                        nickname,
+                        loginOutcome.getAvailableWizards()
                 ));
+            }
+            case WIZARDS_UPDATE -> {
+                WizardsUpdate wizardsUpdate = (WizardsUpdate) message;
+                taskQueue.submit(() -> view.updateAvailableWizards(wizardsUpdate.getAvailableWizards()));
+            }
+            case WIZARD_ERROR -> {
+                WizardError wizardErrorMsg = (WizardError) message;
+                taskQueue.submit(() -> view.showWizardError(wizardErrorMsg.getAvailableWizards()));
             }
             case LOBBY -> {
                 Lobby lobbyMessage = (Lobby) message;
-                //view.showLobby(lobbyMessage.getNicknames(), lobbyMessage.getPlayers());
-                taskQueue.submit(() -> view.showLobby(lobbyMessage.getNicknames(), lobbyMessage.getPlayers()));
-            }
-            case GAME_START -> {
-                GameStart gameStart = (GameStart) message;
-
+                taskQueue.submit(() -> view.showLobby(lobbyMessage.getPlayers(), lobbyMessage.getPlayersNumber()));
             }
             case STRING_MESSAGE -> {
                 StringMessage stringMessage = (StringMessage) message;

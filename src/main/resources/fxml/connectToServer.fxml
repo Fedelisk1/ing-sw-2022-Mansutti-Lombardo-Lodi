@@ -23,12 +23,15 @@
             <Insets left="130.0" right="130.0" />
          </VBox.margin>
          <children>
-            <VBox alignment="CENTER" prefHeight="228.0" prefWidth="599.0" spacing="20.0" styleClass="connectToServer">
+            <VBox alignment="CENTER" prefHeight="255.0" prefWidth="339.0" spacing="20.0" styleClass="connectToServer">
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Connect to server">
                      <font>
                         <Font size="20.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
                   </Text>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
@@ -70,7 +73,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="41.0" prefWidth="299.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="339.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#handleConnectButton" text="Connect" />
                      </children>

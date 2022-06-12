@@ -28,7 +28,6 @@ public class ConnectToServerController extends ViewObservable {
     }
 
     public void onError() {
-        System.out.println("error");
         connectionError.setVisible(true);
     }
 }

@@ -6,5 +6,30 @@
 
 .connectToServer {
     -fx-background-color: rgba(100, 100, 100, .7);
+}
 
+.lobbyEntry {
+    -fx-background-color: rgba(200, 200, 200, .7);
+}
+
+.wizard-btn {
+    /*-fx-background-color: blue;*/
+}
+
+.table-bg {
+    -fx-background-color: #77c4dc;
+}
+
+.school-dashboard {
+    -fx-background-image: url('../images/table/schoolDashboard.png');
+    -fx-background-size: 500;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.school-dashboard-2nd {
+    -fx-background-image: url('../images/table/schoolDashboard2nd.png');
+    -fx-background-size: 204;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
 }

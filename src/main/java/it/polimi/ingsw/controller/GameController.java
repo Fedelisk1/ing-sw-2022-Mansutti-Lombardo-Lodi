@@ -1,10 +1,13 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.AlreadyUsedWizardException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.charactercards.*;
 import it.polimi.ingsw.model.reduced.ReducedGame;
+import it.polimi.ingsw.model.reduced.ReducedPlayer;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.observer.Observer;
 import it.polimi.ingsw.view.VirtualView;
@@ -40,14 +43,17 @@ public class GameController implements Observer {
         nickVirtualViewMap.put(nickname, virtualView);
         game.addPlayer(nickname);
         game.addObserver(virtualView);
-
-        List<String> nicknames = game.getPlayers().stream().map(Player::getNickname).collect(Collectors.toList());
-        getViews().forEach(vv -> vv.showLobby(nicknames, getMaxPlayers()));
     }
 
-    public List<String> getNicknames() {
-        //return game.getPlayers().stream().map(Player::getNickname).collect(Collectors.toList());
-        return new ArrayList<>(nickVirtualViewMap.keySet());
+    /**
+     * @return List of available wizards, that are the wizards not alreasy chosen by the players that joined the game.
+     */
+    public List<Wizard> getAvailableWizards() {
+        List<Wizard> alreadyUsed = game.getPlayers().stream().map(Player::getWizard).toList();
+        List<Wizard> wizards = new ArrayList<>(Arrays.stream(Wizard.values()).toList());
+        wizards.removeAll(alreadyUsed);
+
+        return wizards;
     }
 
     public int getMaxPlayers() {
@@ -100,6 +106,10 @@ public class GameController implements Observer {
     {
         switch (message.getMessageType()) {
             case FILL_CLOUD_CARDS -> state.planning1();
+            case CHOOSE_WIZARD -> {
+                ChooseWizard chooseWizardMsg = (ChooseWizard) message;
+                handleChooseWizard(chooseWizardMsg.getNickname(), chooseWizardMsg.getWizard());
+            }
             case PLAY_ASSISTANT_CARD -> {
                 PlayAssistantCard msg = (PlayAssistantCard) message;
                 state.planning2(msg.getChosenCard());
@@ -156,53 +166,38 @@ public class GameController implements Observer {
                 CCNoEntryIslandReply ccNoEntryIslandReply = (CCNoEntryIslandReply) message;
                 playCCNoEntryIsland(ccNoEntryIslandReply.getIsland());
             }
-//            case CC_BLOCK_COLOR_ONCE -> {
-//                CCBlockColorOnce msg7 = (CCBlockColorOnce) message;
-//                state.ccBlockColorOnce(msg7.getColor(), msg7.getCardPosition());
-//            }
-//            case CC_BLOCK_TOWER -> {
-//                CCBlockTower msg14 = (CCBlockTower) message;
-//                state.ccBlockTower(msg14.getCardPosition());
-//            }
-//            case CC_CHOOSE_1_DINING_ROOM -> {
-//                CCChoose1DiningRoom msg8 = (CCChoose1DiningRoom) message;
-//                state.ccChoose1DiningRoom(msg8.getColor(), msg8.getCardPosition());
-//            }
-//            case CC_CHOOSE_1_TO_ISLAND -> {
-//                CCChooseOneToIsland msg9 = (CCChooseOneToIsland) message;
-//                state.ccChoose1ToIsland(msg9.getColor(), msg9.getIslandNumber(), msg9.getCardPosition());
-//            }
-//            case CC_CHOOSE_3_TO_ENTRANCE -> {
-//                CCChoose3ToEntrance msg10 = (CCChoose3ToEntrance) message;
-//                state.ccChoose3ToEntrance(msg10.getChosenFromCard(), msg10.getChosenFromEntrance(), msg10.getCardPosition());
-//            }
-//            case CC_CHOOSE_ISLAND -> {
-//                CCChooseIsland msg11 = (CCChooseIsland) message;
-//                state.ccChooseIsland(msg11.getIslnumb(), msg11.getCardPosition());
-//            }
-//            case CC_EXCHANGE_2_STUDENTS -> {
-//                CCExchange2Students msg12 = (CCExchange2Students) message;
-//                state.ccExchange2Students(msg12.getChosenFromEntrance(), msg12.getChosenFromDiningRoom(), msg12.getCardPosition());
-//            }
-//            case CC_NO_ENTRY_ISLAND -> {
-//                CCNoEntryIsland msg13 = (CCNoEntryIsland) message;
-//                state.ccNoEntryIsland(msg13.getIslNumb(), msg13.getCardPosition());
-//            }
-//            case CC_PLUS_2_INFLUENCE -> {
-//                CCPlus2Influence msg15 = (CCPlus2Influence) message;
-//                state.ccPlus2Influence(msg15.getCardPosition());
-//            }
-//            case CC_TEMP_CONTROL_PROF -> {
-//                CCTempControlProf msg16 = (CCTempControlProf) message;
-//                state.ccTempControlProf(msg16.getCardPosition());
-//            }
-//            case CC_TWO_ADDITIONAL_MOVES -> {
-//                CCTwoAdditionalMoves msg17 = (CCTwoAdditionalMoves) message;
-//                state.ccTwoAdditionalMoves(msg17.getCardPosition());
-//            }
             default -> throw new IllegalStateException("Protocol violation: unexpected " + message.getMessageType());
         }
 
+    }
+
+    private void handleChooseWizard(String nickname, Wizard wizard) {
+        try {
+            System.out.println(gameLogHeader() + " " + nickname + " has requested wizard " + wizard);
+            game.setPlayerWizard(nickname, wizard);
+
+            // notify the change to all the players that haven't chosen a wizard yet
+            game.getPlayers().stream().filter(p -> p.getWizard() == null)
+                    .map(Player::getNickname)
+                    .map(nickVirtualViewMap::get)
+                    .forEach(v -> v.updateAvailableWizards(getAvailableWizards()));
+
+            // update lobby for all players that have already chosen a wizard
+            game.getPlayers().stream().filter(p -> p.getWizard() != null)
+                    .map(Player::getNickname)
+                    .map(nickVirtualViewMap::get)
+                    .forEach(v -> v.showLobby(ReducedPlayer.list(game), getMaxPlayers()));
+        } catch (AlreadyUsedWizardException e) {
+            getVirtualView(nickname).showWizardError(getAvailableWizards());
+        }
+
+        boolean wizardOk = true;
+        for (Player p : game.getPlayers())
+            if (p.getWizard() == null)
+                wizardOk = false;
+
+        if (wizardOk)
+            startGame();
     }
 
     public void clearPlayerActionCount() {
@@ -464,5 +459,6 @@ public class GameController implements Observer {
         getCurrentPlayerView().askActionPhase3(game.getPlayableCloudCards().stream().map(i -> i+1).toList(), game.isExpertMode());
         broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 3)...");
     }
+
 
 }

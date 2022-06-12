@@ -1,17 +1,17 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.AlreadyUsedWizardException;
 import it.polimi.ingsw.model.charactercards.*;
 import it.polimi.ingsw.observer.Observable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game extends Observable {
     private final EnumMap<Color, Integer> bag;
     private int motherNaturePosition = 0;
     private final int MAX_ISLANDS = 12;
     private final int MAX_BAG_STUDENTS = 130;
-    public static final int CHARACTER_CARDS = 12;
+    public static final int CHARACTER_CARDS = 3;
     private final ArrayList<IslandGroup> islands;
     private final ArrayList<Player> players;
     private int currentPlayer;
@@ -96,7 +96,23 @@ public class Game extends Observable {
         return players.stream().filter(p -> !p.equals(getCurrentPlayerInstance())).toList();
     }
 
+    public Optional<Player> getPlayer(String nickname) {
+        return players.stream().filter(p -> p.getNickname().equals(nickname)).findFirst();
+    }
 
+    /**
+     * Sets the wizard of the player having the specified nickname.
+     * @param nickname nickname of the interested player.
+     * @param wizard wizard to set.
+     * @throws AlreadyUsedWizardException if the provided wizard is already used by another player.
+     */
+    public void setPlayerWizard(String nickname, Wizard wizard) throws AlreadyUsedWizardException {
+        // if the wizard is already used by some player, throw exception
+        if(players.stream().map(Player::getWizard).toList().contains(wizard))
+            throw new AlreadyUsedWizardException();
+
+        getPlayer(nickname).ifPresent(p -> p.setWizard(wizard));
+    }
 
     /**
      * Gets the current number of players in the game.
@@ -322,7 +338,9 @@ public class Game extends Observable {
 
         Collections.shuffle(res);
 
-        return res.subList(0, CHARACTER_CARDS);
+        return Arrays.asList(0, 4, 10);
+
+        //return res.subList(0, CHARACTER_CARDS);
     }
 
     public void extract3CharacterCard(){

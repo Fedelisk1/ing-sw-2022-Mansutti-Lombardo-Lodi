@@ -2,6 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.exceptions.NoGameAvailableExcpetion;
+import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -106,26 +107,30 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleLogin(String nickname) {
-        System.out.println(threadName() + " validate nickname find " + nickname + " in " + nickControllerMap.keySet() + "");
+        System.out.println(threadName() + " validate nickname: find " + nickname + " in " + nickControllerMap.keySet() + "");
+
         if (nickControllerMap.containsKey(nickname)) {
-            sendMessage(new LoginOutcome(false, -1)); // gameid should not be relevant
+            // nickname already in use
+            sendMessage(new LoginOutcome(false, -1, new ArrayList<>())); // gameid should not be relevant
         } else {
             int gameId;
+            List<Wizard> availableWizards;
+
             GameController availableGame = null;
             try {
                 availableGame = allocateClient(nickname);
                 gameId = availableGame.getId();
+                availableWizards = availableGame.getAvailableWizards();
             } catch (NoGameAvailableExcpetion e) {
                 gameId = -1;
+                nickControllerMap.put(nickname, null);
+                availableWizards = Arrays.stream(Wizard.values()).toList();
             }
 
             this.nickname = nickname;
 
             System.out.println(threadName() + " login ok, gameId = " + gameId);
-            sendMessage(new LoginOutcome(true, gameId));
-            if (gameId != -1) {
-                availableGame.startGame();
-            }
+            sendMessage(new LoginOutcome(true, gameId, availableWizards));
 
         }
     }
@@ -160,14 +165,17 @@ public class ClientHandler implements Runnable {
         int players = message.getPlayers();
         boolean expert = message.isExpertMode();
         VirtualView view = new VirtualView(this);
-        int gameId = nickControllerMap.values().size();
 
-        String nickname = message.getNickname();
-        GameController newGame = new GameController(players, expert, gameId);
+        synchronized (nickControllerMap) {
+            int gameId = nickControllerMap.values().size();
 
-        nickControllerMap.put(nickname, newGame);
+            String nickname = message.getNickname();
+            GameController newGame = new GameController(players, expert, gameId);
 
-        newGame.addPlayer(nickname, view);
+            nickControllerMap.put(nickname, newGame);
+
+            newGame.addPlayer(nickname, view);
+        }
     }
 
     public void sendMessage(Message message) {

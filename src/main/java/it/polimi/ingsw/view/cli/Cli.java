@@ -4,9 +4,11 @@ import it.polimi.ingsw.Server;
 import it.polimi.ingsw.model.CloudCard;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.reduced.ReducedCharacterCard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedIsland;
+import it.polimi.ingsw.model.reduced.ReducedPlayer;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
 import jdk.dynalink.NamedOperation;
@@ -108,7 +110,6 @@ public class Cli extends ViewObservable implements View {
     /**
      * Asks the user to enter the desired nickname.
      */
-    @Override
     public void nicknameInput() {
         System.out.println("Please enter a nickname: ");
         String nick = input.nextLine();
@@ -122,17 +123,24 @@ public class Cli extends ViewObservable implements View {
      * @param nickname nickname of the user.
      */
     @Override
-    public void showLoginOutcome(boolean userNameAvailable, boolean newGame, String nickname) {
+    public void showLoginOutcome(boolean userNameAvailable, boolean newGame, String nickname, List<Wizard> availableWizards) {
         if (userNameAvailable) {
             System.out.println("Hi, " + nickname + ". You are logged in!");
 
             if (newGame)
                 askPlayersNumberAndGameMode();
 
+            askWizard(availableWizards);
+
         } else {
             System.out.println("Chosen nickname is not available :(\nPlease choose a new one.");
             nicknameInput();
         }
+    }
+
+    @Override
+    public void updateAvailableWizards(List<Wizard> availableWizards) {
+
     }
 
     /**
@@ -146,18 +154,35 @@ public class Cli extends ViewObservable implements View {
     }
 
     /**
+     * Asks the user to enter the desired wizard.
+     * @param availableWizards list of available wizards to choose from.
+     */
+    public void askWizard(List<Wizard> availableWizards) {
+        String chosenWizard = strInput(availableWizards.stream().map(Wizard::toString).toList(), "Please, choose your wizard " + availableWizards);
+
+        notifyObservers(o -> o.onWizardChosen(Wizard.valueOf(chosenWizard)));
+    }
+
+    @Override
+    public void showWizardError(List<Wizard> availableWizards) {
+        System.out.println("\nLooks like this wizard has already been chosen by another player :( \n");
+
+        askWizard(availableWizards);
+    }
+
+    /**
      * Displays the lobby status to the user.
      *
-     * @param nicknames nicknames of the users already in the lobby.
-     * @param players maximum number of players of the lobby.
+     * @param players players already in the lobby.
+     * @param playersNumber maximum number of players of the lobby.
      */
-    public void showLobby(List<String> nicknames, int players) {
-        int currentPlayers = nicknames.size();
+    public void showLobby(List<ReducedPlayer> players, int playersNumber) {
+        int currentPlayers = players.size();
 
-        System.out.print("Players in the lobby (" + currentPlayers + " out of " + players + "): ");
+        System.out.print("Players in the lobby (" + currentPlayers + " out of " + playersNumber + "): ");
 
         for (int i = 0; i < currentPlayers; i++) {
-            System.out.print(nicknames.get(i));
+            System.out.print(players.get(i).getNickname());
 
             if (i != currentPlayers - 1)
                 System.out.print(", ");
@@ -165,7 +190,7 @@ public class Cli extends ViewObservable implements View {
                 System.out.println();
         }
 
-        if (currentPlayers != players)
+        if (currentPlayers != playersNumber)
             System.out.println("Waiting for players to join...");
     }
 

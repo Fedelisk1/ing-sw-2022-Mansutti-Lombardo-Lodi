@@ -1,6 +1,7 @@
 package it.polimi.ingsw.observer;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Wizard;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -13,6 +14,7 @@ public interface ViewObserver {
     void onServerInfoInput(Map<String, String> serverInfo);
     void onNicknameInput(String nickname);
     void onNewGameParametersInput(int playersNumber, boolean expertMode);
+    void onWizardChosen(Wizard wizard);
     void onAssistantCardChosen(int chosenCard);
     void onStudentMovedToIsland(int island, Color color);
     void onStudentMovedToDiningRoom(Color color);

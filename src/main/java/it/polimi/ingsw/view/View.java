@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
+import it.polimi.ingsw.model.reduced.ReducedPlayer;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -13,9 +15,10 @@ import java.util.Set;
  */
 public interface View {
     void showConnectionOutcome(boolean connectionOk);
-    void showLoginOutcome(boolean userNameAvailable, boolean newGame, String nickname);
-    void nicknameInput();
-    void showLobby(List<String> nicknames, int players);
+    void showLoginOutcome(boolean userNameAvailable, boolean newGame, String nickname, List<Wizard> availableWizards);
+    void updateAvailableWizards(List<Wizard> availableWizards);
+    void showWizardError(List<Wizard> availableWizards);
+    void showLobby(List<ReducedPlayer> players, int playersNumber);
     void askAssistantCard(Map<Integer, Integer> hand, List<Integer> notPlayable);
     void showPlayedAssistantCard(String player, int card);
     void update(ReducedGame game);

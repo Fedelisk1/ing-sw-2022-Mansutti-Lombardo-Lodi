@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.message;
 public enum MessageType {
     LOGIN_REQUEST, LOGIN_OUTCOME,
     NEW_GAME_REQUEST,
+    CHOOSE_WIZARD, WIZARDS_UPDATE, WIZARD_ERROR,
     LOBBY,
     GAME_START,
     ERROR,

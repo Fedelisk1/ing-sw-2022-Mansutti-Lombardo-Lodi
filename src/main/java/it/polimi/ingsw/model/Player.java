@@ -14,6 +14,7 @@ public class Player {
     private int maxSteps;
     private Game currentGame;
     private int count;
+    private Wizard wizard;
 
 
     /** each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
@@ -21,10 +22,19 @@ public class Player {
     {
         hand = new Hand();
         schoolDashboard = new SchoolDashboard();
-        for(Color c: Color.values())
-            schoolDashboard.getDiningRoom().put(c,0);
-        discardPile=new ArrayList<>();
 
+        for(Color c: Color.values())
+            schoolDashboard.getDiningRoom().put(c, 0);
+
+        discardPile = new ArrayList<>();
+    }
+
+    public void setWizard(Wizard wizard) {
+        this.wizard = wizard;
+    }
+
+    public Wizard getWizard() {
+        return wizard;
     }
 
     public String getNickname() {
@@ -35,9 +45,6 @@ public class Player {
         this.nickname = nickname;
     }
 
-    public void setHand(Hand hand) {
-        this.hand = hand;
-    }
     public void addCoins(){
         coins=getCoins()+1;
         currentGame.decreaseTotalCoins();
@@ -69,8 +76,7 @@ public class Player {
      * @param chosenCard, card number chosenCard from the left in hand
      * @throws IndexOutOfBoundsException if chosenCard is outside the possible range of values
      */
-    public void chooseAssistantCard(int chosenCard) throws IndexOutOfBoundsException
-    {
+    public void chooseAssistantCard(int chosenCard) throws IndexOutOfBoundsException {
         int chosenCardIndex = 0;
         int i = 0;
         for (AssistantCard assistantCard : getHand().getAssistantCards()) {
@@ -88,7 +94,7 @@ public class Player {
     }
 
 
-    public void chooseCloudCard(int i){
+    public void chooseCloudCard(int i) {
         currentGame.getCloudCards().get(i).transferStudents();
     }
 

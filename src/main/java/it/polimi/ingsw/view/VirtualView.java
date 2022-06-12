@@ -2,7 +2,9 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
+import it.polimi.ingsw.model.reduced.ReducedPlayer;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.ClientHandler;
 import it.polimi.ingsw.observer.Observer;
@@ -37,18 +39,18 @@ public class VirtualView implements View, Observer {
     }
 
     @Override
-    public void showLoginOutcome(boolean userNameAvailable, boolean newGame, String nickname) {
+    public void showLoginOutcome(boolean userNameAvailable, boolean newGame, String nickname, List<Wizard> availableWizards) {
 
     }
 
     @Override
-    public void nicknameInput() {
-
+    public void showWizardError(List<Wizard> availableWizards) {
+        clientHandler.sendMessage(new WizardError(availableWizards));
     }
 
     @Override
-    public void showLobby(List<String> nicknames, int players) {
-        clientHandler.sendMessage(new Lobby(nicknames, players));
+    public void showLobby(List<ReducedPlayer> players, int playersNumber) {
+        clientHandler.sendMessage(new Lobby(players, playersNumber));
     }
 
     @Override
@@ -134,5 +136,9 @@ public class VirtualView implements View, Observer {
     @Override
     public void askCCNoEntryIslandInput(int maxIsland) {
         clientHandler.sendMessage(new AskCCNoEntryIslandInput(maxIsland));
+    }
+
+    public void updateAvailableWizards(List<Wizard> availableWizards) {
+        clientHandler.sendMessage(new WizardsUpdate(availableWizards));
     }
 }

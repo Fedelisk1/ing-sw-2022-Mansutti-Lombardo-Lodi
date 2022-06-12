@@ -39,6 +39,7 @@ public class SocketClient extends Observable {
                 Message message;
                 try {
                     message = (Message) inputStream.readObject();
+                    System.out.println("message arrived: " + message.getMessageType());
                     switch (message.getMessageType()) {
                         case PING -> {
 
