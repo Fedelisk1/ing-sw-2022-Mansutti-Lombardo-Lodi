@@ -68,4 +68,8 @@ public class ReducedGame implements Serializable {
     public List<ReducedCharacterCard> getCharacterCards() {
         return characterCards;
     }
+
+    public int getMNPosition() {
+        return islands.indexOf(islands.stream().filter(ReducedIsland::isMotherNature).findFirst().get());
+    }
 }

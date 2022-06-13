@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
@@ -15,148 +14,72 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="752.0" prefWidth="1155.0" styleClass="table-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.TableController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="903.0" prefWidth="1194.0" styleClass="table-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.TableController">
    <bottom>
       <VBox>
          <children>
             <HBox alignment="CENTER">
                <children>
-                  <HBox prefHeight="220.0" prefWidth="202.0">
+                  <VBox alignment="TOP_RIGHT" prefHeight="251.0" prefWidth="300.0">
                      <children>
-                        <VBox alignment="TOP_RIGHT">
-                           <children>
-                              <ListView fx:id="handListView" prefHeight="200.0" prefWidth="200.0" />
-                              <Button fx:id="playButton" disable="true" mnemonicParsing="false" onAction="#handlePlayButton" text="Play" />
-                           </children>
-                        </VBox>
+                        <ListView fx:id="handListView" prefHeight="200.0" prefWidth="224.0" />
+                        <Button fx:id="playButton" disable="true" mnemonicParsing="false" onAction="#handlePlayButton" text="Play" />
                      </children>
-                  </HBox>
-                  <Pane prefHeight="220.0" prefWidth="504.0" styleClass="school-dashboard">
+                  </VBox>
+                  <AnchorPane fx:id="currentPlayerSchoolDashboardAP" onMouseClicked="#onSchoolDashboardClick" prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <HBox alignment="BOTTOM_LEFT" layoutX="14.0">
-                           <children>
-                              <GridPane alignment="BOTTOM_CENTER" prefHeight="220.0" prefWidth="318.0">
-                                <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="28.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="105.0" minWidth="10.0" prefWidth="40.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                    <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="65.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="99.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="70.0" minHeight="1.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="78.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="78.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="114.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="282.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="282.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.valignment="BOTTOM">
-                                       <image>
-                                          <Image url="@../images/table/students/green.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                              </GridPane>
-                              <GridPane alignment="CENTER" prefHeight="220.0" prefWidth="54.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints maxHeight="63.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="50.0" minHeight="8.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <ImageView fitHeight="27.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/table/professors/green.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                                 <padding>
-                                    <Insets left="20.0" />
-                                 </padding>
-                              </GridPane>
-                              <GridPane layoutX="330.0" layoutY="10.0" prefHeight="220.0" prefWidth="90.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="56.0" minWidth="10.0" prefWidth="52.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="10.0" prefWidth="38.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="72.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="50.0" minHeight="8.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                              </GridPane>
-                           </children>
-                        </HBox>
+                        <ImageView fitHeight="270.0" fitWidth="577.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/schoolDashboard.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="56.0" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="21.5" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="56.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="21.5" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="21.5" layoutY="158.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="21.5" layoutY="158.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/yellowStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="21.5" layoutY="198.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/blueStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="110.0" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="357.5" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
                      </children>
-                  </Pane>
+                  </AnchorPane>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="1155.0">
@@ -167,174 +90,116 @@
          </children>
       </VBox>
    </bottom>
-   <right>
-      <Pane prefHeight="504.0" prefWidth="220.0" styleClass="school-dashboard-2nd" BorderPane.alignment="CENTER">
-         <children>
-            <HBox alignment="BOTTOM_LEFT" layoutX="-122.0" layoutY="129.0" prefHeight="220.0" prefWidth="504.0" rotate="-90.0">
-               <children>
-                  <GridPane alignment="BOTTOM_CENTER" prefHeight="220.0" prefWidth="318.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="28.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="105.0" minWidth="10.0" prefWidth="40.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="24.0" minWidth="10.0" prefWidth="24.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="65.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="99.0" minHeight="0.0" prefHeight="59.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="70.0" minHeight="1.0" prefHeight="11.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="78.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="78.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="114.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="10" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="282.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="9" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="8" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="7" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="6" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="10.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="24.0" layoutX="282.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="11" GridPane.valignment="BOTTOM">
-                           <image>
-                              <Image url="@../images/table/students/green.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </GridPane>
-                  <GridPane alignment="CENTER" prefHeight="220.0" prefWidth="54.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="63.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="50.0" minHeight="8.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <ImageView fitHeight="27.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/table/professors/green.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets left="20.0" />
-                     </padding>
-                  </GridPane>
-                  <GridPane layoutX="330.0" layoutY="10.0" prefHeight="220.0" prefWidth="90.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="56.0" minWidth="10.0" prefWidth="52.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="10.0" prefWidth="38.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="72.0" minHeight="10.0" prefHeight="71.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="50.0" minHeight="8.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                  </GridPane>
-               </children>
-            </HBox>
-         </children>
-      </Pane>
-   </right>
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="169.0" prefWidth="935.0">
                <children>
-                  <Pane>
+                  <HBox fx:id="cloudCardsHBox" prefHeight="100.0" prefWidth="200.0">
                      <children>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/cloudCards/cloud4.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="9.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/yellowStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="33.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/yellowStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="54.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/yellowStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="71.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/yellowStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                     </children></HBox>
+                  <HBox fx:id="charactersHBox" prefHeight="169.0" prefWidth="581.0" />
+                  <Button fx:id="firstCharacterButton" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
+                     <graphic>
                         <Pane>
                            <children>
-                              <Pane>
-                                 <children>
-                                    <Pane>
-                                       <children>
-                                          <Pane>
-                                             <children>
-                                                <Pane>
-                                                   <children>
-                                                      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@../images/table/cloudCards/cloud3_1.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                   </children>
-                                                </Pane>
-                                             </children>
-                                          </Pane>
-                                       </children>
-                                    </Pane>
-                                 </children>
-                              </Pane>
+                              <ImageView fx:id="firstCharacterIV" fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
+                                 </image>
+                              </ImageView>
+                              <GridPane layoutX="-2.0" layoutY="105.0" prefHeight="68.0" prefWidth="105.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                              </GridPane>
                            </children>
                         </Pane>
-                     </children>
-                  </Pane>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/table/cloudCards/cloud3_2.png" />
-                     </image>
-                  </ImageView>
-                  <HBox fx:id="charactersHBox" prefHeight="169.0" prefWidth="448.0" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="secondCharacterButton" layoutX="310.0" layoutY="10.0" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
+                     <graphic>
+                        <Pane>
+                           <children>
+                              <ImageView fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
+                                 </image>
+                              </ImageView>
+                              <GridPane layoutY="81.0" prefHeight="65.0" prefWidth="103.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </Pane>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="thirdCharacterButton" layoutX="430.0" layoutY="10.0" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
+                     <graphic>
+                        <Pane>
+                           <children>
+                              <ImageView fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
+                                 </image>
+                              </ImageView>
+                              <GridPane layoutY="81.0" prefHeight="65.0" prefWidth="103.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </Pane>
+                     </graphic>
+                  </Button>
                   <VBox prefHeight="169.0" prefWidth="52.0">
                      <children>
                         <ImageView fitHeight="42.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
@@ -368,7 +233,7 @@
             </HBox>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="islandsHBox1" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <AnchorPane prefHeight="150.0" prefWidth="151.0">
                            <children>
@@ -441,7 +306,7 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <HBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="islandsHBox2" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -480,4 +345,91 @@
          </children>
       </VBox>
    </center>
+   <top>
+      <HBox fx:id="topHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                  <HBox>
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <AnchorPane fx:id="schoolDashboardAP2" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="270.0" fitWidth="404.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/schoolDashboard.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="33.6" fitWidth="14.0" layoutX="39.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/greenStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="21.5" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/greenStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="56.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/greenStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="110.0" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/greenStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="357.5" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/students/greenStudent3D.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox>
+               <children>
+                  <AnchorPane fx:id="schoolDashboardAP3" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="270.0" fitWidth="404.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/schoolDashboard.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="33.6" fitWidth="14.0" layoutX="39.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="21.5" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="56.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="110.0" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="357.5" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/students/greenStudent3D.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </children></HBox>
+   </top>
 </BorderPane>

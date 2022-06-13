@@ -2,6 +2,9 @@ package it.polimi.ingsw.view.gui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventDispatcher;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +16,7 @@ import java.io.IOException;
 public class Gui extends Application {
     private static Stage stage;
     private static ConnectToServerController connectToServerController;
+
 
     public static void main() {
         launch();
@@ -42,6 +46,8 @@ public class Gui extends Application {
             Platform.exit();
             System.exit(0);
         });
+
+
     }
 
     public static Stage getStage() {

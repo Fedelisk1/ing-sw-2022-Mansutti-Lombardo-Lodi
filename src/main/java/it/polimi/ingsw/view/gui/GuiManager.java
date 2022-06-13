@@ -33,6 +33,7 @@ public class GuiManager extends ViewObservable implements View{
     private final TableController tableController;
 
     private static Semaphore semaphore;
+    private String nickname;
 
     public GuiManager() {
         semaphore = new Semaphore(0);
@@ -71,6 +72,7 @@ public class GuiManager extends ViewObservable implements View{
 
         gameInfoController.setGuiManager(this);
         lobbyController.setGuiManager(this);
+        tableController.setGuiManager(this);
 
         Platform.setImplicitExit(false);
     }
@@ -110,6 +112,7 @@ public class GuiManager extends ViewObservable implements View{
                 wizardController.setAvailableWizards(availableWizards);
                 askWizard();
             }
+            this.nickname = nickname;
         } else {
             nicknameController.onError();
         }
@@ -157,17 +160,18 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void update(ReducedGame game) {
+        System.out.println("update received");
         tableController.update(game);
     }
 
     @Override
     public void askActionPhase1(int count, int maxIsland, boolean expert) {
-
+        Platform.runLater(() -> tableController.askActionPhase1(count));
     }
 
     @Override
     public void askActionPhase2(int maxMNStpes, boolean expert) {
-
+        Platform.runLater(() -> tableController.askActionPhase2(maxMNStpes));
     }
 
     @Override
@@ -232,5 +236,9 @@ public class GuiManager extends ViewObservable implements View{
 
     public void showTable() {
         Platform.runLater(() -> Gui.getStage().setScene(new Scene(tableRoot)));
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 }

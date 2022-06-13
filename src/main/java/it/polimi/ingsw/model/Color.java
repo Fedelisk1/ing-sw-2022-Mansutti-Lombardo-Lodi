@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 public enum Color {
-    YELLOW, BLUE, GREEN, RED, PINK;
+    GREEN, RED, YELLOW, PINK, BLUE;
 
     public String toString() {
         return toTitleCase(name());
