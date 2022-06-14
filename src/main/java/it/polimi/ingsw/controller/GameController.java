@@ -461,4 +461,10 @@ public class GameController implements Observer {
     }
 
 
+    public void notifyWinner(Player winner) {
+        String winnerNick = winner.getNickname();
+
+        viewsExcept(winnerNick).forEach(v -> v.showWinnerToOthers(winnerNick));
+        getVirtualView(winnerNick).notifyWinner();
+    }
 }

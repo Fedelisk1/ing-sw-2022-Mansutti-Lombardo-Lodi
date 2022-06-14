@@ -10,13 +10,10 @@ import it.polimi.ingsw.observer.ViewObservable;
 import javafx.application.Platform;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -26,11 +23,12 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class TableController extends ViewObservable implements Initializable {
     public GridPane handGridPane;
+    public ImageView currentPlayerAssistant;
+    public VBox cloudCardsVBox;
+    public HBox unudedProfHBox;
     private ReducedGame game;
     private Phase phase;
     private Color actionPhaseSelectedColor;
@@ -39,7 +37,6 @@ public class TableController extends ViewObservable implements Initializable {
     public HBox charactersHBox;
     public HBox islandsHBox1;
     public HBox islandsHBox2;
-    public HBox cloudCardsHBox;
     public AnchorPane currentPlayerSchoolDashboardAP;
     public AnchorPane schoolDashboardAP2;
     public AnchorPane schoolDashboardAP3;
@@ -50,7 +47,8 @@ public class TableController extends ViewObservable implements Initializable {
     private GuiManager guiManager;
     private int maxMNSteps;
     private Integer chosenAssisant;
-    private List<Button> handButtons = new ArrayList();
+    private final List<Button> handButtons = new ArrayList<>();
+    private List<Integer> allowedClodCards = new ArrayList<>();
 
     public void setGuiManager(GuiManager guiManager) {
         this.guiManager = guiManager;
@@ -65,6 +63,9 @@ public class TableController extends ViewObservable implements Initializable {
         handButtons.stream().filter(hb -> hb.getUserData() == chosenAssisant).findFirst().ifPresent(hb -> {
             hb.getStyleClass().add("chosen");
         });
+
+        // show the chosen assistant
+        currentPlayerAssistant.setImage(ImagesUtil.assistantImages.get(chosenAssisant - 1));
 
         playButton.setDisable(true);
         chosenAssisant = null;
@@ -83,50 +84,18 @@ public class TableController extends ViewObservable implements Initializable {
 
     public void askActionPhase3(List<Integer> alloweValues) {
         phase = Phase.ACTION_3;
+        allowedClodCards = alloweValues;
         showMessage("Action phase 3: please select a cloud Card to refill your School Dashboard's entrance.");
     }
 
-    class AssistantListCell extends ListCell<AssistantCard> {
-        @Override
-        protected void updateItem(AssistantCard ac, boolean empty) {
-            super.updateItem(ac, empty);
-
-            if (ac == null || empty) {
-                setGraphic(null);
-                setText(null);
-            } else {
-                Image assistantImage = new Image("/images/table/assistantCards/" + ac.getPriority() + ".png");
-                ImageView assistantIV = new ImageView(assistantImage);
-                assistantIV.setFitHeight(89.0);
-                assistantIV.setFitWidth(61.0);
-                setGraphic(assistantIV);
-                setText("Priority: " + ac.getPriority() + " - max MN steps: " + ac.getMaxSteps());
-
-                if(alreadyPlayedCards.contains(ac.getPriority())) {
-                    setDisable(true);
-                    setTooltip(new Tooltip("Already played by another player"));
-                }
-            }
-        }
+    public void showPlayedAssistant(String player, int card) {
+        ImageView assistantIV = (ImageView) Gui.getStage().getScene().lookup("#assistantIV" + player);
+        assistantIV.setImage(ImagesUtil.assistantImages.get(card - 1));
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        handOL = FXCollections.observableArrayList();
-        hand = FXCollections.observableHashMap();
-
-        hand.addListener((MapChangeListener<? super Integer, ? super Integer>) change -> {
-            int k = change.getKey();
-
-            if (change.wasRemoved()) {
-                int v = change.getValueRemoved();
-                handOL.removeIf(ac -> ac.getPriority() == k);
-            } else if (change.wasAdded()) {
-                int v = change.getValueAdded();
-                handOL.add(new AssistantCard(k, v));
-            }
-
-        });
+        handGridPane.getChildren().clear();
 
         //handListView.setItems(handOL);
         //handListView.setCellFactory((a) -> new AssistantListCell());
@@ -134,8 +103,6 @@ public class TableController extends ViewObservable implements Initializable {
 
     public void update(ReducedGame game) {
         this.game = game;
-        System.out.println("inside update");
-        showMessage("Updating...");
         /*if (game.isExpert()) {
             int i = 0;
             for (ReducedCharacterCard rc : game.getCharacterCards()) {
@@ -216,7 +183,7 @@ public class TableController extends ViewObservable implements Initializable {
         // update cloud cards
         Platform.runLater(() -> {
             long startMillis = System.currentTimeMillis();
-            cloudCardsHBox.getChildren().clear();
+            cloudCardsVBox.getChildren().clear();
 
             Image ccImage;
             List<Double> layoutXs;
@@ -267,7 +234,7 @@ public class TableController extends ViewObservable implements Initializable {
                 long endMillis1 = System.currentTimeMillis();
                 System.out.println("add students to cc took " + (endMillis1-startMillis1));
 
-                cloudCardsHBox.getChildren().add(ap);
+                cloudCardsVBox.getChildren().add(ap);
 
                 ccIndex++;
             }
@@ -278,7 +245,10 @@ public class TableController extends ViewObservable implements Initializable {
         // update schoolDashboards
         Platform.runLater(() -> {
             long startMillis = System.currentTimeMillis();
-            topHBox.getChildren().clear();
+
+            VBox mockup = (VBox) topHBox.lookup("#mockupPlayerVBox");
+            if (mockup != null)
+                topHBox.getChildren().clear();
 
             AnchorPane destAP;
             List<Double> entranceLayoutsX = Arrays.asList(56.0, 21.5, 56.0, 21.5, 56.0, 21.5, 56.0, 21.5, 56.0);
@@ -288,18 +258,22 @@ public class TableController extends ViewObservable implements Initializable {
             List<Double> drLayoutsY = Arrays.asList(34.5, 76.0, 117.0, 158.0, 198.0);
             double scale;
 
+            double profBaseLayoutY = 29.0;
+            double profLayoutYDelta = 41.0;
+            double profLayoutX = 403.0;
+
 
             for (String nick : game.getSchoolDashboards().keySet()) {
                 if (nick.equals(guiManager.getNickname())) {
                     destAP = currentPlayerSchoolDashboardAP;
                     destAP.getChildren().clear();
-                    ImageView sdIV = new ImageView(new Image("images/table/schoolDashboard.png"));
+                    ImageView sdIV = new ImageView(ImagesUtil.schoolDashboardImage);
                     sdIV.setFitWidth(577.0);
-                    sdIV.setFitHeight(270.0);
+                    sdIV.setFitHeight(250.0);
                     sdIV.setLayoutX(0.0);
                     sdIV.setLayoutY(0.0);
                     destAP.setMaxWidth(577.0);
-                    destAP.setMaxHeight(270.0);
+                    destAP.setMaxHeight(250.0);
                     destAP.getChildren().add(sdIV);
 
                     entranceLayoutsX = Arrays.asList(56.0, 21.5, 56.0, 21.5, 56.0, 21.5, 56.0, 21.5, 56.0);
@@ -308,26 +282,50 @@ public class TableController extends ViewObservable implements Initializable {
                     drLayoutXDelta = 27.5;
                     drLayoutsY = Arrays.asList(34.5, 76.0, 117.0, 158.0, 198.0);
                     scale = 1.0;
+
+                    profBaseLayoutY = 29.0;
+                    profLayoutYDelta = 41.0;
+                    profLayoutX = 403.0;
                 } else
                 {
-                    VBox vBox = new VBox();
-                    topHBox.getChildren().add(vBox);
+                    VBox vBox = (VBox) topHBox.lookup("#" + nick + "VBox");
+                    AnchorPane ap; // school dashboard AnchorPane
 
-                    Text nickText = new Text(nick);
-                    vBox.getChildren().add(nickText);
+                    if (vBox == null) { // if the player's VBox han never been created, create it
+                        vBox = new VBox();
+                        vBox.setId(nick + "VBox"); // and assign it an id for future reference
+                        vBox.setAlignment(Pos.CENTER);
+                        vBox.setSpacing(10.0);
+                        topHBox.getChildren().add(vBox);
 
-                    HBox hBox = new HBox();
-                    vBox.getChildren().add(hBox);
-                    AnchorPane ap = new AnchorPane();
-                    hBox.getChildren().add(ap);
+                        Text nickText = new Text(nick);
+                        vBox.getChildren().add(nickText);
+
+                        HBox hBox = new HBox();
+                        hBox.setAlignment(Pos.CENTER);
+                        hBox.setSpacing(10.0);
+                        vBox.getChildren().add(hBox);
+
+                        ImageView playedAssistantIV = new ImageView();
+                        playedAssistantIV.setId("assistantIV" + nick);
+                        playedAssistantIV.setFitHeight(144.0);
+                        playedAssistantIV.setFitWidth(98.0);
+                        hBox.getChildren().add(playedAssistantIV);
+                        ap = new AnchorPane();
+                        hBox.getChildren().add(ap);
+
+                        ap.setId("schoolDashboardAP" + nick);
+                    } else {
+                        ap = (AnchorPane) topHBox.lookup("#schoolDashboardAP" + nick);
+                    }
 
                     ImageView sdIV = new ImageView(ImagesUtil.schoolDashboardImage);
                     sdIV.setLayoutX(0.0);
                     sdIV.setLayoutY(0.0);
                     sdIV.setFitWidth(404.0);
-                    sdIV.setFitHeight(189.0);
+                    sdIV.setFitHeight(175.0);
                     ap.setMaxWidth(404.0);
-                    ap.setMaxHeight(189.0);
+                    ap.setMaxHeight(175.0);
                     ap.getChildren().add(sdIV);
 
                     destAP = ap;
@@ -341,6 +339,7 @@ public class TableController extends ViewObservable implements Initializable {
 
                 ReducedSchoolDashboard sd = game.getSchoolDashboards().get(nick);
                 long startMillis1 = System.currentTimeMillis();
+
                 // fill entrance
                 int i = 0;
                 for (Color c : Color.values()) {
@@ -362,8 +361,8 @@ public class TableController extends ViewObservable implements Initializable {
                 System.out.println("fill entrance sd took " + (endMillis1-startMillis1));
 
                 // fill dr
-                i = 0;
                 for (Color c : Color.values()) {
+                    i = 0;
                     for (int j = 0; j < sd.getDiningRoom().getOrDefault(c, 0); j++) {
                         ImageView iv = studentImage(c, scale);
                         iv.setLayoutX(drLayoutXStart + i * drLayoutXDelta);
@@ -374,11 +373,29 @@ public class TableController extends ViewObservable implements Initializable {
                     }
                 }
 
+                // fill professors
 
+                for (Color c : sd.getProfessors()) {
+                    ImageView profIV = ImagesUtil.profImageView(c, scale);
+                    profIV.setLayoutX(profLayoutX * scale);
+                    profIV.setLayoutY(profBaseLayoutY * scale + c.ordinal() * profLayoutYDelta * scale);
+
+                    destAP.getChildren().add(profIV);
+                }
             }
 
             long endMillis = System.currentTimeMillis();
             System.out.println("update sd took " + (endMillis-startMillis));
+        });
+
+        // update unused professors
+        Platform.runLater(() -> {
+            unudedProfHBox.getChildren().clear();
+
+            for (Color c : game.getUnusedProfessors()) {
+                ImageView profIV = ImagesUtil.profImageView(c, 1.0);
+                unudedProfHBox.getChildren().add(profIV);
+            }
         });
     }
 
@@ -426,7 +443,6 @@ public class TableController extends ViewObservable implements Initializable {
             if (islandIndex < game.getMNPosition())
                 requestedSteps = islandIndex + game.getIslands().size() - game.getMNPosition();
 
-            System.out.println("move mn island clicked " + requestedSteps + " stpes");
             if (requestedSteps <= maxMNSteps && requestedSteps >= 1) {
                 int finalRequestedSteps = requestedSteps;
                 notifyObservers(o -> o.onMotherNatureMoved(finalRequestedSteps));
@@ -442,7 +458,8 @@ public class TableController extends ViewObservable implements Initializable {
         ImageView source = (ImageView) event.getSource();
         int ccIndex = (int) source.getUserData();
         if (phase == Phase.ACTION_3) {
-            notifyObservers(o -> o.onCloudCardChosen(ccIndex));
+            if (allowedClodCards.contains(ccIndex))
+                notifyObservers(o -> o.onCloudCardChosen(ccIndex));
         }
     }
 
@@ -525,14 +542,8 @@ public class TableController extends ViewObservable implements Initializable {
     }
 
     private ImageView studentImage(Color c, double scale) {
-        Image studentImage = null;
-        switch (c) {
-            case GREEN -> studentImage = ImagesUtil.greenStudentImage;
-            case RED -> studentImage = ImagesUtil.redStudentImage;
-            case YELLOW -> studentImage = ImagesUtil.yellowStudentImage;
-            case PINK -> studentImage = ImagesUtil.pinkStudentImage;
-            case BLUE -> studentImage = ImagesUtil.blueStudentImage;
-        }
+        Image studentImage = ImagesUtil.studentImage(c);
+
         ImageView iv = new ImageView(studentImage);
         iv.setFitHeight(20.0 * scale);
         iv.setFitWidth(20.0 * scale);
@@ -547,6 +558,7 @@ public class TableController extends ViewObservable implements Initializable {
         Platform.runLater(() -> {
             playButton.setDisable(false);
             handGridPane.getChildren().clear();
+
             handButtons.clear();
 
             int i = 0, j = 0; // used to determine row and col for handGidPane (row, col)
@@ -557,7 +569,7 @@ public class TableController extends ViewObservable implements Initializable {
                 assistantButton.setUserData(assistantPri);
                 assistantButton.setPrefHeight(104.0);
                 assistantButton.setPrefWidth(71.0);
-                ImageView assistantIV = new ImageView(ImagesUtil.assistantImages.get(assistantPri - 1));
+                ImageView assistantIV = new ImageView(ImagesUtil.assistantImage(assistantPri));
                 assistantIV.setFitHeight(104.0);
                 assistantIV.setFitWidth(71.0);
                 assistantButton.setGraphic(assistantIV);
@@ -580,5 +592,15 @@ public class TableController extends ViewObservable implements Initializable {
 
     public void showMessage(String content) {
         promptText.setText(content);
+    }
+
+    public void showWinnerToOthers(String winnerNick) {
+        phase = Phase.END;
+        showMessage(winnerNick + " has won. The game ends here.");
+    }
+
+    public void notifyWinner() {
+        phase = Phase.END;
+        showMessage("You won! The game ends here.");
     }
 }

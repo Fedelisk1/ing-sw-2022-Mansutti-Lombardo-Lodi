@@ -11,7 +11,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.util.List;
@@ -155,12 +154,11 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void showPlayedAssistantCard(String player, int card) {
-
+        tableController.showPlayedAssistant(player, card);
     }
 
     @Override
     public void update(ReducedGame game) {
-        System.out.println("update received");
         tableController.update(game);
     }
 
@@ -233,6 +231,17 @@ public class GuiManager extends ViewObservable implements View{
     public void showServerUnreachable() {
 
     }
+
+    @Override
+    public void showWinnerToOthers(String winnerNick) {
+        tableController.showWinnerToOthers(winnerNick);
+    }
+
+    @Override
+    public void notifyWinner() {
+        tableController.notifyWinner();
+    }
+
 
     public void showTable() {
         Platform.runLater(() -> Gui.getStage().setScene(new Scene(tableRoot)));

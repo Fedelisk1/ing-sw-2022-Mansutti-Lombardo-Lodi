@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.reduced.ReducedIsland;
 import it.polimi.ingsw.model.reduced.ReducedPlayer;
 import it.polimi.ingsw.observer.ViewObservable;
 import it.polimi.ingsw.view.View;
+import javafx.application.Platform;
 import jdk.dynalink.NamedOperation;
 
 import java.io.BufferedReader;
@@ -220,6 +221,18 @@ public class Cli extends ViewObservable implements View {
     @Override
     public void showServerUnreachable() {
         System.out.println("Server unreachable");
+        System.exit(1);
+    }
+
+    @Override
+    public void showWinnerToOthers(String winnerNick) {
+        System.out.println(winnerNick + " wins the game!");
+        System.exit(1);
+    }
+
+    @Override
+    public void notifyWinner() {
+        System.out.println("You won! The game ends here.");
         System.exit(1);
     }
 

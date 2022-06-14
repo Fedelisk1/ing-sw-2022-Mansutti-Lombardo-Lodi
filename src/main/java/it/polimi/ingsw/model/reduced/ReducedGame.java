@@ -20,6 +20,7 @@ public class ReducedGame implements Serializable {
     private final Map<String, Integer> coins;
     private final boolean expert;
     private final List<ReducedCharacterCard> characterCards;
+    private final Set<Color> unusedProfessors;
 
 
     public ReducedGame(Game game) {
@@ -40,9 +41,10 @@ public class ReducedGame implements Serializable {
         characterCards = new ArrayList<>();
 
         expert = game.isExpertMode();
-        if(expert) {
+        if(expert)
             game.getCharacterCards().forEach(cc -> characterCards.add(new ReducedCharacterCard(cc)));
-        }
+
+        unusedProfessors = new HashSet<>(game.getUnusedProfessors());
     }
 
     public List<ReducedIsland> getIslands() {
@@ -75,5 +77,9 @@ public class ReducedGame implements Serializable {
      */
     public int getMNPosition() {
         return islands.indexOf(islands.stream().filter(ReducedIsland::isMotherNature).findFirst().get());
+    }
+
+    public Set<Color> getUnusedProfessors() {
+        return unusedProfessors;
     }
 }

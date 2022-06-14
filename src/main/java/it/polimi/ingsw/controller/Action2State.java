@@ -32,7 +32,7 @@ public class Action2State implements GameState{
         IslandGroup currentIslandGroup = game.getMotherNatureIsland();
 
 
-        //calculates player with highest influence and sets occupation on island and adds/removes towers
+        //calculates player with the highest influence and sets occupation on island and adds/removes towers
         int groupSize = currentIslandGroup.getIslandCount();
         Player winningPlayer= game.playerWithHigherInfluence(currentIslandGroup);
 
@@ -66,7 +66,8 @@ public class Action2State implements GameState{
         if(winningPlayer.getSchoolDashboard().getTowers()<=0)
         {
             winner = winningPlayer;
-            //TODO: close game
+
+            gameController.notifyWinner(winner);
         }
 
         //checks if the next island group in the sequence is occupied by the same player
@@ -80,7 +81,8 @@ public class Action2State implements GameState{
         if(game.getIslands().size()<=3)
         {
             winner = game.winner();
-            //TODO: close game
+
+            gameController.notifyWinner(winner);
         }
 
         gameController.askActionPhase3();

@@ -29,8 +29,9 @@ public class EndTurnState implements GameState{
         {
             if(game.getCurrentPlayerInstance().getHand().getAssistantCards().size()==0)
             {
-                winner=game.winner();
-                //TODO: close game
+                winner = game.winner();
+
+                gameController.notifyWinner(winner);
             }
             gameController.clearPlayerActionCount();
             gameController.askAssistantCard(null);

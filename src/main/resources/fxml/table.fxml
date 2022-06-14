@@ -13,12 +13,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="952.0" prefWidth="1194.0" styleClass="table-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.TableController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="952.0" prefWidth="1262.0" styleClass="table-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.TableController">
    <bottom>
       <VBox>
          <children>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="15.0">
                <children>
+                  <ImageView fx:id="currentPlayerAssistant" fitHeight="144.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/table/assistantCards/1.png" />
+                     </image>
+                  </ImageView>
                   <VBox alignment="TOP_RIGHT" prefHeight="251.0" prefWidth="381.0">
                      <children>
                         <GridPane fx:id="handGridPane" prefHeight="225.0" prefWidth="411.0">
@@ -131,149 +136,45 @@
       </VBox>
    </bottom>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="415.0" prefWidth="961.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="169.0" prefWidth="935.0">
+            <HBox alignment="CENTER" prefHeight="58.0" prefWidth="961.0" spacing="15.0">
                <children>
-                  <HBox fx:id="cloudCardsHBox" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/cloudCards/cloud4.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="9.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/students/yellowStudent3D.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="33.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/students/yellowStudent3D.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="54.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/students/yellowStudent3D.png" />
-                                 </image>
-                              </ImageView>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="71.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/students/yellowStudent3D.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </AnchorPane>
-                     </children></HBox>
-                  <HBox fx:id="charactersHBox" prefHeight="169.0" prefWidth="581.0" />
-                  <Button fx:id="firstCharacterButton" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
-                     <graphic>
-                        <Pane>
-                           <children>
-                              <ImageView fx:id="firstCharacterIV" fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
-                                 </image>
-                              </ImageView>
-                              <GridPane layoutX="-2.0" layoutY="105.0" prefHeight="68.0" prefWidth="105.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                              </GridPane>
-                           </children>
-                        </Pane>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="secondCharacterButton" layoutX="310.0" layoutY="10.0" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
-                     <graphic>
-                        <Pane>
-                           <children>
-                              <ImageView fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
-                                 </image>
-                              </ImageView>
-                              <GridPane layoutY="81.0" prefHeight="65.0" prefWidth="103.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                              </GridPane>
-                           </children>
-                        </Pane>
-                     </graphic>
-                  </Button>
-                  <Button fx:id="thirdCharacterButton" layoutX="430.0" layoutY="10.0" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
-                     <graphic>
-                        <Pane>
-                           <children>
-                              <ImageView fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
-                                 </image>
-                              </ImageView>
-                              <GridPane layoutY="81.0" prefHeight="65.0" prefWidth="103.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                              </GridPane>
-                           </children>
-                        </Pane>
-                     </graphic>
-                  </Button>
-                  <VBox prefHeight="169.0" prefWidth="52.0">
+                  <HBox fx:id="unudedProfHBox" alignment="CENTER" spacing="5.0">
                      <children>
                         <ImageView fitHeight="42.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/table/professors/yellow.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="42.0" fitWidth="35.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="42.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/table/professors/red.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="42.0" fitWidth="35.0" layoutX="10.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="42.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/table/professors/pink.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="42.0" fitWidth="35.0" layoutX="10.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="42.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/table/professors/green.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="42.0" fitWidth="35.0" layoutX="10.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="42.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/table/professors/blue.png" />
                            </image>
                         </ImageView>
                      </children>
-                  </VBox>
+                  </HBox>
+                  <HBox fx:id="coinsHBox" layoutX="403.0" layoutY="10.0" />
                </children>
             </HBox>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <HBox fx:id="islandsHBox1" prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="islandsHBox1" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <AnchorPane prefHeight="150.0" prefWidth="151.0">
                            <children>
@@ -346,7 +247,7 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <HBox fx:id="islandsHBox2" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="islandsHBox2" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -388,12 +289,15 @@
    <top>
       <HBox fx:id="topHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox>
+            <VBox fx:id="mockupPlayerVBox">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
                   <HBox>
                      <children>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fitHeight="144.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/assistantCards/1.png" />
+                           </image></ImageView>
                         <AnchorPane fx:id="schoolDashboardAP2" prefHeight="200.0" prefWidth="200.0">
                            <children>
                               <ImageView fitHeight="270.0" fitWidth="404.0" pickOnBounds="true" preserveRatio="true">
@@ -432,44 +336,121 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox>
-               <children>
-                  <AnchorPane fx:id="schoolDashboardAP3" prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <ImageView fitHeight="270.0" fitWidth="404.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/table/schoolDashboard.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="33.6" fitWidth="14.0" layoutX="39.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/table/students/greenStudent3D.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="21.5" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/table/students/greenStudent3D.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="56.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/table/students/greenStudent3D.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="110.0" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/table/students/greenStudent3D.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="48.0" fitWidth="20.0" layoutX="357.5" layoutY="34.5" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/table/students/greenStudent3D.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </VBox>
+            <VBox />
+            <VBox layoutX="351.0" layoutY="10.0" />
          </children></HBox>
    </top>
+   <right>
+      <VBox alignment="CENTER" prefHeight="448.0" prefWidth="161.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="firstCharacterButton" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
+               <graphic>
+                  <Pane>
+                     <children>
+                        <ImageView fx:id="firstCharacterIV" fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
+                           </image>
+                        </ImageView>
+                        <GridPane layoutX="-2.0" layoutY="105.0" prefHeight="68.0" prefWidth="105.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                     </children>
+                  </Pane>
+               </graphic>
+            </Button>
+            <Button fx:id="secondCharacterButton" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
+               <graphic>
+                  <Pane>
+                     <children>
+                        <ImageView fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
+                           </image>
+                        </ImageView>
+                        <GridPane layoutY="81.0" prefHeight="65.0" prefWidth="103.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </children>
+                  </Pane>
+               </graphic>
+            </Button>
+            <Button fx:id="thirdCharacterButton" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
+               <graphic>
+                  <Pane>
+                     <children>
+                        <ImageView fitHeight="174.0" fitWidth="114.0" layoutX="-8.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
+                           </image>
+                        </ImageView>
+                        <GridPane layoutY="81.0" prefHeight="65.0" prefWidth="103.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </children>
+                  </Pane>
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
+   </right>
+   <left>
+      <VBox fx:id="cloudCardsVBox" alignment="CENTER" prefHeight="448.0" prefWidth="133.0">
+         <children>
+            <AnchorPane prefHeight="109.0" prefWidth="122.0">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/table/cloudCards/cloud4.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="9.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/table/students/yellowStudent3D.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="33.0" layoutY="73.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/table/students/yellowStudent3D.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="54.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/table/students/yellowStudent3D.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="71.0" layoutY="54.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/table/students/yellowStudent3D.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </left>
 </BorderPane>

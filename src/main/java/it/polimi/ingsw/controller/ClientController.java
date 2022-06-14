@@ -230,6 +230,13 @@ public class ClientController implements ViewObserver, Observer {
                 Shutdown shutdown = (Shutdown) message;
                 view.shutdown(shutdown.getContent());
             }
+            case WINNER_TO_OTHERS -> {
+                WinnerToOthers winnerToOthers = (WinnerToOthers) message;
+                taskQueue.submit(() -> view.showWinnerToOthers(winnerToOthers.getNickname()));
+            }
+            case WINNER -> {
+                taskQueue.submit(view::notifyWinner);
+            }
             case SERVER_UNREACHABLE -> view.showServerUnreachable();
             case ERROR -> {}
             default -> throw new IllegalStateException("Unexpected value: " + message.getMessageType());

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedPlayer;
@@ -11,7 +10,6 @@ import it.polimi.ingsw.observer.Observer;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Handles the communication messages between the server and the client server side, making its methods' invocation
@@ -71,6 +69,16 @@ public class VirtualView implements View, Observer {
     @Override
     public void showServerUnreachable() {
 
+    }
+
+    @Override
+    public void showWinnerToOthers(String winnerNick) {
+        clientHandler.sendMessage(new WinnerToOthers(winnerNick));
+    }
+
+    @Override
+    public void notifyWinner() {
+        clientHandler.sendMessage(new Winner());
     }
 
     @Override

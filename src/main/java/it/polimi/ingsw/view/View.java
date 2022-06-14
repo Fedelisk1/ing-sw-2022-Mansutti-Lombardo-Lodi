@@ -5,10 +5,8 @@ import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedPlayer;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * View interface implemented by the views (cli and gui)
@@ -40,4 +38,6 @@ public interface View {
     void shutdown(String message);
     void showServerUnreachable();
 
+    void showWinnerToOthers(String winnerNick);
+    void notifyWinner();
 }
