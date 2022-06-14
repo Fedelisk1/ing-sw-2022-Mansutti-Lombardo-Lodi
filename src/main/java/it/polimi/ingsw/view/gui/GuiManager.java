@@ -176,7 +176,7 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void askActionPhase3(List<Integer> alloweValues, boolean expert) {
-
+        Platform.runLater(() -> tableController.askActionPhase3(alloweValues));
     }
 
     @Override

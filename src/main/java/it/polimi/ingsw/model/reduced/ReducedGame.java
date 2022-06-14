@@ -69,6 +69,10 @@ public class ReducedGame implements Serializable {
         return characterCards;
     }
 
+    /**
+     * Returns the index (0-indexed) of the island in which MN is currently into.
+     * @return
+     */
     public int getMNPosition() {
         return islands.indexOf(islands.stream().filter(ReducedIsland::isMotherNature).findFirst().get());
     }

@@ -20,16 +20,22 @@
     -fx-background-color: #77c4dc;
 }
 
-.school-dashboard {
-    -fx-background-image: url('../images/table/schoolDashboard.png');
-    -fx-background-size: 500;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center center;
+.assistantButton {
+    -fx-border-width: 1px;
+    -fx-border-color: #3030ff;
+    -fx-padding: 0 0 0 0;
+    -fx-content-display: center;
+    -fx-graphic-text-gap: 10;
+    -fx-background-color: transparent;
 }
 
-.school-dashboard-2nd {
-    -fx-background-image: url('../images/table/schoolDashboard2nd.png');
-    -fx-background-size: 204;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center center;
+.assistantButton:focused {
+    -fx-border-color: #000088;
+    -fx-border-width: 3;
+}
+
+.assistantButton.chosen {
+    -fx-border-color: #000088;
+    -fx-border-style: dotted;
+    -fx-border-width: 3;
 }

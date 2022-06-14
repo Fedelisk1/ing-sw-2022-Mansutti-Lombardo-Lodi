@@ -142,7 +142,7 @@ public class ClientHandler implements Runnable {
 
         for (GameController game : nickControllerMap.values()) {
             //System.out.println("[" + Thread.currentThread().getName() + "] game " + game.getId() + " can be joined: " + game.canBeJoined());
-            if (game.canBeJoined()) {
+            if (game != null && game.canBeJoined()) {
                 availableEmptyGame = true;
                 availableGame = game;
                 nickControllerMap.put(nickname, availableGame);

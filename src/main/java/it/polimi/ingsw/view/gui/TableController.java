@@ -30,11 +30,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class TableController extends ViewObservable implements Initializable {
+    public GridPane handGridPane;
     private ReducedGame game;
     private Phase phase;
     private Color actionPhaseSelectedColor;
-    @FXML
-    public ListView handListView;
     public Text promptText;
     public Button playButton;
     public HBox charactersHBox;
@@ -50,33 +49,41 @@ public class TableController extends ViewObservable implements Initializable {
     private List<Integer> alreadyPlayedCards;
     private GuiManager guiManager;
     private int maxMNSteps;
-
+    private Integer chosenAssisant;
+    private List<Button> handButtons = new ArrayList();
 
     public void setGuiManager(GuiManager guiManager) {
         this.guiManager = guiManager;
     }
 
     public void handlePlayButton(ActionEvent actionEvent) {
-        AssistantCard chosen = (AssistantCard) handListView.getSelectionModel().getSelectedItem();
-
-        if (chosen == null) {
-            showMessage("Please select an Assistant Card!");
+        if(chosenAssisant == null)
             return;
-        }
 
-        notifyObservers(o -> o.onAssistantCardChosen(chosen.getPriority()));
+        notifyObservers(o -> o.onAssistantCardChosen(chosenAssisant));
+
+        handButtons.stream().filter(hb -> hb.getUserData() == chosenAssisant).findFirst().ifPresent(hb -> {
+            hb.getStyleClass().add("chosen");
+        });
+
         playButton.setDisable(true);
+        chosenAssisant = null;
     }
 
     public void askActionPhase1(int count) {
-        showMessage("Action phase 1 - move " + count + ". Please, select a student from the entrance");
         phase = Phase.ACTION_1;
+        showMessage("Action phase 1 - move " + count + ". Please, select a student from the entrance");
     }
 
     public void askActionPhase2(int maxMNStpes) {
         phase = Phase.ACTION_2;
         this.maxMNSteps = maxMNStpes;
         showMessage("Action phase 2: please select the island to move MN to (max " + maxMNStpes + " step(s) allowed).");
+    }
+
+    public void askActionPhase3(List<Integer> alloweValues) {
+        phase = Phase.ACTION_3;
+        showMessage("Action phase 3: please select a cloud Card to refill your School Dashboard's entrance.");
     }
 
     class AssistantListCell extends ListCell<AssistantCard> {
@@ -121,8 +128,8 @@ public class TableController extends ViewObservable implements Initializable {
 
         });
 
-        handListView.setItems(handOL);
-        handListView.setCellFactory((a) -> new AssistantListCell());
+        //handListView.setItems(handOL);
+        //handListView.setCellFactory((a) -> new AssistantListCell());
     }
 
     public void update(ReducedGame game) {
@@ -228,6 +235,7 @@ public class TableController extends ViewObservable implements Initializable {
                 layoutYs = Arrays.asList(33.0, 16.0, 54.0, 73.0);
             }
 
+            int ccIndex = 1;
             for (CloudCard cc : game.getCloudCards()) {
                 long startMillis1 = System.currentTimeMillis();
                 AnchorPane ap = new AnchorPane();
@@ -235,6 +243,8 @@ public class TableController extends ViewObservable implements Initializable {
                 ImageView ccImageView = new ImageView(ccImage);
                 ccImageView.setFitWidth(100.0);
                 ccImageView.setFitHeight(100.0);
+                ccImageView.setUserData(ccIndex);
+                ccImageView.setOnMouseClicked(this::onCloudCardClicked);
 
                 // cc image
                 ap.getChildren().add(ccImageView);
@@ -258,6 +268,8 @@ public class TableController extends ViewObservable implements Initializable {
                 System.out.println("add students to cc took " + (endMillis1-startMillis1));
 
                 cloudCardsHBox.getChildren().add(ap);
+
+                ccIndex++;
             }
             long endMillis = System.currentTimeMillis();
             System.out.println("update cc took " + (endMillis-startMillis));
@@ -409,10 +421,28 @@ public class TableController extends ViewObservable implements Initializable {
             notifyObservers(o -> o.onStudentMovedToIsland(islandIndex + 1, actionPhaseSelectedColor));
             actionPhaseSelectedColor = null;
         } else if (phase == Phase.ACTION_2) {
-            int requestedSteps = islandIndex - game.getMNPosition();
+            int requestedSteps = (islandIndex - game.getMNPosition()) % game.getIslands().size();
+
+            if (islandIndex < game.getMNPosition())
+                requestedSteps = islandIndex + game.getIslands().size() - game.getMNPosition();
+
             System.out.println("move mn island clicked " + requestedSteps + " stpes");
-            if (requestedSteps <= maxMNSteps && requestedSteps >= 1)
-                notifyObservers(o -> o.onMotherNatureMoved(requestedSteps));
+            if (requestedSteps <= maxMNSteps && requestedSteps >= 1) {
+                int finalRequestedSteps = requestedSteps;
+                notifyObservers(o -> o.onMotherNatureMoved(finalRequestedSteps));
+            }
+        }
+    }
+
+    /**
+     * To be performed when the user clicks on a cloud Card.
+     * @param event
+     */
+    private void onCloudCardClicked(MouseEvent event) {
+        ImageView source = (ImageView) event.getSource();
+        int ccIndex = (int) source.getUserData();
+        if (phase == Phase.ACTION_3) {
+            notifyObservers(o -> o.onCloudCardChosen(ccIndex));
         }
     }
 
@@ -512,19 +542,40 @@ public class TableController extends ViewObservable implements Initializable {
     public void askAssistantCard(Map<Integer, Integer> hand, List<Integer> notPlayable) {
         phase = Phase.PLANNING_2;
         showMessage("Please, choose an assistant Card!");
-        playButton.setDisable(false);
-        this.alreadyPlayedCards = notPlayable;
+        chosenAssisant = null;
 
-        if(this.hand.size() == 0)
-            this.hand.putAll(hand);
+        Platform.runLater(() -> {
+            playButton.setDisable(false);
+            handGridPane.getChildren().clear();
+            handButtons.clear();
 
-        Set<Integer> removed = new HashSet<>(this.hand.keySet());
-        Set<Integer> updatedHand = hand.keySet();
-        removed.removeAll(updatedHand); // removed now contains the removed cards from this.hand
+            int i = 0, j = 0; // used to determine row and col for handGidPane (row, col)
+            for (int assistantPri : hand.keySet()) {
+                Button assistantButton = new Button();
+                handButtons.add(assistantButton);
+                assistantButton.setOnAction((e) -> this.chosenAssisant = assistantPri);
+                assistantButton.setUserData(assistantPri);
+                assistantButton.setPrefHeight(104.0);
+                assistantButton.setPrefWidth(71.0);
+                ImageView assistantIV = new ImageView(ImagesUtil.assistantImages.get(assistantPri - 1));
+                assistantIV.setFitHeight(104.0);
+                assistantIV.setFitWidth(71.0);
+                assistantButton.setGraphic(assistantIV);
+                assistantButton.getStyleClass().add("assistantButton");
 
-        for (int removedPri : removed)
-            if (hand.get(removedPri) != null)
-                hand.remove(removedPri);
+                if (notPlayable.contains(assistantPri))
+                    assistantButton.setDisable(true);
+
+                System.out.println("add in " + j + ", " + i);
+                handGridPane.add(assistantButton, j, i);
+
+                j++;
+                if (j == handGridPane.getColumnCount()) {
+                    i++;
+                    j = 0;
+                }
+            }
+        });
     }
 
     public void showMessage(String content) {
