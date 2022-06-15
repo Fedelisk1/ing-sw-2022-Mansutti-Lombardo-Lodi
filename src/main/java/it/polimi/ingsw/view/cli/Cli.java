@@ -423,7 +423,7 @@ public class Cli extends ViewObservable implements View {
     }
 
     @Override
-    public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance) {
+    public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance, int inputCount) {
         EnumMap<Color, Integer> chosenFromCard = new EnumMap<>(Color.class);
         EnumMap<Color, Integer> chosenFromEntrance = new EnumMap<>(Color.class);
         Color chosenColor;
@@ -455,7 +455,7 @@ public class Cli extends ViewObservable implements View {
     }
 
     @Override
-    public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom) {
+    public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom, int inputCount) {
         EnumMap<Color, Integer> chosenFromEntrance = new EnumMap<>(Color.class);
         EnumMap<Color, Integer> chosenFromDiningRoom = new EnumMap<>(Color.class);
         Color chosenColor;

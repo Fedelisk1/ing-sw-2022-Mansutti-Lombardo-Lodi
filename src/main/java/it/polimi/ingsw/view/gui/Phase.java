@@ -5,6 +5,5 @@ public enum Phase {
     ACTION_1,
     ACTION_2,
      ACTION_3,
-
-    CC_CHOOSE_1_TO_ISLAND_INPUT,
+    CHARACTER,
 }

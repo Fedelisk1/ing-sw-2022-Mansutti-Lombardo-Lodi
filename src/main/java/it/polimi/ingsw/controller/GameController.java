@@ -154,6 +154,13 @@ public class GameController implements Observer {
                 CCChoose3ToEntranceReply choose3ToEntranceReply = (CCChoose3ToEntranceReply) message;
                 playCCChoose3ToEntrance(choose3ToEntranceReply.getChosenFromCard(), choose3ToEntranceReply.getChosenFromEntrance());
             }
+            case CC_CHOOSE_3_TO_ENTRANCE_PARTIAL_REPLY -> {
+                CCChoose3ToEntrancePartialReply partialReply = (CCChoose3ToEntrancePartialReply) message;
+                playCCChoose3ToEntrancePartialSwap(partialReply.getChosenFromCard(), partialReply.getChosenFromEntrance(), partialReply.getInputCount());
+            }
+            case CC_CHOOSE_3_TO_ENTRANCE_STOP, CC_EXCHANGE_2_STUDENTS_STOP -> {
+                restoreGameFlow();
+            }
             case CC_CHOOSE_ISLAND_REPLY -> {
                 CCChooseIslandReply ccChooseIslandReply = (CCChooseIslandReply) message;
                 playCCChooseIsland(ccChooseIslandReply.getChosenIsland());
@@ -161,6 +168,10 @@ public class GameController implements Observer {
             case CC_EXCHANGE_2_STUDENTS_REPLY -> {
                 CCExchange2StudentsReply ccExchange2StudentsReply = (CCExchange2StudentsReply) message;
                 playCCExchange2Students(ccExchange2StudentsReply.getChosenFromEntrance(), ccExchange2StudentsReply.getChosenFromDiningRoom());
+            }
+            case CC_EXCHANGE_2_STUDENTS_PARTIAL_REPLY -> {
+                CCExchange2StudentsPartialReply partialReply = (CCExchange2StudentsPartialReply) message;
+                playCCExchange2StudentsPartialSwap(partialReply.getFromEntrance(), partialReply.getFromDiningRoom(), partialReply.getInputCount());
             }
             case CC_NO_ENTRY_ISLAND_REPLY -> {
                 CCNoEntryIslandReply ccNoEntryIslandReply = (CCNoEntryIslandReply) message;
@@ -334,7 +345,7 @@ public class GameController implements Observer {
                 getCurrentPlayerView().askCCChoose1ToIslandInput(card.allowedColors(), game.getIslands().size() + 1);
             }
             case CHOOSE_3_TO_ENTRANCE -> {
-                getCurrentPlayerView().askCCChoose3ToEntranceInput(card.allowedColors(), game.getCurrentPlayerInstance().getSchoolDashboard().entranceAsList());
+                getCurrentPlayerView().askCCChoose3ToEntranceInput(card.allowedColors(), game.getCurrentPlayerInstance().getSchoolDashboard().entranceAsList(), 1);
             }
             case CHOOSE_ISLAND -> {
                 getCurrentPlayerView().askCCChooseIslandInput(game.getIslands().size()  + 1);
@@ -342,7 +353,7 @@ public class GameController implements Observer {
             case EXCHANGE_2_STUDENTS -> {
                 List<Color> entrance = game.getCurrentPlayerInstance().getSchoolDashboard().entranceAsList();
                 List<Color> dr = game.getCurrentPlayerInstance().getSchoolDashboard().diningRoomAsList();
-                getCurrentPlayerView().askCCExchange2StudentsInput(entrance, dr);
+                getCurrentPlayerView().askCCExchange2StudentsInput(entrance, dr, 1);
             }
             case NO_ENTRY_ISLAND -> {
                 getCurrentPlayerView().askCCNoEntryIslandInput(game.getIslands().size());
@@ -400,6 +411,20 @@ public class GameController implements Observer {
         restoreGameFlow();
     }
 
+    private void playCCChoose3ToEntrancePartialSwap(Color fromCard, Color fromEntrance, int inputCount) {
+        Choose3toEntrance card = (Choose3toEntrance) game.getCharacterCard(CharacterCardType.CHOOSE_3_TO_ENTRANCE);
+        card.doPartialEffect(fromCard, fromEntrance);
+
+        if (inputCount < 3) {
+            inputCount++;
+
+            updateViews();
+            getCurrentPlayerView().askCCChoose3ToEntranceInput(card.allowedColors(), game.getCurrentPlayerInstance().getSchoolDashboard().entranceAsList(), inputCount);
+        } else {
+            restoreGameFlow();
+        }
+    }
+
     private void playCCChoose3ToEntrance(EnumMap<Color, Integer> fromCard, EnumMap<Color, Integer> fromEntrance) {
         Choose3toEntrance choose3toEntrance = (Choose3toEntrance) game.getCharacterCard(CharacterCardType.CHOOSE_3_TO_ENTRANCE);
         choose3toEntrance.doEffect(fromCard, fromEntrance);
@@ -419,6 +444,22 @@ public class GameController implements Observer {
         card.doEffect(fromEntrance, fromDiningRoom);
 
         restoreGameFlow();
+    }
+
+    private void playCCExchange2StudentsPartialSwap(Color fromEntrance, Color fromDiningRoom, int inputCount) {
+        Exchange2Students card = (Exchange2Students) game.getCharacterCard(CharacterCardType.EXCHANGE_2_STUDENTS);
+        card.doPartialEffect(fromEntrance, fromDiningRoom);
+
+        if (inputCount < 2) {
+            inputCount++;
+
+            updateViews();
+            List<Color> entrance = game.getCurrentPlayerInstance().getSchoolDashboard().entranceAsList();
+            List<Color> dr = game.getCurrentPlayerInstance().getSchoolDashboard().diningRoomAsList();
+            getCurrentPlayerView().askCCExchange2StudentsInput(entrance, dr, inputCount);
+        } else {
+            restoreGameFlow();
+        }
     }
 
     private void playCCNoEntryIsland(int island) {

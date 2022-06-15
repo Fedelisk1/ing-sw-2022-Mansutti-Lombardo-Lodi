@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.charactercards;
 import it.polimi.ingsw.exceptions.MissingStudentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.SchoolDashboard;
 
 import java.util.EnumMap;
 
@@ -48,5 +49,19 @@ public class Exchange2Students extends CharacterCard {
 
     }
 
+    public void doPartialEffect(Color fromEntrance, Color fromDiningRoom) {
+        SchoolDashboard sd = currentGame.getCurrentPlayerInstance().getSchoolDashboard();
 
+        // remove from entrance
+        sd.getEntrance().merge(fromEntrance, -1, Integer::sum);
+
+        // add to dining room
+        sd.getDiningRoom().merge(fromEntrance, 1, Integer::sum);
+
+        // remove from dining room
+        sd.getDiningRoom().merge(fromDiningRoom, -1, Integer::sum);
+
+        // add to entrance
+        sd.getEntrance().merge(fromDiningRoom, 1, Integer::sum);
+    }
 }

@@ -39,19 +39,6 @@ public class UpdateUtils {
     public final static Image greyTowerImage = new Image("/images/table/towers/grey.png");
     public final static Image whiteTowerImage = new Image("/images/table/towers/white.png");
 
-    public final static Image allRemoveColorImage = new Image("/images/table/characterCards/AllRemoveColor.jpg");
-    public final static Image blockColorOnceImage = new Image("/images/table/characterCards/BlockColorOnce.jpg");
-    public final static Image blockTowerImage = new Image("/images/table/characterCards/BlockTower.jpg");
-    public final static Image choose1DiningRoomImage = new Image("/images/table/characterCards/Choose1DiningRoom.jpg");
-    public final static Image choose1ToIslandImage = new Image("/images/table/characterCards/Choose1ToIsland.jpg");
-    public final static Image choose3toEntranceImage = new Image("/images/table/characterCards/Choose3toEntrance.jpg");
-    public final static Image chooseIslandImage = new Image("/images/table/characterCards/ChooseIsland.jpg");
-    public final static Image exchange2StudentsImage = new Image("/images/table/characterCards/Exchange2Students.jpg");
-    public final static Image noEntryIslandImage = new Image("/images/table/characterCards/NoEntryIsland.jpg");
-    public final static Image plus2InfluenceImage = new Image("/images/table/characterCards/Plus2Influence.jpg");
-    public final static Image tempControlProfImage = new Image("/images/table/characterCards/TempControlProf.jpg");
-    public final static Image twoAdditionalMovesImage = new Image("/images/table/characterCards/TwoAdditionalMoves.jpg");
-
     public final static List<Image> assistantImages = Arrays.asList(
         new Image("/images/table/assistantCards/1.png"),
         new Image("/images/table/assistantCards/2.png"),
@@ -64,6 +51,8 @@ public class UpdateUtils {
         new Image("/images/table/assistantCards/9.png"),
         new Image("/images/table/assistantCards/10.png")
     );
+
+    public static Image coinImage = new Image("/images/table/coin.png");
 
     public static ImageView islandImageView(int islandIndex, EventHandler<MouseEvent> eventEventHandler) {
         ImageView imageView = new ImageView(islandImage);
@@ -200,6 +189,10 @@ public class UpdateUtils {
     }
 
 
-
-
+    public static ImageView coinImageView() {
+        ImageView imageView = new ImageView(coinImage);
+        imageView.setFitHeight(65.5);
+        imageView.setFitWidth(57.2);
+        return imageView;
+    }
 }

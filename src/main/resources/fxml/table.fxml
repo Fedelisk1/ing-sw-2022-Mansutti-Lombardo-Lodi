@@ -8,12 +8,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="952.0" prefWidth="1262.0" styleClass="table-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.TableController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="952.0" prefWidth="1343.0" styleClass="table-bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.TableController">
    <bottom>
       <VBox>
          <children>
@@ -150,6 +149,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
+                  <VBox fx:id="currentPlayerCoins" prefHeight="200.0" prefWidth="100.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="61.0" prefWidth="1155.0">
@@ -161,9 +161,9 @@
       </VBox>
    </bottom>
    <center>
-      <VBox alignment="CENTER" prefHeight="415.0" prefWidth="961.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" maxWidth="520.0" prefHeight="448.0" prefWidth="853.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefHeight="58.0" prefWidth="961.0" spacing="15.0">
+            <HBox alignment="CENTER" prefHeight="58.0" prefWidth="903.0" spacing="15.0">
                <children>
                   <HBox fx:id="unudedProfHBox" alignment="CENTER" spacing="5.0">
                      <children>
@@ -194,12 +194,23 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <HBox fx:id="coinsHBox" layoutX="403.0" layoutY="10.0" />
+                  <HBox fx:id="coinsHBox" layoutX="403.0" layoutY="10.0" prefHeight="58.0" prefWidth="171.0">
+                     <children>
+                        <VBox>
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/table/coin.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                     </children></HBox>
                </children>
             </HBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+            <VBox alignment="CENTER" maxWidth="520.0" prefHeight="300.0" prefWidth="972.0">
                <children>
-                  <HBox fx:id="islandsHBox1" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="islandsHBox1" alignment="CENTER" maxWidth="520.0" prefHeight="150.0" prefWidth="917.0">
                      <children>
                         <AnchorPane prefHeight="150.0" prefWidth="151.0">
                            <children>
@@ -277,7 +288,7 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <HBox fx:id="islandsHBox2" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="islandsHBox2" alignment="CENTER" layoutX="10.0" layoutY="10.0" maxWidth="520.0" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -371,53 +382,30 @@
          </children></HBox>
    </top>
    <right>
-      <VBox fx:id="characterCardsVBox" alignment="CENTER" prefHeight="448.0" prefWidth="161.0" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="characterCardsVBox" alignment="CENTER" prefHeight="667.0" prefWidth="161.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="firstCharacterButton" mnemonicParsing="false" prefHeight="186.0" prefWidth="120.0" styleClass="characterButton">
-               <graphic>
-                  <AnchorPane>
-                     <children>
-                        <ImageView fitHeight="174.0" fitWidth="114.0" layoutX="30.0" pickOnBounds="true" preserveRatio="true" styleClass="characterImage">
+            <AnchorPane prefHeight="178.0" prefWidth="54.0" styleClass="characterAnchorPane">
+               <children>
+                  <Button fx:id="firstCharacterButton" mnemonicParsing="false" prefHeight="186.0" prefWidth="120.0" styleClass="characterAnchorPane">
+                     <graphic>
+                        <ImageView fitHeight="174.0" fitWidth="135.0" layoutX="30.0" pickOnBounds="true" preserveRatio="true" styleClass="characterImage">
                            <image>
                               <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="43.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/table/students/greenStudent3D.png" />
-                           </image>
-                        </ImageView>
-                        <Text fill="WHITE" layoutX="18.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="16.27099609375" />
-                     </children>
-                  </AnchorPane>
-               </graphic>
-            </Button>
-            <Button fx:id="thirdCharacterButton" mnemonicParsing="false" prefHeight="208.0" prefWidth="120.0">
-               <graphic>
-                  <Pane>
-                     <children>
-                        <GridPane layoutY="81.0" prefHeight="65.0" prefWidth="103.0">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                        </GridPane>
-                     </children>
-                  </Pane>
-               </graphic>
-            </Button>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="4.0" layoutY="40.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="24.0" styleClass="stopButton" />
+               </children>
+            </AnchorPane>
+            <Button fx:id="thirdCharacterButton" mnemonicParsing="false" prefHeight="199.0" prefWidth="152.0" />
          </children>
       </VBox>
    </right>
    <left>
-      <VBox fx:id="cloudCardsVBox" alignment="CENTER" prefHeight="448.0" prefWidth="133.0">
+      <VBox fx:id="cloudCardsVBox" alignment="CENTER" prefHeight="448.0" prefWidth="232.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane prefHeight="109.0" prefWidth="122.0">
+            <AnchorPane maxWidth="100.0" prefHeight="109.0" prefWidth="83.0">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                      <image>

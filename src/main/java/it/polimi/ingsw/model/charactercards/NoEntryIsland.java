@@ -16,11 +16,11 @@ public class NoEntryIsland extends CharacterCard {
     }
 
     /**
-     * Set true the boolean noEntryIsland of IslandGroup and decrement availableUses
+     * Set true the boolean noEntryIsland of IslandGroup
      */
     public void doEffect(int islNumb) {
 
-        currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
+        currentGame.getCurrentPlayerInstance().removeCoins(cost);
 
         cost = 3;
 

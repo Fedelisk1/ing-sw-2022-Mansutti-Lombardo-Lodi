@@ -120,6 +120,16 @@ public class ClientController implements ViewObserver, Observer {
     }
 
     @Override
+    public void onCCChoose3ToEntranceSingleInput(Color chosenFromCard, Color chosenFromEntrance, int inputCount) {
+        client.sendMessage(new CCChoose3ToEntrancePartialReply(nickname, chosenFromCard, chosenFromEntrance, inputCount));
+    }
+
+    @Override
+    public void onCCChoose3ToEntranceStop() {
+        client.sendMessage(new CCChoose3ToEntranceStop(nickname));
+    }
+
+    @Override
     public void onCCChooseIslandInput(int chosenIsland) {
         client.sendMessage(new CCChooseIslandReply(nickname, chosenIsland));
     }
@@ -127,6 +137,16 @@ public class ClientController implements ViewObserver, Observer {
     @Override
     public void onCCExchange2StudentsInput(EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom) {
         client.sendMessage(new CCExchange2StudentsReply(nickname, chosenFromEntrance, chosenFromDiningRoom));
+    }
+
+    @Override
+    public void onCCExchange2StudentsSingleInput(Color fromEntrance, Color fromDiningRoom, int inputCount) {
+        client.sendMessage(new CCExchange2StudentsPartialReply(nickname, fromEntrance, fromDiningRoom, inputCount));
+    }
+
+    @Override
+    public void onCCExchange2StudentsStop() {
+        client.sendMessage(new CCExchange2StudentsStop(nickname));
     }
 
     @Override
@@ -208,15 +228,15 @@ public class ClientController implements ViewObserver, Observer {
             }
             case ASK_CC_CHOOSE_3_TO_ENTRANCE_INPUT -> {
                 AskCCChoose3ToEntranceInput ccChoose3ToEntranceInput = (AskCCChoose3ToEntranceInput) message;
-                taskQueue.submit(() -> view.askCCChoose3ToEntranceInput(ccChoose3ToEntranceInput.getAllowedFromCard(), ccChoose3ToEntranceInput.getAllowedFromEntrance()));
+                taskQueue.submit(() -> view.askCCChoose3ToEntranceInput(ccChoose3ToEntranceInput.getAllowedFromCard(), ccChoose3ToEntranceInput.getAllowedFromEntrance(), ccChoose3ToEntranceInput.getInputCount()));
             }
             case ASK_CC_CHOOSE_ISLAND_INPUT -> {
-                AskCCChooseIslandInput askCCChooseIslandInput = (AskCCChooseIslandInput) message;
-                taskQueue.submit(() -> view.askCCChooseIslandInput(askCCChooseIslandInput.getMaxIsland()));
+                AskCCChooseIslandInput msg = (AskCCChooseIslandInput) message;
+                taskQueue.submit(() -> view.askCCChooseIslandInput(msg.getMaxIsland()));
             }
             case ASK_CC_EXCHANGE_2_STUDENTS_INPUT -> {
-                AskCCExchange2StudentsInput askCCExchange2StudentsInput = (AskCCExchange2StudentsInput) message;
-                taskQueue.submit(() -> view.askCCExchange2StudentsInput(askCCExchange2StudentsInput.getEntrance(), askCCExchange2StudentsInput.getDiningRoom()));
+                AskCCExchange2StudentsInput msg = (AskCCExchange2StudentsInput) message;
+                taskQueue.submit(() -> view.askCCExchange2StudentsInput(msg.getEntrance(), msg.getDiningRoom(), msg.getInputCount()));
             }
             case ASK_CC_NO_ENTRY_ISLAND_INPUT -> {
                 AskCCNoEntryIslandInput askCCNoEntryIslandInput = (AskCCNoEntryIslandInput) message;

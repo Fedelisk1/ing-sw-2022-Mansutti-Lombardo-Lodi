@@ -57,7 +57,7 @@ public class Game extends Observable {
         if (expertMode) {
             characterCards = new ArrayList<>();
 
-            extract3CharacterCard();
+            extract3CharacterCards();
         }
 
         currentPlayer = rand.nextInt(players);
@@ -292,7 +292,6 @@ public class Game extends Observable {
                 island.setPlus2Influence_CC(false);
                 return countInfluenceStudents(player, island) + countInfluenceTowers(player, island) + 2;
             } else if (island.getNoEntryTiles() > 0) {
-                island.removeNoEntryTile();
                 return 0;
             } else if (island.isBlockTower_CC()) {
                 island.setBlockTower_CC(false);
@@ -338,12 +337,12 @@ public class Game extends Observable {
 
         Collections.shuffle(res);
 
-        return Arrays.asList(0, 4, 10);
+        return Arrays.asList(3, 4, 5);
 
         //return res.subList(0, CHARACTER_CARDS);
     }
 
-    public void extract3CharacterCard(){
+    public void extract3CharacterCards(){
         // extract 3 random numbers
         List<Integer> extracted = extract3Numbers();
 
@@ -430,6 +429,9 @@ public class Game extends Observable {
 
         if (tiedPlayersCount == 1)
             result = influenceMap.get(maxInfluence).get(0);
+
+        if (islandGroup.isNoEntry())
+            islandGroup.removeNoEntryTile();
 
         return result;
     }

@@ -39,7 +39,7 @@ public class Choose3toEntrance extends CharacterCard {
         EnumMap<Color, Integer> support1 = chosenFromCard.clone();
         EnumMap<Color, Integer> support2 = chosenFromEntrance.clone();
 
-        if (totalNumberofStudent(support1) != totalNumberofStudent(support2))
+        if (totalNumberOfStudents(support1) != totalNumberOfStudents(support2))
             throw new IllegalArgumentException("different number of selected students");
 
 
@@ -53,20 +53,29 @@ public class Choose3toEntrance extends CharacterCard {
             }
 
         }
+
         for (Color c : chosenFromEntrance.keySet()) {
             while (chosenFromEntrance.get(c) > 0) {
                 chosenFromEntrance.put(c, chosenFromEntrance.get(c) - 1);
 
                 students.merge(c, 1, Integer::sum);
-                try {
-                    currentGame.getCurrentPlayerInstance().getSchoolDashboard().removeStudentFromEntrance(c);
-                } catch (MissingStudentException e) {
-                    e.printStackTrace();
-                }
+                currentGame.getCurrentPlayerInstance().getSchoolDashboard().removeStudentFromEntrance(c);
             }
-
-
         }
+    }
+
+    public void doPartialEffect(Color fromCard, Color fromEntrance) {
+        // remove from the card
+        students.merge(fromCard, -1, Integer::sum);
+
+        // add to the entrance
+        currentGame.getCurrentPlayerInstance().getSchoolDashboard().getEntrance().merge(fromCard, 1, Integer::sum);
+
+        // remove from entrance
+        currentGame.getCurrentPlayerInstance().getSchoolDashboard().getEntrance().merge(fromEntrance, -1, Integer::sum);
+
+        // add to card
+        students.merge(fromEntrance, 1, Integer::sum);
     }
 
     public EnumMap<Color, Integer> getStudents() {
@@ -79,7 +88,7 @@ public class Choose3toEntrance extends CharacterCard {
      * @param e is the EnumMap
      * @return total number of students
      */
-    public int totalNumberofStudent(EnumMap<Color, Integer> e) {
+    public int totalNumberOfStudents(EnumMap<Color, Integer> e) {
         int sum = 0;
 
         for (Color c : e.keySet()) {

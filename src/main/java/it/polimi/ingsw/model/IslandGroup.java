@@ -80,6 +80,10 @@ public class IslandGroup {
         return noEntryTiles;
     }
 
+    public boolean isNoEntry() {
+        return noEntryTiles > 0;
+    }
+
     public void setBlockColorOnce_CC(boolean blockColorOnce_CC) {
         this.blockColorOnce_CC = blockColorOnce_CC;
     }

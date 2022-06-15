@@ -183,16 +183,17 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void askCCAllRemoveColorInput() {
+        tableController.askCCAllRemoveColorInput();
     }
 
     @Override
     public void askCCBlockColorOnceInput() {
-
+        tableController.askCCBlockColorOnceInput();
     }
 
     @Override
     public void askCCChoose1DiningRoomInput(List<Color> allowedValues) {
-
+        tableController.askCCChoose1DiningRoomInput();
     }
 
     @Override
@@ -201,23 +202,23 @@ public class GuiManager extends ViewObservable implements View{
     }
 
     @Override
-    public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance) {
-
+    public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance, int inputCount) {
+        tableController.askCCChoose3ToEntranceInput(inputCount);
     }
 
     @Override
     public void askCCChooseIslandInput(int maxIsland) {
-
+        tableController.askCCChooseIslandInput();
     }
 
     @Override
-    public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom) {
-
+    public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom, int inputCount) {
+        tableController.askCCExchange2StudentsInput(inputCount);
     }
 
     @Override
     public void askCCNoEntryIslandInput(int maxIsland) {
-
+        tableController.askCCNoEntryIslandInput();
     }
 
     @Override

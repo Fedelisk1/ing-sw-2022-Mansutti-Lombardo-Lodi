@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedIsland;
 import it.polimi.ingsw.model.reduced.ReducedSchoolDashboard;
 import it.polimi.ingsw.observer.ViewObservable;
+import it.polimi.ingsw.observer.ViewObserver;
 import javafx.application.Platform;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
@@ -23,9 +24,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import static it.polimi.ingsw.view.gui.UpdateUtils.*;
 
@@ -35,6 +38,8 @@ public class TableController extends ViewObservable implements Initializable {
     public VBox cloudCardsVBox;
     public HBox unudedProfHBox;
     public VBox characterCardsVBox;
+    public HBox coinsHBox;
+    public VBox currentPlayerCoins;
     private ReducedGame game;
     private Phase phase;
     private Color actionPhaseSelectedColor;
@@ -57,7 +62,12 @@ public class TableController extends ViewObservable implements Initializable {
     private final List<Button> characterCardButtons = new ArrayList<>();
     private List<Integer> allowedClodCards = new ArrayList<>();
     private List<ImageView> islandsImageViews = new ArrayList<>();
-    private boolean characterCardsInitailized = false;
+    private Set<Integer> activatedCharacterCards = new HashSet<>();
+    private List<ImageView> entranceStudents = new ArrayList<>();
+    private List<ImageView> diningRoomStudents = new ArrayList<>();
+    private Semaphore characterCardUpdateSem;
+    private Semaphore diningRoomUpdateSem;
+
 
     public void setGuiManager(GuiManager guiManager) {
         this.guiManager = guiManager;
@@ -94,12 +104,18 @@ public class TableController extends ViewObservable implements Initializable {
         phase = Phase.ACTION_2;
         this.maxMNSteps = maxMNStpes;
         showMessage("Action phase 2: please select the island to move MN to (max " + maxMNStpes + " step(s) allowed).");
+
+        // allow to play character cards
+        characterCardButtons.forEach(b -> b.setDisable(false));
     }
 
     public void askActionPhase3(List<Integer> alloweValues) {
         phase = Phase.ACTION_3;
         allowedClodCards = alloweValues;
         showMessage("Action phase 3: please select a cloud Card to refill your School Dashboard's entrance.");
+
+        // allow to play character cards
+        characterCardButtons.forEach(b -> b.setDisable(false));
     }
 
     public void showPlayedAssistant(String player, int card) {
@@ -112,35 +128,47 @@ public class TableController extends ViewObservable implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         handGridPane.getChildren().clear();
 
-        //handListView.setItems(handOL);
-        //handListView.setCellFactory((a) -> new AssistantListCell());
+        characterCardUpdateSem = new Semaphore(0);
+        diningRoomUpdateSem = new Semaphore(0);
     }
 
     public void update(ReducedGame game) {
         this.game = game;
 
         if (game.isExpert()) {
-            Platform.runLater(() -> updateCharacterCards(game));
+            Platform.runLater(() -> {
+                updateCharacterCards(game);
+
+                System.out.println("update characters done");
+                characterCardUpdateSem.release();
+            });
         }
 
         // update islands
         Platform.runLater(() -> updateIslands(game));
 
         // update cloud cards
-        Platform.runLater(() -> updateCloudCards(game));
+        Platform.runLater(() -> {
+            updateCloudCards(game);
+        });
 
-        // update schoolDashboards
-        Platform.runLater(() -> updateSchoolDashboards(game) );
+        // update schoolDashboards and coins
+        Platform.runLater(() -> {
+            updateSchoolDashboards(game);
+
+            System.out.println("update dr done");
+            diningRoomUpdateSem.release();
+        });
 
         // update unused professors
         Platform.runLater(() -> updateUnusedProfessors(game));
     }
 
+    /**
+     * Updates the character cards in the view based on the input ReducedGame.
+     * @param game updated state of the game.
+     */
     private void updateCharacterCards(ReducedGame game) {
-        // character Cards are updated only once, at the first update message received
-        if (characterCardsInitailized)
-            return;
-
         // clear mockup
         characterCardsVBox.getChildren().clear();
 
@@ -151,8 +179,6 @@ public class TableController extends ViewObservable implements Initializable {
 
             cardIndex++;
         }
-
-        characterCardsInitailized = true;
     }
 
     /**
@@ -162,12 +188,12 @@ public class TableController extends ViewObservable implements Initializable {
     private void updateIslands(ReducedGame game) {
         islandsHBox1.getChildren().clear();
         islandsHBox2.getChildren().clear();
-        int i = 0;
+        int i = 1;
 
         islandsImageViews.clear();
 
         for (ReducedIsland island : game.getIslands()) {
-            if (i < game.getIslands().size() / 2)
+            if (i <= game.getIslands().size() / 2)
                 addIsland(island, i, islandsHBox1, this::onIslandClicked);
             else
                 addIsland(island, i, islandsHBox2, this::onIslandClicked);
@@ -202,6 +228,7 @@ public class TableController extends ViewObservable implements Initializable {
         int ccIndex = 1;
         for (CloudCard cc : game.getCloudCards()) {
             AnchorPane ap = new AnchorPane();
+            ap.setMaxWidth(100.0);
 
             ImageView ccImageView = UpdateUtils.cloudCardImageView(game.getCloudCards().size());
             ccImageView.setUserData(ccIndex);
@@ -242,6 +269,8 @@ public class TableController extends ViewObservable implements Initializable {
         if (mockup != null)
             topHBox.getChildren().clear();
 
+        entranceStudents.clear();
+
         AnchorPane destAP;
         List<Double> entranceLayoutsX = Arrays.asList(56.0, 21.5, 56.0, 21.5, 56.0, 21.5, 56.0, 21.5, 56.0);
         List<Double> entranceLayoutsY = Arrays.asList(34.5, 76.0, 76.0, 117.0, 117.0, 158.0, 158.0, 198.0, 198.0);;
@@ -258,7 +287,8 @@ public class TableController extends ViewObservable implements Initializable {
         List<Double> towersLayoutsY = Arrays.asList(17.0, 17.0, 58.0, 58.0, 99.0, 99.0, 140.0, 140.0);
 
         for (String nick : game.getSchoolDashboards().keySet()) {
-            if (nick.equals(guiManager.getNickname())) {
+            boolean currentPlayer = nick.equals(guiManager.getNickname());
+            if (currentPlayer) {
                 destAP = currentPlayerSchoolDashboardAP;
                 destAP.getChildren().clear();
                 ImageView sdIV = new ImageView(UpdateUtils.schoolDashboardImage);
@@ -283,6 +313,15 @@ public class TableController extends ViewObservable implements Initializable {
 
                 towersLayoutsX = Arrays.asList(454.0, 498.0, 454.0, 498.0, 454.0, 498.0, 454.0, 498.0);
                 towersLayoutsY = Arrays.asList(17.0, 17.0, 58.0, 58.0, 99.0, 99.0, 140.0, 140.0);
+
+                // coin vbox
+                currentPlayerCoins.getChildren().clear();
+                currentPlayerCoins.setSpacing(10.0);
+                currentPlayerCoins.setAlignment(Pos.CENTER);
+                ImageView coinImageview = UpdateUtils.coinImageView();
+                Text coinsCount = UpdateUtils.islandText(game.getCoins().get(nick));
+                currentPlayerCoins.getChildren().add(coinImageview);
+                currentPlayerCoins.getChildren().add(coinsCount);
             } else
             {
                 VBox vBox = (VBox) topHBox.lookup("#" + nick + "VBox");
@@ -311,6 +350,16 @@ public class TableController extends ViewObservable implements Initializable {
                     ap = new AnchorPane();
                     hBox.getChildren().add(ap);
 
+                    // coin vbox
+                    VBox coinVbox = new VBox();
+                    coinVbox.setSpacing(10.0);
+                    coinVbox.setAlignment(Pos.CENTER);
+                    ImageView coinImageview = UpdateUtils.coinImageView();
+                    Text coinsCount = UpdateUtils.islandText(game.getCoins().get(nick));
+                    coinVbox.getChildren().add(coinImageview);
+                    coinVbox.getChildren().add(coinsCount);
+                    hBox.getChildren().add(coinVbox);
+
                     ap.setId("schoolDashboardAP" + nick);
                 } else {
                     ap = (AnchorPane) topHBox.lookup("#schoolDashboardAP" + nick);
@@ -338,13 +387,16 @@ public class TableController extends ViewObservable implements Initializable {
             }
 
             ReducedSchoolDashboard sd = game.getSchoolDashboards().get(nick);
-            long startMillis1 = System.currentTimeMillis();
 
             // fill entrance
             int i = 0;
             for (Color c : Color.values()) {
                 for (int j = 0; j < sd.getEntrance().getOrDefault(c, 0); j++) {
                     ImageView iv = studentImage(c, scale);
+                    if (currentPlayer) {
+                        iv.setUserData(c);
+                        entranceStudents.add(iv);
+                    }
                     iv.setLayoutX(entranceLayoutsX.get(i));
                     iv.setLayoutY(entranceLayoutsY.get(i));
                     if (nick.equals(guiManager.getNickname())) {
@@ -362,6 +414,10 @@ public class TableController extends ViewObservable implements Initializable {
                 i = 0;
                 for (int j = 0; j < sd.getDiningRoom().getOrDefault(c, 0); j++) {
                     ImageView iv = studentImage(c, scale);
+                    if (currentPlayer) {
+                        iv.setUserData(c);
+                        diningRoomStudents.add(iv);
+                    }
                     iv.setLayoutX(drLayoutXStart + i * drLayoutXDelta);
                     iv.setLayoutY(drLayoutsY.get(c.ordinal()));
                     destAP.getChildren().add(iv);
@@ -434,19 +490,19 @@ public class TableController extends ViewObservable implements Initializable {
      */
     private void onIslandClicked(MouseEvent mouseEvent) {
         ImageView source = (ImageView) mouseEvent.getSource();
-        int islandIndex = (int) source.getUserData(); // 0-indexed island index
+        int islandIndex = (int) source.getUserData(); // 1-indexed island index
 
         switch (phase) {
             case ACTION_1 -> {
                 if (actionPhaseSelectedColor != null) {
-                    notifyObservers(o -> o.onStudentMovedToIsland(islandIndex + 1, actionPhaseSelectedColor));
+                    notifyObservers(o -> o.onStudentMovedToIsland(islandIndex, actionPhaseSelectedColor));
                     actionPhaseSelectedColor = null;
                 }
             } case ACTION_2 -> {
-                int requestedSteps = (islandIndex - game.getMNPosition()) % game.getIslands().size();
+                int requestedSteps = (islandIndex - 1 - game.getMNPosition()) % game.getIslands().size();
 
                 if (islandIndex < game.getMNPosition())
-                    requestedSteps = islandIndex + game.getIslands().size() - game.getMNPosition();
+                    requestedSteps = islandIndex - 1 + game.getIslands().size() - game.getMNPosition();
 
                 if (requestedSteps <= maxMNSteps && requestedSteps >= 1) {
                     int finalRequestedSteps = requestedSteps;
@@ -467,6 +523,9 @@ public class TableController extends ViewObservable implements Initializable {
             if (allowedClodCards.contains(ccIndex)) {
                 // prevent to play character cards when other players are active
                 characterCardButtons.forEach(b -> b.setDisable(true));
+
+                // reset the set of played character cards
+                activatedCharacterCards.clear();
 
                 notifyObservers(o -> o.onCloudCardChosen(ccIndex));
             }
@@ -538,35 +597,41 @@ public class TableController extends ViewObservable implements Initializable {
      * @param card card to create the AnchorPane for.
      * @param cardIndex index of the card in the game.
      * @param eventHandler action event associated with the button inside the AnchorPane.
-     * @return
+     * @return built AnchorPane
      */
     public AnchorPane characterCardAnchorPane(ReducedCharacterCard card, int cardIndex, EventHandler<ActionEvent> eventHandler) {
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.getStyleClass().add("characterAnchorPane");
+        anchorPane.setPrefHeight(174.0);
 
         Button button = new Button();
-        characterCardButtons.add(button);
+        button.getStyleClass().add("characterButton");
+        button.getStyleClass().add(card.getName());
+        if (activatedCharacterCards.contains(cardIndex))
+            button.getStyleClass().add("activated");
         button.setDisable(true);
+        characterCardButtons.add(button);
+        button.setLayoutY(1.0);
         button.setLayoutX(30.0);
         button.setUserData(cardIndex);
         button.setId(card.getName());
         button.setOnAction(eventHandler);
-        button.getStyleClass().add("characterButton");
         anchorPane.getChildren().add(button);
 
         // add tooltip to the button, with the description of the card
         Tooltip tooltip = new Tooltip(card.getDescription());
+        tooltip.setShowDelay(new Duration(1.0));
+        tooltip.setShowDuration(Duration.INDEFINITE);
         button.setTooltip(tooltip);
 
-        ImageView imageView = characterCardImageView(card);
-        button.setGraphic(imageView);
+        /*ImageView imageView = characterCardImageView(card);
+        button.setGraphic(imageView);*/
 
         List<Double> layoutsY = Arrays.asList(0.0, 30.0, 60.0, 90.0, 120.0, 150.0);
+        int i = 0; // used to iterate over layoutsY
 
         // if card has students, attach them to the AnchorPane
         if (card.getStudents().size() > 0) {
-            int i = 0; // used to iterate over layoutsY
-
             for (Color c : Color.values()) {
                 if (card.getStudents().getOrDefault(c, 0) > 0) {
                     attachStudentWithCounter(anchorPane, c, card.getStudents().get(c), 3, layoutsY.get(i), Paint.valueOf("BLACK"), card.getName() + "_" + c.toString());
@@ -577,11 +642,37 @@ public class TableController extends ViewObservable implements Initializable {
 
         // if the card has no entry tiles, attach them to the AnchorPane
         if (card.getNoEntryTiles() > 0) {
-            for (int i = 0; i < card.getNoEntryTiles(); i++) {
+            for (i = 0; i < card.getNoEntryTiles(); i++) {
                 ImageView noEntryImageView = noEntryImageView(24.0);
                 noEntryImageView.setLayoutX(3);
                 noEntryImageView.setLayoutY(layoutsY.get(i));
                 anchorPane.getChildren().add(noEntryImageView);
+            }
+        }
+
+        String cardName = card.getName();
+
+        // for Choose3ToEntrance and Exchange2Students add a Stop button, to be clicked if the user wants to do less than the maximum swaps (3 and 2 respectively)
+        if (cardName.equals("Choose3toEntrance") || cardName.equals("Exchange2Students")) {
+            Button stop = new Button();
+            stop.getStyleClass().add("stopButton");
+            stop.setId(cardName + "_stop");
+            stop.setLayoutX(3);
+            stop.setLayoutY(layoutsY.get(i));
+            anchorPane.getChildren().add(stop);
+        }
+
+        // for AllRemoveColorInput and BlockColorOnce, add a student for every color to allow color input
+        if (cardName.equals("AllRemoveColor") ||
+            cardName.equals("BlockColorOnce")) {
+            i = 0;
+            for (Color c : Color.values()) {
+                ImageView colorImageView = studentImageView(c, 20.0);
+                colorImageView.setId(cardName + "_" + c);
+                colorImageView.setLayoutX(3);
+                colorImageView.setLayoutY(layoutsY.get(i));
+                anchorPane.getChildren().add(colorImageView);
+                i++;
             }
         }
 
@@ -657,8 +748,24 @@ public class TableController extends ViewObservable implements Initializable {
      * @param e
      */
     private void handleCharacterButton(ActionEvent e) {
+        phase = Phase.CHARACTER;
+
         Button source = (Button) e.getSource();
         int cardIndex = (int) source.getUserData();
+
+        source.getStyleClass().add("activated");
+        activatedCharacterCards.add(cardIndex);
+
+        // if phase is ACTION_2, reload the prompt
+        // necessary for TwoAdditionalMoves, to update the maximum steps displayed in the prompt
+        if (phase == Phase.ACTION_2)
+            askActionPhase2(maxMNSteps);
+
+        characterCardUpdateSem.drainPermits();
+        characterCardUpdateSem.release();
+
+        diningRoomUpdateSem.drainPermits();
+        diningRoomUpdateSem.release();
 
         notifyObservers(o -> o.onCCChosen(cardIndex + 1));
      }
@@ -668,7 +775,62 @@ public class TableController extends ViewObservable implements Initializable {
     }
 
     /**
-     * Called when the server accepts the request for Choose1ToIsland CharacterCard
+     * Handles the input to activate AllRemoveColorInput
+     */
+    public void askCCAllRemoveColorInput() {
+        showMessage("Please, select a color from the card");
+
+        for (Color c : Color.values()) {
+            ImageView student = (ImageView) Gui.getStage().getScene().lookup("#AllRemoveColor_" + c);
+
+            if (student != null) {
+                student.setOnMouseClicked((e) -> {
+                    notifyObservers(o -> o.onCCAllRemoveColorInput(c));
+                });
+            }
+        }
+    }
+
+    /**
+     * Handles the input to activate BlockColorOnce
+     */
+    public void askCCBlockColorOnceInput() {
+        showMessage("Please, select a color from the card");
+
+        for (Color c : Color.values()) {
+            ImageView student = (ImageView) Gui.getStage().getScene().lookup("#BlockColorOnce_" + c);
+
+            if (student != null) {
+                student.setOnMouseClicked((e) -> {
+                    notifyObservers(o -> o.onCCBlockColorOnceInput(c));
+                });
+            }
+        }
+    }
+
+    /**
+     * Handles the input to activate Choose1DiningRoom
+     */
+    public void askCCChoose1DiningRoomInput() {
+        showMessage("Please, pick a student from the Character Card");
+
+        for (Color c : Color.values()) {
+            ImageView student = (ImageView) Gui.getStage().getScene().lookup("#Choose1DiningRoom_" + c);
+
+            if (student != null) {
+                // if color c is present in the cc, attach click listener to the student
+                student.setOnMouseClicked((e) -> {
+                    notifyObservers(o -> o.onCCChoose1DiningRoomInput(c));
+
+                    // remove the listener once the color has been chosen
+                    student.setOnMouseClicked(null);
+                });
+            }
+        }
+    }
+
+    /**
+     * Handles the input to activate Choose1ToIsland
      */
     public void askCCChoose1ToIslandInput() {
         showMessage("Please, pick a student from the Character Card");
@@ -685,12 +847,10 @@ public class TableController extends ViewObservable implements Initializable {
                     // replace the islands' click handler
                     islandsImageViews.forEach(i -> {
                         i.setOnMouseClicked((event) -> {
-                            notifyObservers(o -> o.onCCChose1ToIslandInput(c, (int) i.getUserData() + 1));
+                            notifyObservers(o -> o.onCCChose1ToIslandInput(c, (int) i.getUserData()));
 
                             // once the choice is done, roll back to the default click handler
-                            islandsImageViews.forEach(island -> {
-                                island.setOnMouseClicked(this::onIslandClicked);
-                            });
+                            resetIslandsClickHandler();
                         });
                     });
 
@@ -700,5 +860,152 @@ public class TableController extends ViewObservable implements Initializable {
             }
         }
     }
+
+    /**
+     * Handles the input to activate Choose3ToEntrance
+     */
+    public void askCCChoose3ToEntranceInput(int inputCount) {
+        // wait for the character cards to be rendered by the update method
+        System.out.println("wait for characterCardUpdateSem");
+        try {
+            characterCardUpdateSem.acquire();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("characterCardUpdateSem acquired");
+
+        showMessage("[Swap " + inputCount + " of 3] Please, choose a student from the card");
+
+        Button stop = (Button) Gui.getStage().getScene().lookup("#Choose3toEntrance_stop");
+        Tooltip stopTooltip = new Tooltip("Stop (skip next swaps)");
+        stop.setTooltip(stopTooltip);
+        stop.setOnAction(e -> {
+            notifyObservers(ViewObserver::onCCChoose3ToEntranceStop);
+            stop.setOnAction(null);
+            stop.setTooltip(null);
+        });
+
+        for (Color c : Color.values()) {
+            ImageView student = (ImageView) Gui.getStage().getScene().lookup("#Choose3toEntrance_" + c);
+
+            if (student != null) {
+                student.setOnMouseClicked((e) -> {
+                    showMessage("[Swap " + inputCount + " of 3] Please, choose a student in the entrance to swap with the " + c.toString().toLowerCase() + " from the card.");
+
+                    entranceStudents.forEach(es -> {
+                        es.setOnMouseClicked((event) -> {
+                            characterCardUpdateSem.drainPermits();
+
+                            notifyObservers(o -> o.onCCChoose3ToEntranceSingleInput(c, (Color) es.getUserData(), inputCount));
+
+                            if (inputCount == 3) {
+                                stop.setOnAction(null);
+                                stop.setTooltip(null);
+                            }
+
+                            entranceStudents.forEach(es1 -> es1.setOnMouseClicked(null));
+                        });
+                    });
+
+                    student.setOnMouseClicked(null);
+                });
+            }
+        }
+    }
+
+    /**
+     * Handles the input to activate ChooseIsland
+     */
+    public void askCCChooseIslandInput() {
+        showMessage("Please, choose an island on which apply the card");
+
+        islandsImageViews.forEach(island -> {
+            island.setOnMouseClicked((e) -> {
+                notifyObservers(o -> o.onCCChooseIslandInput((int) island.getUserData() - 1));
+
+                // once the choice is done, roll back to the default click handler
+                resetIslandsClickHandler();
+            });
+        });
+    }
+
+    /**
+     * Handles the input to activate Exchange2Students
+     */
+    public void askCCExchange2StudentsInput(int inputCount) {
+        // wait for the character cards to be rendered by the update method
+        System.out.println("waiting for characterCardUpdateSem");
+        try {
+            characterCardUpdateSem.acquire();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("characterCardUpdateSem acquired");
+
+        showMessage("[Swap " + inputCount + " of 2] Please, choose a student from the entrance");
+
+        Button stop = (Button) Gui.getStage().getScene().lookup("#Exchange2Students_stop");
+        Tooltip stopTooltip = new Tooltip("Stop (skip next swap)");
+        stop.setTooltip(stopTooltip);
+        stop.setOnAction(e -> {
+            notifyObservers(ViewObserver::onCCExchange2StudentsStop);
+            stop.setOnAction(null);
+            stop.setTooltip(null);
+        });
+
+        // wait for the school dashboard to be rendered by the update method
+        System.out.println("waiting for diningRoomUpdateSem");
+        try {
+            diningRoomUpdateSem.acquire();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("diningRoomUpdateSem acquired");
+
+        entranceStudents.forEach(es -> {
+            es.setOnMouseClicked(event -> {
+                Color fromEntrance = (Color) es.getUserData();
+                showMessage("[Swap " + inputCount + " of 2] Please, choose a student in the dining room to swap with the " + fromEntrance.toString().toLowerCase() + " from the entrance.");
+
+                diningRoomStudents.forEach(drs -> {
+                    drs.setOnMouseClicked(e -> {
+                        Color fromDining = (Color) drs.getUserData();
+
+                        characterCardUpdateSem.drainPermits();
+                        diningRoomUpdateSem.drainPermits();
+
+                        notifyObservers(o -> o.onCCExchange2StudentsSingleInput(fromEntrance, fromDining, inputCount));
+                    });
+                });
+            });
+        });
+    }
+
+    /**
+     * Handles the input to activate NoEntryIsland
+     */
+    public void askCCNoEntryIslandInput() {
+        showMessage("Please, choose an island on which apply the card");
+
+        islandsImageViews.forEach(island -> {
+            island.setOnMouseClicked((e) -> {
+                notifyObservers(o -> o.onCCNoEntryIslandInput((int) island.getUserData() - 1));
+
+                // once the choice is done, roll back to the default click handler
+                resetIslandsClickHandler();
+            });
+        });
+    }
+
+    /**
+     * Sets this::onIslandClicked as the islands' click handler.
+     * Useful if the click handler needs to be 1-shot overwritten, as in some character cards' input.
+     */
+    private void resetIslandsClickHandler() {
+        islandsImageViews.forEach(island -> {
+            island.setOnMouseClicked(this::onIslandClicked);
+        });
+    }
+
 
 }

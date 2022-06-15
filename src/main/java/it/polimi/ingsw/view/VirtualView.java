@@ -127,8 +127,8 @@ public class VirtualView implements View, Observer {
     }
 
     @Override
-    public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance) {
-        clientHandler.sendMessage(new AskCCChoose3ToEntranceInput(allowedFromCC, allowedFromEntrance));
+    public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance, int inputCount) {
+        clientHandler.sendMessage(new AskCCChoose3ToEntranceInput(allowedFromCC, allowedFromEntrance, inputCount));
     }
 
     @Override
@@ -137,8 +137,8 @@ public class VirtualView implements View, Observer {
     }
 
     @Override
-    public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom) {
-        clientHandler.sendMessage(new AskCCExchange2StudentsInput(entrance, diningRoom));
+    public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom, int inputCount) {
+        clientHandler.sendMessage(new AskCCExchange2StudentsInput(entrance, diningRoom, inputCount));
     }
 
     @Override

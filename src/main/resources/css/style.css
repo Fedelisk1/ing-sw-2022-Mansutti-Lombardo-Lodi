@@ -33,20 +33,48 @@
     -fx-border-width: 3;
 }
 
-.assistantButton.chosen {
+.assistantButton.chosen, .characterButton.activated {
     -fx-border-color: #000088;
     -fx-border-style: dotted;
     -fx-border-width: 3;
 }
 
+.characterButton.activated {
+    -fx-border-width: 4;
+}
+
 .characterAnchorPane {
-    -fx-min-width: 144;
-    -fx-min-height: 174;
+    -fx-pref-width: 144;
+    -fx-max-width: 144;
+    -fx-pref-height: 174;
+    -fx-padding: 0;
 }
 
 .characterButton {
     -fx-pref-height: 174;
     -fx-pref-width: 114;
-    -fx-alignment: center-right;
     -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-size: cover;
+}
+
+.characterButton.AllRemoveColor {-fx-background-image: url("../images/table/characterCards/AllRemoveColor.jpg");}
+.characterButton.BlockColorOnce {-fx-background-image: url("../images/table/characterCards/BlockColorOnce.jpg");}
+.characterButton.BlockTower {-fx-background-image: url("../images/table/characterCards/BlockTower.jpg");}
+.characterButton.Choose1DiningRoom {-fx-background-image: url("../images/table/characterCards/Choose1DiningRoom.jpg");}
+.characterButton.Choose1ToIsland {-fx-background-image: url("../images/table/characterCards/Choose1ToIsland.jpg");}
+.characterButton.Choose3toEntrance {-fx-background-image: url("../images/table/characterCards/Choose3toEntrance.jpg");}
+.characterButton.ChooseIsland {-fx-background-image: url("../images/table/characterCards/ChooseIsland.jpg");}
+.characterButton.Exchange2Students {-fx-background-image: url("../images/table/characterCards/Exchange2Students.jpg");}
+.characterButton.NoEntryIsland {-fx-background-image: url("../images/table/characterCards/NoEntryIsland.jpg");}
+.characterButton.Plus2Influence {-fx-background-image: url("../images/table/characterCards/Plus2Influence.jpg");}
+.characterButton.TempControlProf {-fx-background-image: url("../images/table/characterCards/TempControlProf.jpg");}
+.characterButton.TwoAdditionalMoves {-fx-background-image: url("../images/table/characterCards/TwoAdditionalMoves.jpg");}
+
+.stopButton {
+    -fx-background-image: url("../images/table/stop.jpg");
+    -fx-background-size: cover;
+    -fx-padding: 0;
+    -fx-pref-width: 25;
+    -fx-pref-height: 25;
 }
