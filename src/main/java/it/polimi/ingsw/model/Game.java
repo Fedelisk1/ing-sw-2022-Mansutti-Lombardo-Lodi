@@ -131,26 +131,12 @@ public class Game extends Observable {
         return islands;
     }
 
-    private void printIslands() {
-        int i = 0;
-        for (IslandGroup ig : islands) {
-            System.out.print("Island " + i + " ");
-            if (motherNaturePosition == i)
-                System.out.print("MN");
-            System.out.println();
-            i++;
-        }
-    }
-
     /**
      * Merges the island in the given index with the next one.
      * @param index Index of the first island to merge.
      * @throws IndexOutOfBoundsException When the given index exceeds the maximum index.
      */
     public void mergeIslands(int index) throws IndexOutOfBoundsException {
-        System.out.println("---- before merge" + index  + " with " + (index+1)%islands.size() + " ----");
-        printIslands();
-
         boolean decreaseMNPos = index == getPreviousMotherNaturePosition();
 
         IslandGroup first = islands.get(index);
@@ -166,21 +152,15 @@ public class Game extends Observable {
 
         islands.remove(second);
 
-        System.out.println("index " + index + " mn prevpos " + getPreviousMotherNaturePosition());
         if (decreaseMNPos)
             decreaseMotherNaturePosition();
-
-        System.out.println("---- after merge ----");
-        printIslands();
     }
 
     private void decreaseMotherNaturePosition() {
-        System.out.print("decrease mn pos from " + motherNaturePosition);
         motherNaturePosition -= 1;
 
         if(motherNaturePosition == -1)
             motherNaturePosition = islands.size() - 1;
-        System.out.println("to " + motherNaturePosition);
     }
 
     /**

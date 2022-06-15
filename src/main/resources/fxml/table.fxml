@@ -18,11 +18,7 @@
          <children>
             <HBox alignment="CENTER" spacing="15.0">
                <children>
-                  <ImageView fx:id="currentPlayerAssistant" fitHeight="144.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/table/assistantCards/1.png" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="currentPlayerAssistant" fitHeight="144.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true" />
                   <VBox alignment="TOP_RIGHT" prefHeight="251.0" prefWidth="381.0">
                      <children>
                         <GridPane fx:id="handGridPane" prefHeight="225.0" prefWidth="411.0">
@@ -37,35 +33,6 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
-                           <children>
-                              <Button mnemonicParsing="false" styleClass="assistantButton">
-                                 <graphic>
-                                    <ImageView fitHeight="104.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true" styleClass="assistantImage">
-                                       <image>
-                                          <Image url="@../images/table/assistantCards/1.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button disable="true" mnemonicParsing="false" styleClass="assistantButton" GridPane.columnIndex="1">
-                                 <graphic>
-                                    <ImageView disable="true" fitHeight="103.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/table/assistantCards/2.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button layoutX="109.0" layoutY="14.0" mnemonicParsing="false" styleClass="assistantButton" GridPane.columnIndex="2">
-                                 <graphic>
-                                    <ImageView fitHeight="103.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/table/assistantCards/3.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
                         </GridPane>
                         <Button fx:id="playButton" disable="true" mnemonicParsing="false" onAction="#handlePlayButton" text="Play" />
                      </children>
@@ -194,18 +161,6 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <HBox fx:id="coinsHBox" layoutX="403.0" layoutY="10.0" prefHeight="58.0" prefWidth="171.0">
-                     <children>
-                        <VBox>
-                           <children>
-                              <ImageView fitHeight="150.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/table/coin.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </VBox>
-                     </children></HBox>
                </children>
             </HBox>
             <VBox alignment="CENTER" maxWidth="520.0" prefHeight="300.0" prefWidth="972.0">
@@ -382,25 +337,7 @@
          </children></HBox>
    </top>
    <right>
-      <VBox fx:id="characterCardsVBox" alignment="CENTER" prefHeight="667.0" prefWidth="161.0" spacing="10.0" BorderPane.alignment="CENTER">
-         <children>
-            <AnchorPane prefHeight="178.0" prefWidth="54.0" styleClass="characterAnchorPane">
-               <children>
-                  <Button fx:id="firstCharacterButton" mnemonicParsing="false" prefHeight="186.0" prefWidth="120.0" styleClass="characterAnchorPane">
-                     <graphic>
-                        <ImageView fitHeight="174.0" fitWidth="135.0" layoutX="30.0" pickOnBounds="true" preserveRatio="true" styleClass="characterImage">
-                           <image>
-                              <Image url="@../images/table/characterCards/TwoAdditionalMoves.jpg" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button layoutX="4.0" layoutY="40.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="24.0" styleClass="stopButton" />
-               </children>
-            </AnchorPane>
-            <Button fx:id="thirdCharacterButton" mnemonicParsing="false" prefHeight="199.0" prefWidth="152.0" />
-         </children>
-      </VBox>
+      <VBox fx:id="characterCardsVBox" alignment="CENTER" prefHeight="667.0" prefWidth="161.0" spacing="10.0" BorderPane.alignment="CENTER" />
    </right>
    <left>
       <VBox fx:id="cloudCardsVBox" alignment="CENTER" prefHeight="448.0" prefWidth="232.0" BorderPane.alignment="CENTER">
