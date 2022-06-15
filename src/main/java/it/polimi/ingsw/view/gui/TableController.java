@@ -326,6 +326,7 @@ public class TableController extends ViewObservable implements Initializable {
             {
                 VBox vBox = (VBox) topHBox.lookup("#" + nick + "VBox");
                 AnchorPane ap; // school dashboard AnchorPane
+                VBox coinVbox;
 
                 if (vBox == null) { // if the player's VBox han never been created, create it
                     vBox = new VBox();
@@ -351,19 +352,23 @@ public class TableController extends ViewObservable implements Initializable {
                     hBox.getChildren().add(ap);
 
                     // coin vbox
-                    VBox coinVbox = new VBox();
-                    coinVbox.setSpacing(10.0);
-                    coinVbox.setAlignment(Pos.CENTER);
-                    ImageView coinImageview = UpdateUtils.coinImageView();
-                    Text coinsCount = UpdateUtils.islandText(game.getCoins().get(nick));
-                    coinVbox.getChildren().add(coinImageview);
-                    coinVbox.getChildren().add(coinsCount);
+                    coinVbox = new VBox();
+                    coinVbox.setId(nick + "_coinVbox");
                     hBox.getChildren().add(coinVbox);
 
                     ap.setId("schoolDashboardAP" + nick);
                 } else {
                     ap = (AnchorPane) topHBox.lookup("#schoolDashboardAP" + nick);
+                    coinVbox = (VBox) topHBox.lookup("#" + nick + "_coinVbox");
                 }
+
+                coinVbox.getChildren().clear();
+                coinVbox.setSpacing(10.0);
+                coinVbox.setAlignment(Pos.CENTER);
+                ImageView coinImageview = UpdateUtils.coinImageView();
+                Text coinsCount = UpdateUtils.islandText(game.getCoins().get(nick));
+                coinVbox.getChildren().add(coinImageview);
+                coinVbox.getChildren().add(coinsCount);
 
                 ImageView sdIV = new ImageView(UpdateUtils.schoolDashboardImage);
                 sdIV.setLayoutX(0.0);

@@ -75,8 +75,9 @@ public class Action2State implements GameState{
         if(game.getNextIsland().getOccupiedBy() == winningPlayer)
             game.mergeIslands(game.getMotherNaturePosition());
         //also, if the previous island group is occupied by the same player
-        if(game.getPreviousIsland().getOccupiedBy() == winningPlayer)
-            game.mergeIslands(game.getMotherNaturePosition()-1);
+        if(game.getPreviousIsland().getOccupiedBy() == winningPlayer) {
+            game.mergeIslands(game.getPreviousMotherNaturePosition());
+        }
 
         //if there are 3 or less island groups left, game ends.
         if(game.getIslands().size()<=3)
