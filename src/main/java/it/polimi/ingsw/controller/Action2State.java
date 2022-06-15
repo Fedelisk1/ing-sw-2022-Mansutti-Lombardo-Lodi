@@ -68,6 +68,7 @@ public class Action2State implements GameState{
             winner = winningPlayer;
 
             gameController.notifyWinner(winner);
+            return;
         }
 
         //checks if the next island group in the sequence is occupied by the same player
@@ -83,8 +84,10 @@ public class Action2State implements GameState{
             winner = game.winner();
 
             gameController.notifyWinner(winner);
+            return;
         }
 
+        gameController.updateViews();
         gameController.askActionPhase3();
         gameController.changeState(new Action3State(gameController));
 

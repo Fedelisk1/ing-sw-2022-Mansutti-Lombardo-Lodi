@@ -4,5 +4,7 @@ public enum Phase {
     PLANNING_2,
     ACTION_1,
     ACTION_2,
-    END, ACTION_3
+     ACTION_3,
+
+    CC_CHOOSE_1_TO_ISLAND_INPUT,
 }

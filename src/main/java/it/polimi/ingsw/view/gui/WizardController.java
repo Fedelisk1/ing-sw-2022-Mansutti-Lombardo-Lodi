@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.observer.Observable;
 import it.polimi.ingsw.observer.ViewObservable;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -24,7 +25,12 @@ import static it.polimi.ingsw.model.Wizard.*;
 
 public class WizardController extends ViewObservable implements Initializable {
     public HBox wizardsHBox;
+    public Button kingButton;
+    public Button sorcererButton;
+    public Button pixieButton;
+    public Button wizardButton;
     private List<Wizard> availableWizards;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -37,20 +43,31 @@ public class WizardController extends ViewObservable implements Initializable {
 
         availableWizards = availableWizardsUpdate;
 
-        System.out.println(wizardsHBox.getChildren());
+        System.out.println("removed " + removed);
 
         removed.forEach(r -> {
-            Button toRemove = (Button) Gui.getStage().getScene().lookup("#" + r.toString().toLowerCase() + "Button");
-            wizardsHBox.getChildren().remove(toRemove);
-            System.out.println(wizardsHBox.getChildren());
-        });
-    }
+            Button toRemove = null;
 
-    public void onError() {
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setHeaderText("Wizard already taken");
-        a.setContentText("This wizard has already been taken by another player.");
-        a.show();
+            switch (r) {
+                case KING -> toRemove = kingButton;
+                case PIXIE -> toRemove = pixieButton;
+                case SORCERER -> toRemove = sorcererButton;
+                case WIZARD -> toRemove = wizardButton;
+            }
+
+            Button finalToRemove = toRemove;
+            Platform.runLater(() -> {
+                System.out.println(wizardsHBox.getChildren().contains(finalToRemove));
+
+                finalToRemove.setDisable(true);
+                try {
+                    System.out.println("remove: " + wizardsHBox.getChildren().remove(finalToRemove));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("after remove: " + wizardsHBox.getChildren().contains(finalToRemove));
+            });
+        });
     }
 
     public void handleKingButton(ActionEvent actionEvent) {

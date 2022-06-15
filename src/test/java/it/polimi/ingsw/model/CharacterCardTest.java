@@ -307,9 +307,7 @@ class Choose1DiningRoomTest{
         Choose1DiningRoom p=new Choose1DiningRoom(game);
 
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
-        game.getPlayers().get(0).setCurrentGame(game);
         game.getPlayers().get(0).getSchoolDashboard().setCurrentGame(game);
-        game.getPlayers().get(1).setCurrentGame(game);
         game.getPlayers().get(1).getSchoolDashboard().setCurrentGame(game);
 
         p.getStudents().put(Color.YELLOW,2);
@@ -354,7 +352,6 @@ class AllRemoveColorTest{
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
 
         for(Player g: game.getPlayers()){
-            g.setCurrentGame(game);
             g.getSchoolDashboard().setCurrentGame(game);
         }
 
@@ -390,7 +387,6 @@ class Choose3toEntranceTest{
         Choose3toEntrance p = new Choose3toEntrance(game);
 
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
-        game.getPlayers().get(game.getCurrentPlayer()).setCurrentGame(game);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().setCurrentGame(game);
 
         p.getStudents().put(Color.BLUE, 1);
@@ -492,7 +488,6 @@ class ChooseIslandTest{
 
         for(Player x : game.getPlayers()){
             x.getSchoolDashboard().setCurrentGame(game);
-            x.setCurrentGame(game);
             game.getPlayers().get(0).setCoins(3);
         }
         game.setCurrentPlayer(0);
@@ -529,7 +524,6 @@ class ChooseIslandTest{
         for(Player x : game.getPlayers()){
 
             x.getSchoolDashboard().setCurrentGame(game);
-            x.setCurrentGame(game);
 
         }
         game.getPlayers().get(0).setCoins(3);
@@ -559,7 +553,6 @@ class TempControlProfTest{
 
         for(Player g: game.getPlayers()) {
             g.setCoins(3);
-            g.setCurrentGame(game);
             g.getSchoolDashboard().setCurrentGame(game);
         }
         game.setCurrentPlayer(0);
@@ -589,7 +582,6 @@ class TempControlProfTest{
 
         for(Player g: game.getPlayers()) {
             g.setCoins(3);
-            g.setCurrentGame(game);
             g.getSchoolDashboard().setCurrentGame(game);
         }
         game.setCurrentPlayer(0);

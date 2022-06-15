@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model.reduced;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.SchoolDashboard;
+import it.polimi.ingsw.model.TowerColor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -15,12 +17,15 @@ public class ReducedSchoolDashboard implements Serializable {
     private int towers;
     private EnumMap<Color,Integer> entrance;
     private EnumMap<Color,Integer> diningRoom;
+    private TowerColor towerColor;
 
-    public ReducedSchoolDashboard(SchoolDashboard schoolDashboard) {
+    public ReducedSchoolDashboard(Player player) {
+        SchoolDashboard schoolDashboard = player.getSchoolDashboard();
         professors = schoolDashboard.getProfessors();
         towers = schoolDashboard.getTowers();
         entrance = schoolDashboard.getEntrance();
         diningRoom = schoolDashboard.getDiningRoom();
+        towerColor = player.getTowerColor();
     }
 
     public ArrayList<Color> getProfessors() {
@@ -37,5 +42,9 @@ public class ReducedSchoolDashboard implements Serializable {
 
     public EnumMap<Color, Integer> getDiningRoom() {
         return diningRoom;
+    }
+
+    public TowerColor getTowerColor() {
+        return  towerColor;
     }
 }

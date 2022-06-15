@@ -32,7 +32,7 @@ public class ReducedGame implements Serializable {
         game.getIslands().forEach(islandGroup -> islands.add(new ReducedIsland(game, islandGroup)));
 
         for (Player p : game.getPlayers()) {
-            schoolDashboards.put(p.getNickname(), new ReducedSchoolDashboard(p.getSchoolDashboard()));
+            schoolDashboards.put(p.getNickname(), new ReducedSchoolDashboard(p));
             coins.put(p.getNickname(), p.getCoins());
         }
 

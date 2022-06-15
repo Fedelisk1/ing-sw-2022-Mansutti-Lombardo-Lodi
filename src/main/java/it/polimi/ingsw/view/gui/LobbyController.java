@@ -41,7 +41,6 @@ public class LobbyController implements Initializable {
         int i = players.size();
 
         // firstly remove the spinner
-        System.out.println("remove spinner from vbox" + i);
         VBox vBox = (VBox) Gui.getStage().getScene().lookup("#vBoxPlayer" + i);
         vBox.getChildren().remove(spinners.get(i - 1));
 

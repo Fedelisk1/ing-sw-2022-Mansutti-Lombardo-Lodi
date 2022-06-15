@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedPlayer;
@@ -23,6 +24,8 @@ public class GuiManager extends ViewObservable implements View{
     private final Parent wizardRoot;
     private final Parent lobbyRoot;
     private final Parent tableRoot;
+    private final Parent winnerRoot;
+    private final Parent otherWinnerRoot;
 
     private final ConnectToServerController connectToServerController;
     private final NicknameController nicknameController;
@@ -30,6 +33,8 @@ public class GuiManager extends ViewObservable implements View{
     private final WizardController wizardController;
     private final LobbyController lobbyController;
     private final TableController tableController;
+    private final WinnerController winnerController;
+    private final OtherWinnerController otherWinnerController;
 
     private static Semaphore semaphore;
     private String nickname;
@@ -49,6 +54,8 @@ public class GuiManager extends ViewObservable implements View{
         FXMLLoader wizardLoader = new FXMLLoader(getClass().getResource("/fxml/wizard.fxml"));
         FXMLLoader lobbyLoader = new FXMLLoader(getClass().getResource("/fxml/lobby.fxml"));
         FXMLLoader tableLoader = new FXMLLoader(getClass().getResource("/fxml/table.fxml"));
+        FXMLLoader winnerLoader = new FXMLLoader(getClass().getResource("/fxml/winner.fxml"));
+        FXMLLoader otherWinnerLoader = new FXMLLoader(getClass().getResource("/fxml/otherWinner.fxml"));
 
         try {
             nicknameRoot = nicknameLoader.load();
@@ -56,6 +63,8 @@ public class GuiManager extends ViewObservable implements View{
             wizardRoot = wizardLoader.load();
             lobbyRoot = lobbyLoader.load();
             tableRoot = tableLoader.load();
+            winnerRoot = winnerLoader.load();
+            otherWinnerRoot = otherWinnerLoader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,8 +75,8 @@ public class GuiManager extends ViewObservable implements View{
         wizardController = wizardLoader.getController();
         lobbyController = lobbyLoader.getController();
         tableController = tableLoader.getController();
-
-        System.out.println(tableController);
+        winnerController = winnerLoader.getController();
+        otherWinnerController = otherWinnerLoader.getController();
 
         gameInfoController.setGuiManager(this);
         lobbyController.setGuiManager(this);
@@ -128,16 +137,11 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void showWizardError(List<Wizard> availableWizards) {
-        System.out.println("Wizard error");
         wizardController.setAvailableWizards(availableWizards);
-        wizardController.onError();
     }
 
     @Override
     public void showLobby(List<ReducedPlayer> players, int playersNumber) {
-        System.out.println("show lobby " + players.size() + playersNumber);
-
-
         Platform.runLater(() -> {
             if(! Gui.getStage().getScene().getRoot().equals(lobbyRoot))
                 Gui.getStage().setScene(new Scene(lobbyRoot));
@@ -179,7 +183,6 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void askCCAllRemoveColorInput() {
-
     }
 
     @Override
@@ -194,7 +197,7 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void askCCChoose1ToIslandInput(List<Color> allowedColors, int maxIsland) {
-
+        tableController.askCCChoose1ToIslandInput();
     }
 
     @Override
@@ -234,14 +237,13 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void showWinnerToOthers(String winnerNick) {
-        tableController.showWinnerToOthers(winnerNick);
+        Platform.runLater(() -> {Gui.getStage().setScene(new Scene(otherWinnerRoot));});
     }
 
     @Override
     public void notifyWinner() {
-        tableController.notifyWinner();
+        Platform.runLater(() -> {Gui.getStage().setScene(new Scene(winnerRoot));});
     }
-
 
     public void showTable() {
         Platform.runLater(() -> Gui.getStage().setScene(new Scene(tableRoot)));

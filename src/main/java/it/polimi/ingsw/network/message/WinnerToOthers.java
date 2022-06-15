@@ -14,6 +14,6 @@ public class WinnerToOthers extends Message {
 
     @Override
     public String getNickname() {
-        return super.getNickname();
+        return nick;
     }
 }

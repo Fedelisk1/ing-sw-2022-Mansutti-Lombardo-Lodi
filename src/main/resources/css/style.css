@@ -20,12 +20,11 @@
     -fx-background-color: #77c4dc;
 }
 
-.assistantButton {
+.assistantButton, .characterAnchorPane {
     -fx-border-width: 1px;
     -fx-border-color: #3030ff;
     -fx-padding: 0 0 0 0;
     -fx-content-display: center;
-    -fx-graphic-text-gap: 10;
     -fx-background-color: transparent;
 }
 
@@ -38,4 +37,16 @@
     -fx-border-color: #000088;
     -fx-border-style: dotted;
     -fx-border-width: 3;
+}
+
+.characterAnchorPane {
+    -fx-min-width: 144;
+    -fx-min-height: 174;
+}
+
+.characterButton {
+    -fx-pref-height: 174;
+    -fx-pref-width: 114;
+    -fx-alignment: center-right;
+    -fx-background-color: transparent;
 }

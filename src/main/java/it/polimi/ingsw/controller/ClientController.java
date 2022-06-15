@@ -240,7 +240,6 @@ public class ClientController implements ViewObserver, Observer {
             case SERVER_UNREACHABLE -> view.showServerUnreachable();
             case ERROR -> {}
             default -> throw new IllegalStateException("Unexpected value: " + message.getMessageType());
-
         }
     }
 }

@@ -15,10 +15,11 @@ public class Player {
     private Game currentGame;
     private int count;
     private Wizard wizard;
+    private TowerColor towerColor;
 
 
     /** each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
-    public Player()
+    public Player(Game currentGame)
     {
         hand = new Hand();
         schoolDashboard = new SchoolDashboard();
@@ -27,6 +28,15 @@ public class Player {
             schoolDashboard.getDiningRoom().put(c, 0);
 
         discardPile = new ArrayList<>();
+
+        this.currentGame = currentGame;
+
+        Set<TowerColor> unusedColors = currentGame.getUnusedTowers();
+        unusedColors.stream().findFirst().ifPresent(tc -> towerColor = tc);
+    }
+
+    public TowerColor getTowerColor() {
+        return towerColor;
     }
 
     public void setWizard(Wizard wizard) {
@@ -48,11 +58,6 @@ public class Player {
     public void addCoins(){
         coins=getCoins()+1;
         currentGame.decreaseTotalCoins();
-    }
-
-    public void setCurrentGame(Game game)
-    {
-        this.currentGame=game;
     }
 
     public int getCardValue()

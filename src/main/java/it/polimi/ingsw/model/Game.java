@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.charactercards.*;
 import it.polimi.ingsw.observer.Observable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game extends Observable {
     private final EnumMap<Color, Integer> bag;
@@ -73,8 +74,7 @@ public class Game extends Observable {
     }
 
     public void addPlayer(String nickname) {
-        Player p = new Player();
-        p.setCurrentGame(this);
+        Player p = new Player(this);
         p.getSchoolDashboard().setCurrentGame(this);
         p.getSchoolDashboard().setUp();
         p.setNickname(nickname);
@@ -510,4 +510,11 @@ public class Game extends Observable {
             return characterCards.get(index);
     }
 
+    /**
+     * @return Set containing the TowerColors not yet assigned to any player
+     */
+    public Set<TowerColor> getUnusedTowers() {
+        Set<TowerColor> usedColors = players.stream().map(Player::getTowerColor).collect(Collectors.toSet());
+        return Arrays.stream(TowerColor.values()).filter(tc -> !usedColors.contains(tc)).collect(Collectors.toSet());
+    }
 }
