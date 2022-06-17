@@ -484,7 +484,8 @@ public class GameController implements Observer {
     public void askActionPhase1() {
         if(state instanceof Action1State) {
             int action1Moves = ((Action1State) state).getMovesCount();
-            if (action1Moves <= 3) {
+            //modifico 3 e metto 4
+            if (action1Moves <= 4) {
                 getCurrentPlayerView().askActionPhase1(action1Moves, game.getIslands().size(), getGame().isExpertMode());
                 broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 1, move " + action1Moves + ")...");
             }

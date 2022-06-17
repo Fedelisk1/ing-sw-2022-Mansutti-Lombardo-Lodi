@@ -204,6 +204,7 @@ public class Cli extends ViewObservable implements View {
         playable.forEach(card -> System.out.println("Card priority: " + card + " - Max MN steps: " + hand.get(card)));
 
         int chosenCard = intInput(playable, "Please, choose an assistant card (enter card priority): ");
+
         notifyObservers(o -> o.onAssistantCardChosen(chosenCard));
     }
 
