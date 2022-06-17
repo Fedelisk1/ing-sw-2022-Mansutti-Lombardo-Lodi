@@ -7,7 +7,7 @@ import it.polimi.ingsw.observer.Observable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Game extends Observable {
+public class Game {
     private final EnumMap<Color, Integer> bag;
     private int motherNaturePosition = 0;
     private final int MAX_ISLANDS = 12;
@@ -75,7 +75,6 @@ public class Game extends Observable {
 
     public void addPlayer(String nickname) {
         Player p = new Player(this);
-        p.getSchoolDashboard().setCurrentGame(this);
         p.getSchoolDashboard().setUp();
         p.setNickname(nickname);
         if (expertMode)
@@ -167,14 +166,14 @@ public class Game extends Observable {
      * method extract from bag: it converts possible keys into numbers and extracts one of them by
      * decreasing the number from bag and increasing to extracted.
      * If there are not enough students throw IllegalArgumentException
-     * @param student describes how many students we need to extract
+     * @param quantity describes how many students we need to extract
      * @return a new EnumMap with the extracted students
      */
 
-    public EnumMap<Color,Integer> extractFromBag(int student) {
+    public EnumMap<Color, Integer> extractFromBag(int quantity) {
         EnumMap<Color,Integer> extracted = new EnumMap<>(Color.class);
-        if(studentsInBag()>0 && studentsInBag()>=student){
-            for (int i = 0; i < student; i++) {
+        if(studentsInBag()>0 && studentsInBag()>=quantity){
+            for (int i = 0; i < quantity; i++) {
 
                 int extractColor = new Random().nextInt(bag.values().size());
 

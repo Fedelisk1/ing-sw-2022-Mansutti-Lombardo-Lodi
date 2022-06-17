@@ -22,7 +22,7 @@ public class Player {
     public Player(Game currentGame)
     {
         hand = new Hand();
-        schoolDashboard = new SchoolDashboard();
+        schoolDashboard = new SchoolDashboard(currentGame);
 
         for(Color c: Color.values())
             schoolDashboard.getDiningRoom().put(c, 0);

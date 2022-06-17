@@ -12,10 +12,17 @@ public class SchoolDashboard {
     private Game currentGame;
 
 
-    SchoolDashboard()
+    SchoolDashboard(Game currentGame)
     {
         professors= new ArrayList<>();
-        towers = 8;
+
+        this.currentGame = currentGame;
+
+        if(currentGame.getMaxPlayers() == 2)
+            towers = 8;
+        else
+            towers = 6;
+
         entrance = new EnumMap<>(Color.class);
         diningRoom = new EnumMap<>(Color.class);
 
@@ -25,13 +32,11 @@ public class SchoolDashboard {
         });
     }
 
-    public void setUp()
-    {
-        entrance=currentGame.extractFromBag(7);
-    }
-
-    public void setCurrentGame(Game currentGame) {
-        this.currentGame = currentGame;
+    public void setUp() {
+        if (currentGame.getMaxPlayers() == 2)
+            entrance = currentGame.extractFromBag(7);
+        else
+            entrance = currentGame.extractFromBag(9);
     }
 
     public void addTowers(int n)

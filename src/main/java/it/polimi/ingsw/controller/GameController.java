@@ -42,7 +42,6 @@ public class GameController implements Observer {
     public void addPlayer(String nickname, VirtualView virtualView) {
         nickVirtualViewMap.put(nickname, virtualView);
         game.addPlayer(nickname);
-        game.addObserver(virtualView);
     }
 
     /**
