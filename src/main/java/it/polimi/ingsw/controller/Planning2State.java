@@ -44,22 +44,25 @@ public class Planning2State implements GameState{
 
         playedAssistants.add(chosenPriority);
 
-        if(count == game.getMaxPlayers() - 1) {
-            game.setCurrentPlayer(0);
-            playedAssistants.clear();
-            count = 1;
-        } else {
-            game.setCurrentPlayer((game.getCurrentPlayer() + 1) % game.getMaxPlayers());
+            if (count == game.getMaxPlayers() - 1){
+                game.setCurrentPlayer(0);
+                playedAssistants.clear();
+                // !!!! perchè questo count = 1 a che serve?
+                //count = 1;
+            } else {
+                game.setCurrentPlayer((game.getCurrentPlayer() + 1) % game.getMaxPlayers());
 
-            // in case the player has only cards that have already been played, let him play anyway
-            if (playedAssistants.equals(game.getCurrentPlayerInstance().getHand().getAssistantCardsAsList()))
-                gameController.askAssistantCard(null);
-            else
-                gameController.askAssistantCard(playedAssistants);
-        }
+                // in case the player has only cards that have already been played, let him play anyway
+                if (playedAssistants.equals(game.getCurrentPlayerInstance().getHand().getAssistantCardsAsList()))
+                    gameController.askAssistantCard(null);
+                else
+                    gameController.askAssistantCard(playedAssistants);
+            }
+
 
         //if all players have chosen an assistant card, it sets the current player to the player that has chosen the card
         //with the least value and changes state
+
         if(count == game.getMaxPlayers() - 1) {
             int position = 0;
             for (int i = 1; i < game.getPlayers().size(); i++) {
