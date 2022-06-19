@@ -63,22 +63,7 @@ class Choose1ToIslandTest{
         assertEquals(4,sum);
 
     }
-    @Test
-    public void doEffectShouldThrowRuntimeExceptionWhenNullTest(){
-        Game game = new Game(2, true);
 
-        Choose1ToIsland p = new Choose1ToIsland(game);
-
-        EnumMap<Color, Integer> extractedFromBag= new EnumMap<>(Color.class);
-        extractedFromBag.put(Color.BLUE,4);
-        Color choosen= Color.YELLOW;
-        int isl=1;
-
-        Assertions.assertThrows(IllegalArgumentException.class , () -> {p.doEffect(choosen,isl);});
-        System.out.println("AssertThrows");
-
-
-    }
     @Test
     public void testInit(){
         Game game = new Game(2, true);
@@ -132,17 +117,15 @@ class NoEntryIslandTest{
 
         assertEquals(2,p.getCost());
 
-        assertEquals(false,game.getIslands().get(islNumb).getNoEntryTiles());
+        assertEquals(0,game.getIslands().get(islNumb).getNoEntryTiles());
         p.doEffect(islNumb);
-        assertEquals(true,game.getIslands().get(islNumb).getNoEntryTiles());
+        assertEquals(1,game.getIslands().get(islNumb).getNoEntryTiles());
         assertEquals(0,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(islNumb)));
-        assertEquals(false,game.getIslands().get(islNumb).getNoEntryTiles());
+        assertEquals(0,game.getIslands().get(islNumb).getNoEntryTiles());
         assertEquals(3,p.getNoEntryTiles());
         assertEquals(3,p.getCost());
 
     }
-
-
 }
 
 class BlockTowerTest{
@@ -307,8 +290,8 @@ class Choose1DiningRoomTest{
         Choose1DiningRoom p=new Choose1DiningRoom(game);
 
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
-        game.getPlayers().get(0).getSchoolDashboard().setCurrentGame(game);
-        game.getPlayers().get(1).getSchoolDashboard().setCurrentGame(game);
+        //game.getPlayers().get(0).getSchoolDashboard().setCurrentGame(game);
+        //game.getPlayers().get(1).getSchoolDashboard().setCurrentGame(game);
 
         p.getStudents().put(Color.YELLOW,2);
         p.getStudents().put(Color.RED,2);
@@ -351,9 +334,6 @@ class AllRemoveColorTest{
         AllRemoveColor p= new AllRemoveColor(game);
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
 
-        for(Player g: game.getPlayers()){
-            g.getSchoolDashboard().setCurrentGame(game);
-        }
 
         for(int i=0;i<4;i++)
             game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
@@ -385,21 +365,21 @@ class Choose3toEntranceTest{
         game.addPlayer("p2");
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         Choose3toEntrance p = new Choose3toEntrance(game);
-
         game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
-        game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().setCurrentGame(game);
 
+        p.clear();
+
+        //manual card init
         p.getStudents().put(Color.BLUE, 1);
         p.getStudents().put(Color.RED, 2);
         p.getStudents().put(Color.YELLOW, 1);
         p.getStudents().put(Color.GREEN, 2);
 
-
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.BLUE);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.PINK);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.PINK);
 
-
+        //manual input init
         EnumMap<Color, Integer> fromCard = new EnumMap<>(Color.class);
         fromCard.put(Color.GREEN, 1);
         fromCard.put(Color.YELLOW, 1);
@@ -408,30 +388,24 @@ class Choose3toEntranceTest{
         fromEntrance.put(Color.BLUE, 1);
         fromEntrance.put(Color.PINK, 2);
 
-            int sum1 = 0;
-            for (Color c : p.getStudents().keySet())
-                sum1 = sum1 + p.getStudents().get(c);
+        //init verification
+        EnumMap<Color, Integer> support1 = p.getStudents().clone();
+        assertEquals(6, p.totalNumberOfStudents(support1));
 
-            assertEquals(6, sum1);
+        p.doEffect(fromCard, fromEntrance);
 
-            p.doEffect(fromCard, fromEntrance);
-
-            int sum2 = 0;
-
-            for (Color c : p.getStudents().keySet())
-                sum2 = sum2 + p.getStudents().get(c);
-
-            //verifica della carta
-            assertEquals(6, sum2);
+        //card verification after the effect
+        EnumMap<Color, Integer> support2 = p.getStudents().clone();
+        assertEquals(6, p.totalNumberOfStudents(support2));
             assertEquals(2, p.getStudents().get(Color.BLUE));
             assertEquals(1, p.getStudents().get(Color.GREEN));
             assertEquals(1, p.getStudents().get(Color.RED));
             assertEquals(2, p.getStudents().get(Color.PINK));
 
-            //verifica dell'ingresso
-            assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.RED));
-            assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.YELLOW));
-            assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.GREEN));
+        //entrance verification after the effect
+        assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.RED));
+        assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.YELLOW));
+        assertEquals(1, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().get(Color.GREEN));
 
     }
     @Test
@@ -455,7 +429,6 @@ class Choose3toEntranceTest{
         support1 = fromCard.clone();
         support2 = fromEntrance.clone();
 
-        System.out.println("Throw");
         Assertions.assertThrows(IllegalArgumentException.class , () -> p.doEffect(fromCard, fromEntrance));
 
 
@@ -486,10 +459,10 @@ class ChooseIslandTest{
         game.addPlayer("player1");
         game.addPlayer("player2");
 
-        for(Player x : game.getPlayers()){
-            x.getSchoolDashboard().setCurrentGame(game);
-            game.getPlayers().get(0).setCoins(3);
-        }
+        //for(Player x : game.getPlayers()){
+        //    x.getSchoolDashboard().setCurrentGame(game);
+         //   game.getPlayers().get(0).setCoins(3);
+        //}
         game.setCurrentPlayer(0);
 
         //isola occupata 2 dal giocatore 1 decremento torri
@@ -521,11 +494,11 @@ class ChooseIslandTest{
 
         ChooseIsland p= new ChooseIsland(game);
 
-        for(Player x : game.getPlayers()){
+        //for(Player x : game.getPlayers()){
 
-            x.getSchoolDashboard().setCurrentGame(game);
+            //x.getSchoolDashboard().setCurrentGame(game);
 
-        }
+        //}
         game.getPlayers().get(0).setCoins(3);
         game.setCurrentPlayer(0);
 
@@ -551,10 +524,10 @@ class TempControlProfTest{
 
         TempControlProf p= new TempControlProf(game);
 
-        for(Player g: game.getPlayers()) {
-            g.setCoins(3);
-            g.getSchoolDashboard().setCurrentGame(game);
-        }
+        //for(Player g: game.getPlayers()) {
+        //    g.setCoins(3);
+        //    g.getSchoolDashboard().setCurrentGame(game);
+        //}
         game.setCurrentPlayer(0);
         game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
         game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);
@@ -582,7 +555,7 @@ class TempControlProfTest{
 
         for(Player g: game.getPlayers()) {
             g.setCoins(3);
-            g.getSchoolDashboard().setCurrentGame(game);
+            //g.getSchoolDashboard().setCurrentGame(game);
         }
         game.setCurrentPlayer(0);
         game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.RED);

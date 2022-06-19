@@ -84,7 +84,7 @@ public class Action1State implements GameState{
         return movesCount;
     }
 
-    //    @Override
+//    @Override
 //    public void ccBlockColorOnce(Color color)
 //    {
 //        BlockColorOnce chosenCard = (BlockColorOnce) game.getCharacterCards().get(cardPosition);

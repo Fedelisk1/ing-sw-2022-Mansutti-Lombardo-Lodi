@@ -32,7 +32,6 @@ public class Gui extends Application {
         stage.setScene(new Scene(root));
         connectToServerController = connectLoader.getController();
         stage.show();
-
         GuiManager.getSemaphore().release();
 
 /*

@@ -13,14 +13,16 @@ class SchoolDashboardTest
     @BeforeEach
     public void setUp()
     {
-        game = new Game(3, true);
+        game = new Game(2, true);
         game.addPlayer("p1");
         game.addPlayer("p2");
         game.addPlayer("p3");
+
     }
     @Test
     public void RemoveTowersTest()
     {
+
         game.getPlayers().get(1).getSchoolDashboard().removeTowers(3);
         Assertions.assertEquals(5, game.getPlayers().get(1).getSchoolDashboard().getTowers());
     }
@@ -28,6 +30,7 @@ class SchoolDashboardTest
     @Test
     public void addTowersTest()
     {
+
         game.getPlayers().get(1).getSchoolDashboard().removeTowers(3);
         game.getPlayers().get(1).getSchoolDashboard().addTowers(1);
         Assertions.assertEquals(6, game.getPlayers().get(1).getSchoolDashboard().getTowers());
@@ -107,6 +110,7 @@ class SchoolDashboardTest
         //one yellow student is added to player 1 dining room
         game.setCurrentPlayer(1);
 
+
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getEntrance().clear();
         game.getPlayers().get(1).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
 
@@ -115,6 +119,7 @@ class SchoolDashboardTest
 
         //2 yellow students are added to player 2 dining room, professor is now moved to player2
         game.setCurrentPlayer(2);
+        game.getCurrentPlayerInstance().setCoins(0);
         game.getPlayers().get(2).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
         Assertions.assertFalse(game.getPlayers().get(2).getSchoolDashboard().getProfessors().contains(Color.YELLOW));
         game.getPlayers().get(2).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);

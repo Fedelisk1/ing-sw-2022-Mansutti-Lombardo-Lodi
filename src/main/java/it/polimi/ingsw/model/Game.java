@@ -307,6 +307,7 @@ public class Game {
                 island.setPlus2Influence_CC(false);
                 return countInfluenceStudents(player, island) + countInfluenceTowers(player, island) + 2;
             } else if (island.getNoEntryTiles() > 0) {
+                island.removeNoEntryTile();
                 return 0;
             } else if (island.isBlockTower_CC()) {
                 island.setBlockTower_CC(false);

@@ -44,22 +44,22 @@ public class Choose3toEntrance extends CharacterCard {
 
 
         for (Color c : chosenFromCard.keySet()) {
-
             while (chosenFromCard.get(c) > 0) {
 
                 chosenFromCard.put(c, chosenFromCard.get(c) - 1);
                 students.put(c, students.get(c) - 1);
                 currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(c);
-            }
 
+            }
         }
 
         for (Color c : chosenFromEntrance.keySet()) {
             while (chosenFromEntrance.get(c) > 0) {
-                chosenFromEntrance.put(c, chosenFromEntrance.get(c) - 1);
 
+                chosenFromEntrance.put(c, chosenFromEntrance.get(c) - 1);
                 students.merge(c, 1, Integer::sum);
                 currentGame.getCurrentPlayerInstance().getSchoolDashboard().removeStudentFromEntrance(c);
+
             }
         }
     }
@@ -84,6 +84,7 @@ public class Choose3toEntrance extends CharacterCard {
 
     /**
      * Calculate the total number of students
+     * !! it empties the enumMap
      *
      * @param e is the EnumMap
      * @return total number of students
@@ -91,13 +92,23 @@ public class Choose3toEntrance extends CharacterCard {
     public int totalNumberOfStudents(EnumMap<Color, Integer> e) {
         int sum = 0;
 
-        for (Color c : e.keySet()) {
-            while (e.get(c) > 0) {
-                e.put(c, e.get(c) - 1);
-                sum++;
+        for (Color c : Color.values()) {
+            if(e.containsKey(c)) {
+                while (e.get(c) > 0) {
+                    e.put(c, e.get(c) - 1);
+                    sum++;
+                }
             }
         }
         return sum;
+    }
+    public void clear(){
+        for(Color c: Color.values()){
+            if(students.containsKey(c))
+            while(students.get(c)>0)
+                students.put(c,0);
+            else students.put(c,0);
+        }
     }
 
 }

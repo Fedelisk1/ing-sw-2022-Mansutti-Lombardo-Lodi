@@ -59,7 +59,6 @@ public class Planning2State implements GameState{
                     gameController.askAssistantCard(playedAssistants);
             }
 
-
         //if all players have chosen an assistant card, it sets the current player to the player that has chosen the card
         //with the least value and changes state
 

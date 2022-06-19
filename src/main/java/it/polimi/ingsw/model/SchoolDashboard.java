@@ -277,4 +277,8 @@ public class SchoolDashboard {
         res.put("professors", profMap);
         return res;
     }
+
+    public void setTowers(int towers) {
+        this.towers = towers;
+    }
 }
