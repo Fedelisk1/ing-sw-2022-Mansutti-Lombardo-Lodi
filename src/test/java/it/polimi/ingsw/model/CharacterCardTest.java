@@ -121,6 +121,7 @@ class NoEntryIslandTest{
         p.doEffect(islNumb);
         assertEquals(1,game.getIslands().get(islNumb).getNoEntryTiles());
         assertEquals(0,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(islNumb)));
+        game.playerWithHigherInfluence(game.getIslands().get(islNumb));
         assertEquals(0,game.getIslands().get(islNumb).getNoEntryTiles());
         assertEquals(3,p.getNoEntryTiles());
         assertEquals(3,p.getCost());
@@ -389,14 +390,12 @@ class Choose3toEntranceTest{
         fromEntrance.put(Color.PINK, 2);
 
         //init verification
-        EnumMap<Color, Integer> support1 = p.getStudents().clone();
-        assertEquals(6, p.totalNumberOfStudents(support1));
+        assertEquals(6, p.totalNumberOfStudents(p.getStudents()));
 
         p.doEffect(fromCard, fromEntrance);
 
         //card verification after the effect
-        EnumMap<Color, Integer> support2 = p.getStudents().clone();
-        assertEquals(6, p.totalNumberOfStudents(support2));
+        assertEquals(6, p.totalNumberOfStudents(p.getStudents()));
             assertEquals(2, p.getStudents().get(Color.BLUE));
             assertEquals(1, p.getStudents().get(Color.GREEN));
             assertEquals(1, p.getStudents().get(Color.RED));

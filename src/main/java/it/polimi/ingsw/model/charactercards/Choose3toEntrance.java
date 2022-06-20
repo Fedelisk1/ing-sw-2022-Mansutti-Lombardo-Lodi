@@ -36,10 +36,8 @@ public class Choose3toEntrance extends CharacterCard {
         currentGame.getCurrentPlayerInstance().removeCoins(cost);
 
         cost = 2;
-        EnumMap<Color, Integer> support1 = chosenFromCard.clone();
-        EnumMap<Color, Integer> support2 = chosenFromEntrance.clone();
 
-        if (totalNumberOfStudents(support1) != totalNumberOfStudents(support2))
+        if (totalNumberOfStudents(chosenFromCard) != totalNumberOfStudents(chosenFromEntrance))
             throw new IllegalArgumentException("different number of selected students");
 
 
@@ -83,14 +81,14 @@ public class Choose3toEntrance extends CharacterCard {
     }
 
     /**
-     * Calculate the total number of students
-     * !! it empties the enumMap
+     * Calculate the total number of students in the EnumMap
      *
-     * @param e is the EnumMap
+     * @param k is the EnumMap
      * @return total number of students
      */
-    public int totalNumberOfStudents(EnumMap<Color, Integer> e) {
+    public int totalNumberOfStudents(EnumMap<Color, Integer> k) {
         int sum = 0;
+        EnumMap<Color, Integer> e = k.clone();
 
         for (Color c : Color.values()) {
             if(e.containsKey(c)) {
