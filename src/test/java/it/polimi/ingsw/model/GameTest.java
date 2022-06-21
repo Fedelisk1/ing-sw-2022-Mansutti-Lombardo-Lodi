@@ -164,5 +164,18 @@ class GameTest {
 
 
    }
+   @Test
+   public void testPlayerWithHigherInfluenze(){
+        g=new Game(2,false);
+        g.addPlayer("fede");
+        g.addPlayer("pietro");
+        //g.addPlayer("ico");
+
+        System.out.println(g.getPlayers().get(0));
+        System.out.println(g.getPlayers().get(1));
+        //System.out.println(g.getPlayers().get(2));
+        g.setCurrentPlayer(1);
+        g.playerWithHigherInfluence(g.getIslands().get(2));
+   }
 
 }

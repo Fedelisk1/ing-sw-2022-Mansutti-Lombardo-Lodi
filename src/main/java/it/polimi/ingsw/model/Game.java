@@ -23,6 +23,12 @@ public class Game {
     private final boolean expertMode;
     private final int maxPlayers;
 
+    private boolean blockColorOnce;
+    private Color blockedColor;
+    private boolean plus2Influence;
+    private boolean blockTower;
+    private int count;
+
 
     public Game(int players, boolean expertMode) {
         Random rand = new Random();
@@ -289,6 +295,14 @@ public class Game {
         return cloudCards;
     }
 
+    public void setBlockColorOnce(boolean blockColorOnce) {
+        this.blockColorOnce = blockColorOnce;
+    }
+
+    public void setBlockedColor(Color blockedColor) {
+        this.blockedColor = blockedColor;
+    }
+
     /**
      * This method calculates the influence
      * @param player is the player
@@ -298,18 +312,26 @@ public class Game {
 
     public int countInfluence(Player player, IslandGroup island){
         if(expertMode) {
-            if (island.isBlockColorOnce_CC()) {
-                int x = countInfluenceTowers(player, island) + countInfluenceStudents(player, island) - island.getStudents(island.getBlockedColor());
-                island.setBlockedColor(null);
-                island.setBlockColorOnce_CC(false);
+            if (blockColorOnce) {
+                int x = countInfluenceTowers(player, island) + countInfluenceStudents(player, island) - island.getStudents(blockedColor);
+                //bisogna aggiungere un count prima di settare a false
+                if(count==getPlayersCount()-1){
+                    blockColorOnce=false;
+                    blockedColor=null;
+                }
+
+                //island.setBlockedColor(null);
+                //island.setBlockColorOnce_CC(false);
                 return x;
-            } else if (island.isPlus2Influence_CC()) {
-                island.setPlus2Influence_CC(false);
+            } else if (plus2Influence) {
+                plus2Influence=false;
                 return countInfluenceStudents(player, island) + countInfluenceTowers(player, island) + 2;
             } else if (island.getNoEntryTiles() > 0) {
                 return 0;
-            } else if (island.isBlockTower_CC()) {
-                island.setBlockTower_CC(false);
+            } else if (blockTower) {
+                //bisogna aggiungere un count prima di settare a false
+                if(count==getPlayersCount()-1)
+                    blockTower=false;
                 return countInfluenceStudents(player, island);
             }
             else return countInfluenceTowers(player,island)+countInfluenceStudents(player,island);
@@ -412,7 +434,6 @@ public class Game {
         unusedProfessors.remove(color);
     }
 
-
     /**
      * calculates the player with maximum influence, that is the eligible owner for islandGroup
      *
@@ -422,8 +443,14 @@ public class Game {
     public Player playerWithHigherInfluence(IslandGroup islandGroup) {
         Map<Integer, ArrayList<Player>> influenceMap = new HashMap<>();
         Player result = null;
+        count=0;
 
-        for (Player p : players) {
+        //sostituisco foreach for (Player p : players)
+
+        //starts from the current player and calls for every player countInfluence
+        for(int j=currentPlayer, i=0;i<getPlayersCount();i++,j=(j+1)%getPlayersCount()) {
+            Player p= getPlayers().get(j);
+
             int currentInfluence = countInfluence(p, islandGroup);
             ArrayList<Player> players = influenceMap.get(currentInfluence);
 
@@ -533,5 +560,13 @@ public class Game {
     public Set<TowerColor> getUnusedTowers() {
         Set<TowerColor> usedColors = players.stream().map(Player::getTowerColor).collect(Collectors.toSet());
         return Arrays.stream(TowerColor.values()).filter(tc -> !usedColors.contains(tc)).collect(Collectors.toSet());
+    }
+
+    public void setPlus2Influence(boolean plus2Influence) {
+        this.plus2Influence = plus2Influence;
+    }
+
+    public void setBlockTower(boolean blockTower) {
+        this.blockTower = blockTower;
     }
 }

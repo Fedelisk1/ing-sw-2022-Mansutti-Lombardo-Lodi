@@ -22,7 +22,7 @@ public class BlockColorOnce extends CharacterCard {
         currentGame.getCurrentPlayerInstance().setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
 
         cost = 4;
-        currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setBlockedColor(c);
-        currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setBlockColorOnce_CC(true);
+        currentGame.setBlockColorOnce(true);
+        currentGame.setBlockedColor(c);
     }
 }

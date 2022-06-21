@@ -18,9 +18,9 @@ public class Plus2Influence extends CharacterCard {
     public void doEffect() {
 
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
-
         cost = 3;
-        currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setPlus2Influence_CC(true);
+        currentGame.setPlus2Influence(true);
+
     }
 
 

@@ -18,8 +18,7 @@ public class BlockTower extends CharacterCard {
     public void doEffect() {
 
         currentGame.getPlayers().get(currentGame.getCurrentPlayer()).setCoins(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getCoins() - cost);
-
         cost = 4;
-        currentGame.getIslands().get(currentGame.getMotherNaturePosition()).setBlockTower_CC(true);
+        currentGame.setBlockTower(true);
     }
 }

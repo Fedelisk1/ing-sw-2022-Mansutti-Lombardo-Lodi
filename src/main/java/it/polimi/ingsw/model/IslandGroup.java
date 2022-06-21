@@ -9,10 +9,6 @@ public class IslandGroup {
     private int islandCount = 1;
     private Player occupiedBy;
     private final EnumMap<Color, Integer> students = new EnumMap<>(Color.class);
-    private boolean blockColorOnce_CC = false;
-    private Color blockedColor;
-    private boolean plus2Influence_CC = false;
-    private boolean blockTower_CC = false;
     private int noEntryTiles = 0;
     private final Game game;
 
@@ -55,26 +51,12 @@ public class IslandGroup {
         islandCount += quantity;
     }
 
-    public void incrementIslandCount() {incrementIslandCount(1);}
-
     public void setOccupiedBy(Player player) {
         occupiedBy = player;
     }
 
     public Player getOccupiedBy() {return occupiedBy;}
 
-
-    public boolean isBlockColorOnce_CC() {
-        return blockColorOnce_CC;
-    }
-
-    public boolean isPlus2Influence_CC() {
-        return plus2Influence_CC;
-    }
-
-    public boolean isBlockTower_CC() {
-        return blockTower_CC;
-    }
 
     public int getNoEntryTiles() {
         return noEntryTiles;
@@ -84,17 +66,6 @@ public class IslandGroup {
         return noEntryTiles > 0;
     }
 
-    public void setBlockColorOnce_CC(boolean blockColorOnce_CC) {
-        this.blockColorOnce_CC = blockColorOnce_CC;
-    }
-
-    public void setPlus2Influence_CC(boolean plus2Influence_CC) {
-        this.plus2Influence_CC = plus2Influence_CC;
-    }
-
-    public void setBlockTower_CC(boolean blockTower_CC) {
-        this.blockTower_CC = blockTower_CC;
-    }
 
     public void addNoEntryTile() {
         noEntryTiles++;
@@ -106,13 +77,6 @@ public class IslandGroup {
         noEntryTiles--;
     }
 
-    public void setBlockedColor(Color blockedColor) {
-        this.blockedColor = blockedColor;
-    }
-
-    public Color getBlockedColor() {
-        return blockedColor;
-    }
 
     /**
      * Merges th current island with another given one.
