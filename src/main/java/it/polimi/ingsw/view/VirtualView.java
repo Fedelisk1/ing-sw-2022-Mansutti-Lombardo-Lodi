@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.model.reduced.ReducedPlayer;
 import it.polimi.ingsw.network.message.*;
 import it.polimi.ingsw.network.ClientHandler;
-import it.polimi.ingsw.observer.Observer;
 
 import java.util.List;
 import java.util.Map;
@@ -15,20 +14,11 @@ import java.util.Map;
  * Handles the communication messages between the server and the client server side, making its methods' invocation
  * completely network-transparent for the caller.
  */
-public class VirtualView implements View, Observer {
+public class VirtualView implements View {
     private final ClientHandler clientHandler;
 
     public VirtualView(ClientHandler clientHandler) {
         this.clientHandler = clientHandler;
-    }
-
-    /**
-     * Receives update message from the model and forwards it to the server over the network.
-     * @param message update message
-     */
-    @Override
-    public void onMessageArrived(Message message) {
-        clientHandler.sendMessage(message);
     }
 
     @Override

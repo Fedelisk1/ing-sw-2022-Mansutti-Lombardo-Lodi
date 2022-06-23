@@ -69,6 +69,7 @@ public class SocketClient extends Observable {
         readerThread.start();
     }
 
+
     public void sendMessage(Message message) {
         try {
             outputStream.writeObject(message);

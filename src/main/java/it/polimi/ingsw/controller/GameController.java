@@ -69,11 +69,15 @@ public class GameController implements Observer {
         return state;
     }
 
-    private String gameLogHeader() {
+    public String gameLogHeader() {
         return "[Game" + getId() + "]";
     }
 
-    public void startGame()
+    public void log(String toLog) {
+        System.out.println(gameLogHeader() + " " + toLog);
+    }
+
+    private void startGame()
     {
         if (game.getPlayersCount() != game.getMaxPlayers())
             return;

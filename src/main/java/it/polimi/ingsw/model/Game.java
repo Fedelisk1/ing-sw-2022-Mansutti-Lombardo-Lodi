@@ -265,6 +265,9 @@ public class Game {
         return islands.get((motherNaturePosition + 1) % islands.size());
     }
 
+    /**
+     * @return IslandGroup on which Mother Nature is currently in.
+     */
     public IslandGroup getMotherNatureIsland() {
         return islands.get(motherNaturePosition);
     }
@@ -374,7 +377,7 @@ public class Game {
 
         Collections.shuffle(res);
 
-        return Arrays.asList(3, 4, 5);
+        return Arrays.asList(6, 4, 5);
 
         //return res.subList(0, CHARACTER_CARDS);
     }
@@ -441,15 +444,14 @@ public class Game {
      * @return player instance with maximum influence for the given island or null if two players have maximum influence
      */
     public Player playerWithHigherInfluence(IslandGroup islandGroup) {
+        // maps the influence value with the list of players that have that influence on the provided island
         Map<Integer, ArrayList<Player>> influenceMap = new HashMap<>();
         Player result = null;
-        count=0;
+        count = 0;
 
-        //sostituisco foreach for (Player p : players)
-
-        //starts from the current player and calls for every player countInfluence
-        for(int j=currentPlayer, i=0;i<getPlayersCount();i++,j=(j+1)%getPlayersCount()) {
-            Player p= getPlayers().get(j);
+        // starts from the current player and calls for every player countInfluence
+        for(int j = currentPlayer, i = 0; i < getPlayersCount(); i++, j = (j+1) % getPlayersCount()) {
+            Player p = getPlayers().get(j);
 
             int currentInfluence = countInfluence(p, islandGroup);
             ArrayList<Player> players = influenceMap.get(currentInfluence);

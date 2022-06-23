@@ -2,7 +2,6 @@ package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.GameController;
 import it.polimi.ingsw.network.ClientHandler;
-import it.polimi.ingsw.view.cli.Cli;
 
 import java.io.IOException;
 import java.net.ServerSocket;
