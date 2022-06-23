@@ -317,14 +317,13 @@ public class Game {
         if(expertMode) {
             if (blockColorOnce) {
                 int x = countInfluenceTowers(player, island) + countInfluenceStudents(player, island) - island.getStudents(blockedColor);
+                if(x<0)
+                    x=0;
                 //bisogna aggiungere un count prima di settare a false
                 if(count==getPlayersCount()-1){
                     blockColorOnce=false;
                     blockedColor=null;
                 }
-
-                //island.setBlockedColor(null);
-                //island.setBlockColorOnce_CC(false);
                 return x;
             } else if (plus2Influence) {
                 plus2Influence=false;
@@ -465,6 +464,9 @@ public class Game {
             }
 
             influenceMap.put(currentInfluence, toAdd);
+
+            //
+            count++;
         }
 
         int maxInfluence = Collections.max(influenceMap.keySet());
@@ -570,5 +572,21 @@ public class Game {
 
     public void setBlockTower(boolean blockTower) {
         this.blockTower = blockTower;
+    }
+
+    public boolean isBlockColorOnce() {
+        return blockColorOnce;
+    }
+
+    public Color getBlockedColor() {
+        return blockedColor;
+    }
+
+    public boolean isPlus2Influence() {
+        return plus2Influence;
+    }
+
+    public boolean isBlockTower() {
+        return blockTower;
     }
 }

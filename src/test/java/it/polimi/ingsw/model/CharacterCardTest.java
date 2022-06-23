@@ -135,6 +135,7 @@ class BlockTowerTest{
         Game game = new Game(2, true);
         game.addPlayer("p1");
         game.addPlayer("p2");
+        game.setCurrentPlayer(0);
 
         BlockTower p=new BlockTower(game);
 
@@ -145,13 +146,19 @@ class BlockTowerTest{
 
         assertEquals(3,p.getCost());
 
-        assertEquals(false,game.getIslands().get(game.getMotherNaturePosition()).isBlockTower_CC());
+        assertEquals(false,game.isBlockTower());
+        assertEquals(3,game.countInfluence(game.getPlayers().get(0),game.getIslands().get(0)));
 
         p.doEffect();
-        assertEquals(true,game.getIslands().get(game.getMotherNaturePosition()).isBlockTower_CC());
+
+        assertEquals(true,game.isBlockTower());
+
         assertEquals(2,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(0)));
-        assertEquals(false,game.getIslands().get(game.getMotherNaturePosition()).isBlockTower_CC());
+
+        assertEquals(game.getPlayers().get(0),game.playerWithHigherInfluence(game.getIslands().get(0)));
+        assertEquals(false,game.isBlockTower());
         assertEquals(4,p.getCost());
+
 
     }
 
@@ -171,13 +178,13 @@ class Plus2InfluenceTest{
         game.getCurrentPlayerInstance().getSchoolDashboard().addStudentToDiningRoom(Color.GREEN);
 
         assertEquals(2,p.getCost());
-        assertEquals(false,game.getIslands().get(game.getMotherNaturePosition()).isPlus2Influence_CC());
+        assertEquals(false,game.isPlus2Influence());
         p.doEffect();
-        assertEquals(true,game.getIslands().get(game.getMotherNaturePosition()).isPlus2Influence_CC());
+        assertEquals(true,game.isPlus2Influence());
         assertEquals(3,p.getCost());
 
         assertEquals(4,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(0)));
-        assertEquals(false,game.getIslands().get(0).isPlus2Influence_CC());
+        assertEquals(false,game.isPlus2Influence());
 
     }
 }
@@ -188,31 +195,42 @@ class BlockColorOnceTest{
         Game game = new Game(2, true);
         game.addPlayer("p1");
         game.addPlayer("p2");
-
+        Color choosen=Color.YELLOW;
         BlockColorOnce p= new BlockColorOnce(game);
 
-        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
-        Color choosen=Color.YELLOW;
+        //clear the island
+        cleanIsland(game.getIslands().get(0));
 
-        game.getIslands().get(0).addStudents(Color.YELLOW,2);
+        game.getPlayers().get(game.getCurrentPlayer()).setCoins(3);
+
+        //initialize school dashboard
         game.setCurrentPlayer(0);
-        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(Color.YELLOW);
+        game.getIslands().get(0).addStudents(choosen,2);
+        game.getPlayers().get(0).getSchoolDashboard().addStudentToDiningRoom(choosen);
+        assertEquals(true,game.getPlayers().get(0).getSchoolDashboard().hasProfessor(choosen));
 
         assertEquals(3,p.getCost());
-        assertEquals(false,game.getIslands().get(0).isBlockColorOnce_CC());
-        assertEquals(null,game.getIslands().get(0).getBlockedColor());
-
+        assertEquals(false,game.isBlockColorOnce());
+        assertEquals(null,game.getBlockedColor());
 
         p.doEffect(choosen);
-        assertEquals(choosen,game.getIslands().get(game.getMotherNaturePosition()).getBlockedColor());
 
-        assertEquals(true,game.getIslands().get(0).isBlockColorOnce_CC());
-        assertEquals(0,game.countInfluence(game.getCurrentPlayerInstance(),game.getIslands().get(0)));
-        assertEquals(false,game.getIslands().get(0).isBlockColorOnce_CC());
+        assertEquals(choosen,game.getBlockedColor());
+
+        assertEquals(null,game.playerWithHigherInfluence(game.getIslands().get(0)));
+        assertEquals(false,game.isBlockColorOnce());
+        assertEquals(null,game.getBlockedColor());
 
 
         assertEquals(4,p.getCost());
 
+    }
+    private void cleanIsland(IslandGroup c){
+        for(Color p : Color.values()){
+            while(c.getStudents().get(p)>0){
+                c.getStudents().put(p,0);
+            }
+        }
     }
 }
 class Exchange2StudentsTest{
