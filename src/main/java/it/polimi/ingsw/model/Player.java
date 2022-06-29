@@ -18,7 +18,7 @@ public class Player {
     private TowerColor towerColor;
 
 
-    /** each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
+    /** Each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
     public Player(Game currentGame)
     {
         hand = new Hand();
@@ -98,7 +98,10 @@ public class Player {
         hand.getAssistantCards().remove(chosenCardIndex);
     }
 
-
+    /**
+     * Calls the method transfer student to move all students from cloud card i to the current player
+     * @param i
+     */
     public void chooseCloudCard(int i) {
         currentGame.getCloudCards().get(i).transferStudents();
     }
@@ -115,6 +118,13 @@ public class Player {
         this.coins -= coins;
     }
 
+    /**
+     * It moves one student from the entrance to the island i
+     * @param color is the color chosen
+     * @param i is the destination's island
+     * @throws NullPointerException
+     * @throws MissingStudentException
+     */
     public void moveOneOfThreeToIsland(Color color, int i) throws NullPointerException, MissingStudentException
     {
         try {
@@ -136,6 +146,13 @@ public class Player {
     {
         count=0;
     }
+
+    /**
+     * It moves one student from the entrance to the dining room
+     * @param color color of the student to move
+     * @throws NullPointerException
+     * @throws MissingStudentException
+     */
     public void moveOneOfThreeToDiningRoom(Color color) throws NullPointerException, MissingStudentException
     {
         if(count==3)throw new IllegalStateException("limit of students moved reached for this turn");

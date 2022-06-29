@@ -307,7 +307,8 @@ public class Game {
     }
 
     /**
-     * This method calculates the influence
+     * This method calculates the influence: if the boolean expert mode is true and if a character card
+     * is active it calculates the influence in a different way
      * @param player is the player
      * @param island is the island
      * @return the calculation of the influence
@@ -342,6 +343,12 @@ public class Game {
 
     }
 
+    /**
+     * Calculates the student's influence of the player p on the island isl
+     * @param p is a player
+     * @param isl is the island
+     * @return
+     */
     private int countInfluenceStudents(Player p, IslandGroup isl){
         int sum=0;
         for (Color c : isl.getStudents().keySet()){
@@ -351,6 +358,12 @@ public class Game {
         return sum;
     }
 
+    /**
+     * Calculates the tower's influence of the player p on the island isl
+     * @param p is a player
+     * @param isl is the island
+     * @return
+     */
     private int countInfluenceTowers(Player p, IslandGroup isl){
         int sum=0;
 
@@ -364,7 +377,6 @@ public class Game {
     }
 
     /**
-     *
      * @return array with three different numbers from 0 to 11
      */
 
@@ -381,6 +393,9 @@ public class Game {
         //return res.subList(0, CHARACTER_CARDS);
     }
 
+    /**
+     * Initializes the three character card
+     */
     public void extract3CharacterCards(){
         // extract 3 random numbers
         List<Integer> extracted = extract3Numbers();

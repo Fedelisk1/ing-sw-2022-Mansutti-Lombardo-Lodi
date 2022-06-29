@@ -25,21 +25,21 @@ public class ChooseIsland extends CharacterCard {
 
         cost = 4;
 
-        //se l'isola è occupata da un giocatore diverso dal corrente
+        //if the island is occupied by a different player than the current
         if (currentGame.getIslands().get(islandNumber).getOccupiedBy() != null &&
                 currentGame.getIslands().get(islandNumber).getOccupiedBy() != currentGame.getPlayers().get(currentGame.getCurrentPlayer())) {
-            //se il calcolo dell'influenza del giocatore corrente sull'isola è maggiore dell'influenza del giocatore che detiene l'isola
+            //if the count of influence of the current player is major than the influence of the player who owns the island
             if (currentGame.countInfluence(currentGame.getPlayers().get(currentGame.getCurrentPlayer()), currentGame.getIslands().get(islandNumber)) >
                     currentGame.countInfluence(currentGame.getIslands().get(islandNumber).getOccupiedBy(), currentGame.getIslands().get(islandNumber))) {
-                //assegni l'occupiedby al giocatore corrente, decrementi il conto delle torri del giocatore corrente e incrementi quello del vecchio occupato
+                //sets the occupiedby to the current player, removes tower from current player, adda a tower to the old owner
                 int sizeIsland = currentGame.getIslands().get(islandNumber).getIslandCount();
                 currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeTowers(sizeIsland);
                 currentGame.getIslands().get(islandNumber).getOccupiedBy().getSchoolDashboard().addTowers(sizeIsland);
                 currentGame.getIslands().get(islandNumber).setOccupiedBy(currentGame.getPlayers().get(currentGame.getCurrentPlayer()));
             }
-            //se l'isola non è occupata da nessuno
+            //if no one occupies the island
         } else if (currentGame.getIslands().get(islandNumber).getOccupiedBy() == null) {
-            //decrementare le torri e settare occupiedby
+            //decrements the number of towers and sets occupied by
             int sizeIsland = currentGame.getIslands().get(islandNumber).getIslandCount();
             currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().removeTowers(sizeIsland);
             currentGame.getIslands().get(islandNumber).setOccupiedBy(currentGame.getPlayers().get(currentGame.getCurrentPlayer()));

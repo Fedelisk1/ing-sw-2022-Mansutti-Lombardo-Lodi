@@ -41,6 +41,9 @@ public class CloudCard implements Serializable {
         students.clear();
     }
 
+    /**
+     * Fill the cloud card with a number of students proportional to number of players
+     */
     public void fill() {
         this.students = currentGame.extractFromBag(currentGame.getPlayers().size()+1);
     }

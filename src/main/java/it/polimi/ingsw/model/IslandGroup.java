@@ -33,6 +33,10 @@ public class IslandGroup {
         students.put(color, prevVal + quantity);
     }
 
+    /**
+     * Adds one student of the color chosen
+     * @param color color of the student
+     */
     public void addStudents(Color color) {
         addStudents(color, 1);
     }
@@ -47,6 +51,10 @@ public class IslandGroup {
         return islandCount;
     }
 
+    /**
+     * Increase the dimension of the island 
+     * @param quantity
+     */
     public void incrementIslandCount(int quantity) {
         islandCount += quantity;
     }

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public class Hand {
     private ArrayList<AssistantCard> assistantCards;
 
-    /**initialising player's starting assistantCards**/
+    /** Initialising player's starting assistantCards**/
     public Hand()
     {
 

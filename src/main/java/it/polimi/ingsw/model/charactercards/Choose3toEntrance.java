@@ -100,6 +100,10 @@ public class Choose3toEntrance extends CharacterCard {
         }
         return sum;
     }
+
+    /**
+     * Remove all students from the card
+     */
     public void clear(){
         for(Color c: Color.values()){
             if(students.containsKey(c))

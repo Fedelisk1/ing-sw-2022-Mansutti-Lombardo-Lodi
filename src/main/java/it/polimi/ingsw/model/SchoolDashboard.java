@@ -11,7 +11,10 @@ public class SchoolDashboard {
     private final EnumMap<Color,Integer> diningRoom;
     private Game currentGame;
 
-
+    /**
+     * Sets the numbers of towers and initialize the entrance and the dining room
+     * @param currentGame
+     */
     SchoolDashboard(Game currentGame)
     {
         professors= new ArrayList<>();
@@ -32,6 +35,9 @@ public class SchoolDashboard {
         });
     }
 
+    /**
+     * Initialise the entrance of players with: seven student if it's a 2 players game, nine else
+     */
     public void setUp() {
         if (currentGame.getMaxPlayers() == 2)
             entrance = currentGame.extractFromBag(7);
@@ -39,12 +45,20 @@ public class SchoolDashboard {
             entrance = currentGame.extractFromBag(9);
     }
 
+    /**
+     * Adds n towers to the school dashboard
+     * @param n number of towers
+     */
     public void addTowers(int n)
     {
         if(n<0 || towers+n>8) throw new IllegalArgumentException("tower number not valid");
         towers = towers + n;
     }
 
+    /**
+     * Remove n towers from the school dashboard
+     * @param n number of towers
+     */
     public void removeTowers(int n)
     {
         towers = towers - n;
@@ -59,6 +73,10 @@ public class SchoolDashboard {
         return entrance;
     }
 
+    /**
+     * Converts the entrance into a list of color
+     * @return a list of color
+     */
     public List<Color> entranceAsList() {
         List<Color> res = new ArrayList<>();
 
@@ -71,7 +89,7 @@ public class SchoolDashboard {
     }
 
     /**
-     * removes a student from the entrance
+     * Removes a student from the entrance
      * @param color student color
      * @throws IllegalArgumentException if there is no student of the chosen color in the entrance
      * @throws NullPointerException if color is null
@@ -83,7 +101,7 @@ public class SchoolDashboard {
     }
 
     /**
-     * adds a student to the entrance
+     * Adds a student to the entrance
      * @param color student color
      * @throws NullPointerException if color is null
      */
@@ -94,7 +112,7 @@ public class SchoolDashboard {
     }
 
     /**
-     * increments the amount of student in entrance of the specified color by quantity
+     * Increments the amount of student in entrance of the specified color by quantity
      * @param color color of students to add
      * @param quantity how many students to add
      */
@@ -113,6 +131,11 @@ public class SchoolDashboard {
         return diningRoom.getOrDefault(color, 0);
     }
 
+    /**
+     * Converts the dining room into a list of color
+     * @return a list of color
+     */
+
     public List<Color> diningRoomAsList() {
         List<Color> res = new ArrayList<>();
 
@@ -125,7 +148,7 @@ public class SchoolDashboard {
     }
 
     /**
-     *moves student from entrance to dining room
+     * Moves student from entrance to dining room
      * @param color student color
      * @throws NullPointerException if color is null
      * @throws IllegalArgumentException if there is no student of the chosen color in the entrance
@@ -137,7 +160,7 @@ public class SchoolDashboard {
     }
 
     /**
-     * moves the desired quantity of students of the specified color to the dining room
+     * Moves the desired quantity of students of the specified color to the dining room
      * @param color color of the students to move
      * @param quantity how many students to move
      */
@@ -147,7 +170,7 @@ public class SchoolDashboard {
     }
 
     /**
-     * adds a student to the Dining Room, and if the students of that color in that dining room, are more than the other players, move a professor.
+     * Adds a student to the Dining Room, and if the students of that color in that dining room, are more than the other players, move a professor.
      *
      * @param color student color
      * @throws NullPointerException if color is null
@@ -199,7 +222,7 @@ public class SchoolDashboard {
     }
 
     /**
-     * Removes a student from dining romm.
+     * Removes a student from dining room.
      * @param color color of the student to remove.
      */
     public void removeStudentFromDiningRoom(Color color) {
