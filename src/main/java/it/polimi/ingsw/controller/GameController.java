@@ -319,6 +319,13 @@ public class GameController implements Observer {
 
         int playerCoins = game.getCurrentPlayerInstance().getCoins();
         int cardCost = card.getCost();
+        boolean CCActivated = game.getCurrentPlayerInstance().isCCActivated();
+        if(CCActivated){
+            getCurrentPlayerView().showStringMessage("You can't use another Character Card during this turn");
+            restoreGameFlow();
+            return;
+        }
+
 
         if (playerCoins < cardCost) {
             getCurrentPlayerView().showStringMessage("You need " + (cardCost - playerCoins) + " more coins to activate this card");
@@ -327,6 +334,8 @@ public class GameController implements Observer {
         }
 
         broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is activating Character Card " + chosenCard + "... ");
+
+        game.getCurrentPlayerInstance().setCCActivated(true);
 
         switch (card.getType()) {
             case ALL_REMOVE_COLOR -> {
@@ -416,6 +425,10 @@ public class GameController implements Observer {
 
     private void playCCChoose3ToEntrancePartialSwap(Color fromCard, Color fromEntrance, int inputCount) {
         Choose3toEntrance card = (Choose3toEntrance) game.getCharacterCard(CharacterCardType.CHOOSE_3_TO_ENTRANCE);
+
+        if(inputCount==1)
+        game.getCurrentPlayerInstance().removeCoins(card.getCost());
+
         card.doPartialEffect(fromCard, fromEntrance);
 
         if (inputCount < 3) {
@@ -451,6 +464,10 @@ public class GameController implements Observer {
 
     private void playCCExchange2StudentsPartialSwap(Color fromEntrance, Color fromDiningRoom, int inputCount) {
         Exchange2Students card = (Exchange2Students) game.getCharacterCard(CharacterCardType.EXCHANGE_2_STUDENTS);
+
+        if(inputCount==1)
+            game.getCurrentPlayerInstance().removeCoins(card.getCost());
+
         card.doPartialEffect(fromEntrance, fromDiningRoom);
 
         if (inputCount < 2) {

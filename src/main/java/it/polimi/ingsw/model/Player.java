@@ -16,6 +16,7 @@ public class Player {
     private int count;
     private Wizard wizard;
     private TowerColor towerColor;
+    private boolean CCActivated;
 
 
     /** Each player starts with a hand of 10 assistant cards, 10 coins and a school dashboard. Each player is identified by his/her nickname**/
@@ -33,6 +34,16 @@ public class Player {
 
         Set<TowerColor> unusedColors = currentGame.getUnusedTowers();
         unusedColors.stream().findFirst().ifPresent(tc -> towerColor = tc);
+
+       CCActivated=false;
+    }
+
+    public boolean isCCActivated() {
+        return CCActivated;
+    }
+
+    public void setCCActivated(boolean CCActivated) {
+        this.CCActivated = CCActivated;
     }
 
     public TowerColor getTowerColor() {
@@ -100,7 +111,7 @@ public class Player {
 
     /**
      * Calls the method transfer student to move all students from cloud card i to the current player
-     * @param i
+     * @param i number of island
      */
     public void chooseCloudCard(int i) {
         currentGame.getCloudCards().get(i).transferStudents();

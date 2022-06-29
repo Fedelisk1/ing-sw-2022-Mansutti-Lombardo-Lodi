@@ -33,6 +33,9 @@ public class EndTurnState implements GameState{
 
                 gameController.notifyWinner(winner);
             }
+            for(Player p: game.getPlayers()){
+                p.setCCActivated(false);
+            }
             gameController.clearPlayerActionCount();
             gameController.askAssistantCard(null);
             gameController.changeState(new Planning1State(gameController));
@@ -40,6 +43,7 @@ public class EndTurnState implements GameState{
         }
         //if some players haven't yet completed action turns, set current player to the next player and go back to the start of the action phase
         else {
+            //game.getCurrentPlayerInstance().setCCActivated(false);
             game.setCurrentPlayer((game.getCurrentPlayer()+1) % game.getMaxPlayers());
 
             gameController.changeState(new Action1State(gameController));

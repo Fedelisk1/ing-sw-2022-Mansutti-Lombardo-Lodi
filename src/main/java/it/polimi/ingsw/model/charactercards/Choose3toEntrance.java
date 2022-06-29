@@ -63,6 +63,7 @@ public class Choose3toEntrance extends CharacterCard {
     }
 
     public void doPartialEffect(Color fromCard, Color fromEntrance) {
+        cost=2;
         // remove from the card
         students.merge(fromCard, -1, Integer::sum);
 

@@ -47,7 +47,8 @@ public class Game {
         islands = new ArrayList<>();
         for(int i = 0; i < MAX_ISLANDS; i++) {
             IslandGroup ig = new IslandGroup(this);
-            if (i != MAX_ISLANDS / 2 - 1 && i != 0) {
+
+            if (i != MAX_ISLANDS / 2  && i != 0) {
                 Color color = Color.values()[rand.nextInt(Color.values().length)];
                 bag.remove(color, 1);
                 ig.addStudents(color, 1);
@@ -347,7 +348,7 @@ public class Game {
      * Calculates the student's influence of the player p on the island isl
      * @param p is a player
      * @param isl is the island
-     * @return
+     * @return student's influence
      */
     private int countInfluenceStudents(Player p, IslandGroup isl){
         int sum=0;
@@ -362,7 +363,7 @@ public class Game {
      * Calculates the tower's influence of the player p on the island isl
      * @param p is a player
      * @param isl is the island
-     * @return
+     * @return tower's influence
      */
     private int countInfluenceTowers(Player p, IslandGroup isl){
         int sum=0;
@@ -388,7 +389,7 @@ public class Game {
 
         Collections.shuffle(res);
 
-        return Arrays.asList(6, 4, 5);
+        return Arrays.asList(6, 9, 5);
 
         //return res.subList(0, CHARACTER_CARDS);
     }
