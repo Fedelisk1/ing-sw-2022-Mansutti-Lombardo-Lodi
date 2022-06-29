@@ -23,6 +23,7 @@ public class GameController implements Observer {
     private final Map<String, VirtualView> nickVirtualViewMap;
     private GameState state;
     private int playerActionCount;
+    private int highestPriority;
     private final int gameId;
 
     public GameController(int playersNumber, boolean expertMode, int gameId)
@@ -529,5 +530,13 @@ public class GameController implements Observer {
 
         viewsExcept(winnerNick).forEach(v -> v.showWinnerToOthers(winnerNick));
         getVirtualView(winnerNick).notifyWinner();
+    }
+
+    public int getHighestPriority() {
+        return highestPriority;
+    }
+
+    public void setHighestPriority(int highestPriority) {
+        this.highestPriority = highestPriority;
     }
 }

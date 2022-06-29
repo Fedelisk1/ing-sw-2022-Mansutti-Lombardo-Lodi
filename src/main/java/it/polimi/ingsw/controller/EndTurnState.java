@@ -27,16 +27,20 @@ public class EndTurnState implements GameState{
         //if all player finished their action turns, proceed to the start of the planning phase
         if(gameController.getPlayerActionCount()==game.getPlayers().size())
         {
+            //checks for winning condition
             if(game.getCurrentPlayerInstance().getHand().getAssistantCards().size()==0)
             {
                 winner = game.winner();
 
                 gameController.notifyWinner(winner);
             }
+            //deactivates character cards
             for(Player p: game.getPlayers()){
                 p.setCCActivated(false);
             }
             gameController.clearPlayerActionCount();
+
+            game.setCurrentPlayer(gameController.getHighestPriority());
             gameController.askAssistantCard(null);
             gameController.changeState(new Planning1State(gameController));
             gameController.getState().planning1();

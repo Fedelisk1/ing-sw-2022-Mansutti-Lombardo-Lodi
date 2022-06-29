@@ -6,12 +6,10 @@ import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.network.message.Update;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.util.*;
+
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Planning2State implements GameState{
 
@@ -19,11 +17,13 @@ public class Planning2State implements GameState{
     private final Game game;
     private int count;
     private final List<Integer> playedAssistants;
+    private ArrayList<Player> prio;
 
     public Planning2State(GameController gameController)
     {
         this.gameController=gameController;
         this.game=gameController.getGame();
+        prio = new ArrayList<>(game.getPlayers().size());
         count = 0;
 
         playedAssistants = new ArrayList<>();
@@ -44,39 +44,51 @@ public class Planning2State implements GameState{
 
         playedAssistants.add(chosenPriority);
 
-            if (count == game.getMaxPlayers() - 1){
-                game.setCurrentPlayer(0);
-                playedAssistants.clear();
-                // !!!! perchè questo count = 1 a che serve?
-                //count = 1;
-            } else {
-                game.setCurrentPlayer((game.getCurrentPlayer() + 1) % game.getMaxPlayers());
-
-                // in case the player has only cards that have already been played, let him play anyway
-                if (playedAssistants.equals(game.getCurrentPlayerInstance().getHand().getAssistantCardsAsList()))
-                    gameController.askAssistantCard(null);
-                else
-                    gameController.askAssistantCard(playedAssistants);
-            }
-
-        //if all players have chosen an assistant card, it sets the current player to the player that has chosen the card
-        //with the least value and changes state
-
         if(count == game.getMaxPlayers() - 1) {
+
             int position = 0;
+
+            //creates a copy of the player array
+            for (int i =0; i<game.getPlayers().size(); i++)
+            {
+                prio.add(game.getPlayers().get(i));
+            }
+            //sorts the array based on card value
+            prio.sort(Comparator.comparing(Player::getCardValue));
+
+
+
+            //finds the highest priority assistant card
             for (int i = 1; i < game.getPlayers().size(); i++) {
                 if (game.getPlayers().get(i).getCardValue() < game.getPlayers().get(position).getCardValue()) {
                     position = i;
                 }
             }
+
             game.setCurrentPlayer(position);
+            gameController.setHighestPriority(position);
+            playedAssistants.clear();
             gameController.changeState(new Action1State(gameController));
 
 
             String currentNick = game.getCurrentPlayerNick();
             gameController.getCurrentPlayerView().update(new ReducedGame(game));
             gameController.askActionPhase1();
+
         }
+        else {
+            game.setCurrentPlayer((game.getCurrentPlayer() + 1) % game.getMaxPlayers());
+
+            // in case the player has only cards that have already been played, let him play anyway
+            if (playedAssistants.equals(game.getCurrentPlayerInstance().getHand().getAssistantCardsAsList()))
+                gameController.askAssistantCard(null);
+            else
+                gameController.askAssistantCard(playedAssistants);
+
+        }
+
+        //if all players have chosen an assistant card, it sets the current player to the player that has chosen the card
+        //with the least value and changes state
 
         count++;
     }
