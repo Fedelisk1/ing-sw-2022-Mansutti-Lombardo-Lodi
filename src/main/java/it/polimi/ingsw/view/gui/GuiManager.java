@@ -24,8 +24,6 @@ public class GuiManager extends ViewObservable implements View{
     private final Parent wizardRoot;
     private final Parent lobbyRoot;
     private final Parent tableRoot;
-    private final Parent winnerRoot;
-    private final Parent otherWinnerRoot;
 
     private final ConnectToServerController connectToServerController;
     private final NicknameController nicknameController;
@@ -33,8 +31,6 @@ public class GuiManager extends ViewObservable implements View{
     private final WizardController wizardController;
     private final LobbyController lobbyController;
     private final TableController tableController;
-    private final WinnerController winnerController;
-    private final OtherWinnerController otherWinnerController;
 
     private static Semaphore semaphore;
     private String nickname;
@@ -54,8 +50,6 @@ public class GuiManager extends ViewObservable implements View{
         FXMLLoader wizardLoader = new FXMLLoader(getClass().getResource("/fxml/wizard.fxml"));
         FXMLLoader lobbyLoader = new FXMLLoader(getClass().getResource("/fxml/lobby.fxml"));
         FXMLLoader tableLoader = new FXMLLoader(getClass().getResource("/fxml/table.fxml"));
-        FXMLLoader winnerLoader = new FXMLLoader(getClass().getResource("/fxml/winner.fxml"));
-        FXMLLoader otherWinnerLoader = new FXMLLoader(getClass().getResource("/fxml/otherWinner.fxml"));
 
         try {
             nicknameRoot = nicknameLoader.load();
@@ -63,8 +57,6 @@ public class GuiManager extends ViewObservable implements View{
             wizardRoot = wizardLoader.load();
             lobbyRoot = lobbyLoader.load();
             tableRoot = tableLoader.load();
-            winnerRoot = winnerLoader.load();
-            otherWinnerRoot = otherWinnerLoader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -75,8 +67,6 @@ public class GuiManager extends ViewObservable implements View{
         wizardController = wizardLoader.getController();
         lobbyController = lobbyLoader.getController();
         tableController = tableLoader.getController();
-        winnerController = winnerLoader.getController();
-        otherWinnerController = otherWinnerLoader.getController();
 
         gameInfoController.setGuiManager(this);
         lobbyController.setGuiManager(this);
@@ -238,12 +228,12 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void showWinnerToOthers(String winnerNick) {
-        Platform.runLater(() -> {Gui.getStage().setScene(new Scene(otherWinnerRoot));});
+        Platform.runLater(() -> {tableController.showLoser(winnerNick); });
     }
 
     @Override
     public void notifyWinner() {
-        Platform.runLater(() -> {Gui.getStage().setScene(new Scene(winnerRoot));});
+        Platform.runLater(() -> {tableController.showWinner(); });
     }
 
     public void showTable() {

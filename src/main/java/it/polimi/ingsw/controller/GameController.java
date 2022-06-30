@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * Handles the flow of the game serer side.
  */
 public class GameController implements Observer {
-    private final Game game;
+    private Game game;
     private final Map<String, VirtualView> nickVirtualViewMap;
     private GameState state;
     private int playerActionCount;
@@ -34,6 +34,10 @@ public class GameController implements Observer {
         this.gameId = gameId;
         prio = new ArrayList<>(game.getPlayers().size());
         playerActionCount=0;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     /**
@@ -269,6 +273,8 @@ public class GameController implements Observer {
 
         VirtualView currentView = getVirtualView(currentNick);
         currentView.askAssistantCard(game.getCurrentPlayerInstance().getHand().getAsMap(), notPlayable);
+
+
         broadcastMessage(currentNick + " is choosing an assistant card... ", currentNick);
     }
 

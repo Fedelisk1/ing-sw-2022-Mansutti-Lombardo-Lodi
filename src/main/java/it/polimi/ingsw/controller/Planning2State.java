@@ -34,6 +34,8 @@ public class Planning2State implements GameState{
     @Override
     public void planning2(int chosenPriority)
     {
+        count++;
+
         //the current player chooses the assistant card, then the current player is changed to the next
         game.getCurrentPlayerInstance().chooseAssistantCard(chosenPriority);
 
@@ -42,7 +44,7 @@ public class Planning2State implements GameState{
 
         playedAssistants.add(chosenPriority);
 
-        if(count == game.getMaxPlayers() - 1) {
+        if(count == game.getMaxPlayers()) {
 
             //creates a copy of the player array
             for (int i =0; i<game.getPlayers().size(); i++)
@@ -59,11 +61,8 @@ public class Planning2State implements GameState{
             playedAssistants.clear();
             gameController.changeState(new Action1State(gameController));
 
-
-            String currentNick = game.getCurrentPlayerNick();
             gameController.getCurrentPlayerView().update(new ReducedGame(game));
             gameController.askActionPhase1();
-
         }
         else {
             game.setCurrentPlayer((game.getCurrentPlayer() + 1) % game.getMaxPlayers());
@@ -79,7 +78,7 @@ public class Planning2State implements GameState{
         //if all players have chosen an assistant card, it sets the current player to the player that has chosen the card
         //with the least value and changes state
 
-        count++;
+
     }
 
     @Override

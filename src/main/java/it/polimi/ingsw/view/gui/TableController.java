@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -36,16 +37,14 @@ public class TableController extends ViewObservable implements Initializable {
     public GridPane handGridPane;
     public ImageView currentPlayerAssistant;
     public VBox cloudCardsVBox;
-    public HBox unudedProfHBox;
+    public HBox unusedProfHBox;
     public VBox characterCardsVBox;
-    public HBox coinsHBox;
     public VBox currentPlayerCoins;
     private ReducedGame game;
     private Phase phase;
     private Color actionPhaseSelectedColor;
     public Text promptText;
     public Button playButton;
-    public HBox charactersHBox;
     public HBox islandsHBox1;
     public HBox islandsHBox2;
     public AnchorPane currentPlayerSchoolDashboardAP;
@@ -455,11 +454,11 @@ public class TableController extends ViewObservable implements Initializable {
      * @param game updated game state.
      */
     private void updateUnusedProfessors(ReducedGame game) {
-        unudedProfHBox.getChildren().clear();
+        unusedProfHBox.getChildren().clear();
 
         for (Color c : game.getUnusedProfessors()) {
             ImageView profIV = UpdateUtils.profImageView(c, 1.0);
-            unudedProfHBox.getChildren().add(profIV);
+            unusedProfHBox.getChildren().add(profIV);
         }
     }
 
@@ -1000,6 +999,7 @@ public class TableController extends ViewObservable implements Initializable {
                 resetIslandsClickHandler();
             });
         });
+
     }
 
     /**
@@ -1013,4 +1013,26 @@ public class TableController extends ViewObservable implements Initializable {
     }
 
 
+    /**
+     * Displays an alert showing the user that he lost the game, and the nick of the winner.
+     * @param winnerNick nick of the winner
+     */
+    public void showLoser(String winnerNick) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setOnCloseRequest(de -> Platform.exit());
+        a.setHeaderText("Game over");
+        a.setContentText(winnerNick + " won the game.");
+        a.show();
+    }
+
+    /**
+     * Shows the user that he won the game
+     */
+    public void showWinner() {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setOnCloseRequest(de -> Platform.exit());
+        a.setHeaderText("You won!");
+        a.setContentText("The game ends here.");
+        a.show();
+    }
 }

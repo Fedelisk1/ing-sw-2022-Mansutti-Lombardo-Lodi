@@ -8,14 +8,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Game {
-    private final EnumMap<Color, Integer> bag;
+    protected final EnumMap<Color, Integer> bag;
     private int motherNaturePosition = 0;
     private final int MAX_ISLANDS = 12;
     private final int MAX_BAG_STUDENTS = 130;
     public static final int CHARACTER_CARDS = 3;
     private final ArrayList<IslandGroup> islands;
     private final ArrayList<Player> players;
-    private int currentPlayer;
+    protected int currentPlayer;
     private ArrayList<CharacterCard> characterCards;
     private int totalCoins;
     private final ArrayList<CloudCard> cloudCards;
@@ -28,7 +28,6 @@ public class Game {
     private boolean plus2Influence;
     private boolean blockTower;
     private int count;
-
 
     public Game(int players, boolean expertMode) {
         Random rand = new Random();
@@ -43,7 +42,7 @@ public class Game {
         for (Color c : Color.values())
             bag.put(c, MAX_BAG_STUDENTS / Color.values().length);
 
-        // isalnds init
+        // islands init
         islands = new ArrayList<>();
         for(int i = 0; i < MAX_ISLANDS; i++) {
             IslandGroup ig = new IslandGroup(this);
@@ -84,8 +83,10 @@ public class Game {
         Player p = new Player(this);
         p.getSchoolDashboard().setUp();
         p.setNickname(nickname);
+
         if (expertMode)
             p.setCoins(20);
+
         this.players.add(p);
     }
 
