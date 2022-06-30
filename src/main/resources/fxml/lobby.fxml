@@ -59,7 +59,7 @@
       </HBox>
       <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#handleStartButton" prefHeight="38.0" prefWidth="77.0" text="Start" />
+            <Button fx:id="startButton" mnemonicParsing="false" onAction="#handleStartButton" prefHeight="38.0" prefWidth="77.0" text="Start" />
          </children>
          <padding>
             <Insets right="20.0" />

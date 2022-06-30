@@ -59,13 +59,7 @@ public class WizardController extends ViewObservable implements Initializable {
             Platform.runLater(() -> {
                 System.out.println(wizardsHBox.getChildren().contains(finalToRemove));
 
-                finalToRemove.setDisable(true);
-                try {
-                    System.out.println("remove: " + wizardsHBox.getChildren().remove(finalToRemove));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                System.out.println("after remove: " + wizardsHBox.getChildren().contains(finalToRemove));
+                wizardsHBox.getChildren().remove(finalToRemove);
             });
         });
     }

@@ -11,7 +11,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Handles interaction between server and a specific client.
@@ -24,7 +23,6 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream output;
     private ObjectInputStream input;
     private boolean connected;
-    private static final int TIMEOUT = 20000;
     private String nickname;
 
     public ClientHandler(Socket client, Map<String, GameController> nickControllerMap) {
@@ -44,6 +42,7 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         }
     }
+
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -85,23 +84,27 @@ public class ClientHandler implements Runnable {
                 if (! (readObject instanceof Message msgIn))
                     break;
 
-                if(msgIn.getMessageType() != MessageType.PING)
-                    System.out.println(threadName() + " message arrived: " + msgIn.getMessageType());
+                onMessageArrived(msgIn);
+            }
+        }
+    }
 
-                switch (msgIn.getMessageType()) {
-                    case PING -> {
-                        // ping from server arrived
-                    }
-                    case LOGIN_REQUEST -> {
-                        System.out.println(threadName() + " handle login for " + msgIn.getNickname());
-                        handleLogin(msgIn.getNickname());
-                    }
-                    case NEW_GAME_REQUEST -> handleNewGameRequest((NewGameRequest) msgIn);
-                    default -> {
-                        // forward message to the controller
-                        nickControllerMap.get(msgIn.getNickname()).onMessageArrived(msgIn);
-                    }
-                }
+    public void onMessageArrived(Message message) {
+        if(message.getMessageType() != MessageType.PING)
+            System.out.println(threadName() + " message arrived: " + message.getMessageType());
+
+        switch (message.getMessageType()) {
+            case PING -> {
+                // ping from server arrived
+            }
+            case LOGIN_REQUEST -> {
+                System.out.println(threadName() + " handle login for " + message.getNickname());
+                handleLogin(message.getNickname());
+            }
+            case NEW_GAME_REQUEST -> handleNewGameRequest((NewGameRequest) message);
+            default -> {
+                // forward message to the controller
+                nickControllerMap.get(message.getNickname()).onMessageArrived(message);
             }
         }
     }

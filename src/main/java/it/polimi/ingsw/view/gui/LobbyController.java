@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view.gui;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import it.polimi.ingsw.model.reduced.ReducedPlayer;
 import javafx.application.Platform;
@@ -17,14 +19,19 @@ import java.util.*;
 import java.util.List;
 
 public class LobbyController implements Initializable {
+    @FXML
+    private Button startButton;
     private List<ReducedPlayer> players;
     private List<ImageView> spinners;
     private GuiManager guiManager;
+    private int maxPlayers;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         players = new ArrayList<>();
         spinners = new ArrayList<>();
+
+        startButton.setDisable(true);
     }
 
     public void setGuiManager(GuiManager guiManager) {
@@ -54,11 +61,17 @@ public class LobbyController implements Initializable {
         wizardImageView.setFitWidth(135.0);
         wizardImageView.setFitHeight(213.0);
         vBox.getChildren().add(wizardImageView);
+
+        // when all the players have joined, enable the start button
+        if (maxPlayers == players.size())
+            startButton.setDisable(false);
     }
 
     public void setPlayersNumber(int maxPlayers) {
         if (players.size() != 0)
             return;
+
+        this.maxPlayers = maxPlayers;
 
         for (int i = 1; i <= maxPlayers; i++) {
             System.out.println(i);
