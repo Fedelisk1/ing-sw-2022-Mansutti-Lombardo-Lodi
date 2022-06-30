@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.Server;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
 import org.junit.jupiter.api.Assertions;
@@ -70,10 +71,6 @@ class Action2StateTest {
         gameController.changeState(new Action2State(gameController));
 
     }
-    @BeforeEach
-    public void setUpServer() throws IOException {
-        serverSocket = new ServerSocket(12345);
-    }
 
 
     /**
@@ -84,12 +81,16 @@ class Action2StateTest {
     void action2NoOccupation() throws IOException {
         Game game = gameController.getGame();
 
+        //adds a red student to the dining room and to island 1
         game.getCurrentPlayerInstance().getSchoolDashboard().addStudentToDiningRoom(Color.RED);
         game.getIslands().get(1).getStudents().clear();
         game.getIslands().get(1).addStudents(Color.RED);
+
+        //moves mn to island 1
         gameController.getState().action2(1);
 
 
+        //checks, dining room, island, tower count and occupation
         Assertions.assertEquals(1,game.getCurrentPlayerInstance().getSchoolDashboard().getDiningRoom(Color.RED));
         Assertions.assertEquals(1,game.getIslands().get(1).getStudents(Color.RED));
         Assertions.assertEquals(game.getCurrentPlayerInstance(),game.getIslands().get(1).getOccupiedBy());
@@ -97,6 +98,32 @@ class Action2StateTest {
 
         socket1.close();
         socket2.close();
+    }
+
+    //checks that control is effectively stolen
+    @Test
+    void action2Occupied() throws IOException {
+        Game game = gameController.getGame();
+
+        game.setCurrentPlayer(0);
+        game.getCurrentPlayerInstance().getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getIslands().get(1).addStudents(Color.RED);
+        gameController.getState().action2(1);
+
+        gameController.changeState(new Action2State(gameController));
+        game.setCurrentPlayer(1);
+        game.getCurrentPlayerInstance().getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getCurrentPlayerInstance().getSchoolDashboard().addStudentToDiningRoom(Color.RED);
+        game.getIslands().get(1).addStudents(Color.RED);
+        gameController.getState().action2(12);
+
+        Assertions.assertEquals(game.getCurrentPlayerInstance(),game.getIslands().get(1).getOccupiedBy());
+        Assertions.assertEquals(7,game.getCurrentPlayerInstance().getSchoolDashboard().getTowers());
+        Assertions.assertEquals(8,game.getPlayers().get(0).getSchoolDashboard().getTowers());
+
+        socket1.close();
+        socket2.close();
+
     }
 
 

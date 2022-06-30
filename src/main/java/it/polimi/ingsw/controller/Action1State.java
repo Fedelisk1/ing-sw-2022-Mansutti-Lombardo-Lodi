@@ -73,91 +73,9 @@ public class Action1State implements GameState{
         action1(color, -1);
     }
 
-    @Override
-    public void ccAllRemoveColor(Color color)
-    {
-        AllRemoveColor chosenCard = (AllRemoveColor) game.getCharacterCard(CharacterCardType.ALL_REMOVE_COLOR);
-        chosenCard.doEffect(color);
-    }
-
     public int getMovesCount() {
         return movesCount;
     }
-
-//    @Override
-//    public void ccBlockColorOnce(Color color)
-//    {
-//        BlockColorOnce chosenCard = (BlockColorOnce) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect(color);
-//    }
-//    @Override
-//    public void ccBlockTower()
-//    {
-//        BlockTower chosenCard = (BlockTower) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect();
-//    }
-//    @Override
-//    public void ccChoose1DiningRoom(Color color)
-//    {
-//        Choose1DiningRoom chosenCard = (Choose1DiningRoom) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect(color);
-//    }
-//    @Override
-//    public void ccChoose1ToIsland(Color color, int islandNumber)
-//    {
-//        Choose1ToIsland chosenCard = (Choose1ToIsland) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect(color, islandNumber);
-//    }
-//    @Override
-//    public void ccChoose3ToEntrance(EnumMap<Color,Integer> chosenFromCard , EnumMap<Color,Integer> chosenFromEntrance, int cardPosition)
-//    {
-//        Choose3toEntrance chosenCard = (Choose3toEntrance) game.getCharacterCards().get(cardPosition);
-//        try {
-//            chosenCard.doEffect(chosenFromCard,chosenFromEntrance);
-//        } catch (MissingStudentException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//    @Override
-//    public void ccChooseIsland(int islandNumber)
-//    {
-//        ChooseIsland chosenCard = (ChooseIsland) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect(islandNumber);
-//    }
-//    @Override
-//    public void ccExchange2Students(EnumMap<Color,Integer> chosenFromEntrance,EnumMap<Color,Integer> chosenFromDiningRoom)
-//    {
-//        Exchange2Students chosenCard = (Exchange2Students) game.getCharacterCards().get(cardPosition);
-//        try {
-//            chosenCard.doEffect(chosenFromEntrance,chosenFromDiningRoom);
-//        } catch (MissingStudentException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//    @Override
-//    public void ccNoEntryIsland(int islandNumber,int cardPosition)
-//    {
-//        NoEntryIsland chosenCard = (NoEntryIsland) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect(islandNumber);
-//    }
-//    @Override
-//    public void ccPlus2Influence(int cardPosition)
-//    {
-//        Plus2Influence chosenCard = (Plus2Influence) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect();
-//    }
-//    @Override
-//    public void ccTempControlProf(int cardPosition)
-//    {
-//        TempControlProf chosenCard = (TempControlProf) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect();
-//    }
-//    @Override
-//    public void ccTwoAdditionalMoves(int cardPosition)
-//    {
-//        TwoAdditionalMoves chosenCard = (TwoAdditionalMoves) game.getCharacterCards().get(cardPosition);
-//        chosenCard.doEffect();
-//    }
 
     @Override
     public void action2(int steps) {
