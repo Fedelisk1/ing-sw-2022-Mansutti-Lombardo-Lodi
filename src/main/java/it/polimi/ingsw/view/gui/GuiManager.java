@@ -12,8 +12,10 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
@@ -104,13 +106,16 @@ public class GuiManager extends ViewObservable implements View{
         if (userNameAvailable) {
             if (newGame) {
                 // ask parameters for the new game
-                Platform.runLater(() -> Gui.getStage().setScene(new Scene(gameInfoRoot)));
+                Scene s = new Scene(gameInfoRoot);
+                Platform.runLater(() -> Gui.getStage().setScene(s));
             } else {
                 // ask wizard
                 wizardController.setAvailableWizards(availableWizards);
                 askWizard();
             }
             this.nickname = nickname;
+            System.out.println("set title");
+            Platform.runLater(() -> Gui.getStage().setTitle("Eriantys - " + nickname));
         } else {
             nicknameController.onError();
         }
