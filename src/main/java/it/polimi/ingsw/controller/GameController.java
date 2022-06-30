@@ -23,8 +23,8 @@ public class GameController implements Observer {
     private final Map<String, VirtualView> nickVirtualViewMap;
     private GameState state;
     private int playerActionCount;
-    private int highestPriority;
     private final int gameId;
+    private ArrayList<Player> prio;
 
     public GameController(int playersNumber, boolean expertMode, int gameId)
     {
@@ -32,6 +32,7 @@ public class GameController implements Observer {
         this.nickVirtualViewMap = Collections.synchronizedMap(new HashMap<>());
         this.state= new InitialState(this);
         this.gameId = gameId;
+        prio = new ArrayList<>(game.getPlayers().size());
         playerActionCount=0;
     }
 
@@ -43,6 +44,11 @@ public class GameController implements Observer {
     public void addPlayer(String nickname, VirtualView virtualView) {
         nickVirtualViewMap.put(nickname, virtualView);
         game.addPlayer(nickname);
+    }
+
+    public ArrayList<Player> getPrio()
+    {
+        return prio;
     }
 
     /**
@@ -532,11 +538,4 @@ public class GameController implements Observer {
         getVirtualView(winnerNick).notifyWinner();
     }
 
-    public int getHighestPriority() {
-        return highestPriority;
-    }
-
-    public void setHighestPriority(int highestPriority) {
-        this.highestPriority = highestPriority;
-    }
 }

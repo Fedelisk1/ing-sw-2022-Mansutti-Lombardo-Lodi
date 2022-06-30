@@ -40,16 +40,17 @@ public class EndTurnState implements GameState{
             }
             gameController.clearPlayerActionCount();
 
-            game.setCurrentPlayer(gameController.getHighestPriority());
+            //sets next player to the player that played the lowest card value last turn
+            game.setCurrentPlayer(game.getPlayers().indexOf(gameController.getPrio().get(0)));
+            gameController.getPrio().clear();
             gameController.askAssistantCard(null);
             gameController.changeState(new Planning1State(gameController));
             gameController.getState().planning1();
         }
         //if some players haven't yet completed action turns, set current player to the next player and go back to the start of the action phase
         else {
-            //game.getCurrentPlayerInstance().setCCActivated(false);
-            game.setCurrentPlayer((game.getCurrentPlayer()+1) % game.getMaxPlayers());
-
+            //sets current player to the next element in prio arraylist (the next lowest played card value)
+            game.setCurrentPlayer(game.getPlayers().indexOf(gameController.getPrio().get(gameController.getPlayerActionCount())));
             gameController.changeState(new Action1State(gameController));
             gameController.askActionPhase1();
         }
