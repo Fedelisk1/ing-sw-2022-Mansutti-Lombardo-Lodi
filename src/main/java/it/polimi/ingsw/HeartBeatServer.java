@@ -34,6 +34,9 @@ public class HeartBeatServer extends TimerTask implements Runnable {
         }
     }
 
+    /**
+     * Sends a ping message
+     */
     private void sendPing() {
         if (clientHandler.isConnected())
             clientHandler.sendMessage(message);

@@ -31,7 +31,9 @@ public class Gui extends Application {
         stage.setTitle("Eriantys");
         stage.setScene(new Scene(root));
         connectToServerController = connectLoader.getController();
-        stage.setResizable(false);
+
+        //stage.setResizable(false);
+
         stage.show();
         GuiManager.getSemaphore().release();
 

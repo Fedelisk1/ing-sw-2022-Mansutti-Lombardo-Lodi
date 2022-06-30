@@ -41,6 +41,9 @@ public class HeartBeatClient extends TimerTask implements Runnable {
         }
     }
 
+    /**
+     * Sends a ping message
+     */
     private void sendPing() {
         if (socketClient.isConnected())
             socketClient.sendMessage(message);

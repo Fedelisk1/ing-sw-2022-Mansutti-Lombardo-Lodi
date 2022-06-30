@@ -16,6 +16,11 @@ public class EndTurnState implements GameState{
         this.gameController=gameController;
         this.game=gameController.getGame();
     }
+
+    /**
+     * executes end player turn and if all player finished their action turn proceed to start again planning phase 1 for the next player,
+     * deactivates character card and checks for winning condition
+     */
     @Override
     public void endPlayerTurn()
     {

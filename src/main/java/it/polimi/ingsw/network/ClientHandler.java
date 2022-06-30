@@ -48,6 +48,9 @@ public class ClientHandler implements Runnable {
         this.nickname = nickname;
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         try {
@@ -89,6 +92,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * dispatch messages received from the server
+     * @param message message received
+     */
     public void onMessageArrived(Message message) {
         if(message.getMessageType() != MessageType.PING)
             System.out.println(threadName() + " message arrived: " + message.getMessageType());
@@ -109,6 +116,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * handles login and asserts that nickname is unique
+     * @param nickname
+     */
     private void handleLogin(String nickname) {
         System.out.println(threadName() + " validate nickname: find " + nickname + " in " + nickControllerMap.keySet() + "");
 
@@ -138,6 +149,12 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * allocates client and if there is an available empty game adds the player to it
+     * @param nickname
+     * @return
+     * @throws NoGameAvailableExcpetion if there isn't any available game
+     */
     private GameController allocateClient(String nickname) throws NoGameAvailableExcpetion {
         boolean availableEmptyGame = false;
         GameController availableGame = null;
@@ -164,6 +181,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * handles new game request
+     * @param message message NewGameRequest
+     */
     private void handleNewGameRequest(NewGameRequest message) {
         int players = message.getPlayers();
         boolean expert = message.isExpertMode();
@@ -181,6 +202,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * send message
+     * @param message message
+     */
     public void sendMessage(Message message) {
         synchronized (outputLock) {
             try {
@@ -192,6 +217,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * disconnects the client
+     */
     public void disconnect() {
         try {
             client.close();

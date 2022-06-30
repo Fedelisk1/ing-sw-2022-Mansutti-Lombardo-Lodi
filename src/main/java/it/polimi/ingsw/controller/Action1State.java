@@ -21,7 +21,7 @@ public class Action1State implements GameState{
     }
 
     /**
-     * Performs action1.
+     * Executes action 1, action 1  must be called a number of times equal to player number to change to next state, it moves students from entrance to dining room or island
      * @param color color of the student to move
      * @param islandNumber 1-indexed index of the destination island. If negative, the student will be moved to the dining room.
      */

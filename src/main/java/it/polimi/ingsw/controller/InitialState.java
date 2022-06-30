@@ -16,7 +16,10 @@ public class InitialState implements GameState{
         this.gameController=gameController;
     }
 
-    //creates a new game with the number of players and mode specified in the message
+    /**
+     * Creates a new game with the number of players and mode specified in the message, and set planning 1 state
+     */
+
     @Override
     public void startGame()
     {

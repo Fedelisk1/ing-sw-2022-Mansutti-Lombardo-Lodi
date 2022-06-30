@@ -19,7 +19,7 @@ public class Action3State implements GameState{
 
 
     /**
-     * transfers the students from the chosen cloudcard to the entrance of the current player
+     * executes action 3, transfers the students from the chosen cloud card to the entrance of the current player
      * @param cloudCard 1-indexed cloud card number
      */
     @Override

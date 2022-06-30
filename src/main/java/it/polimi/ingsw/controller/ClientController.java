@@ -29,6 +29,10 @@ public class ClientController implements ViewObserver, Observer {
         taskQueue = Executors.newSingleThreadExecutor();
     }
 
+    /**
+     * starts HeartBeat task and update the view
+     * @param serverInfo
+     */
     @Override
     public void onServerInfoInput(Map<String, String> serverInfo) {
         boolean connectionOk = true;
@@ -48,106 +52,209 @@ public class ClientController implements ViewObserver, Observer {
         taskQueue.submit(() -> view.showConnectionOutcome(finalConnectionOk));
     }
 
+    /**
+     * sends message LoginRequest
+     * @param nickname name of the player
+     */
     @Override
     public void onNicknameInput(String nickname) {
         this.nickname = nickname;
         client.sendMessage(new LoginRequest(nickname));
     }
 
+    /**
+     * sends message asking NewGameRequest
+     * @param playersNumber numbers of player
+     * @param expertMode expert mode
+     */
     @Override
     public void onNewGameParametersInput(int playersNumber, boolean expertMode) {
         client.sendMessage(new NewGameRequest(this.nickname, playersNumber, expertMode));
     }
+
+    /**
+     * sends message Choose Wizard
+     * @param wizard
+     */
 
     @Override
     public void onWizardChosen(Wizard wizard) {
         client.sendMessage(new ChooseWizard(nickname, wizard));
     }
 
+    /**
+     * sends message PlayAssistantCard
+     * @param chosenCard
+     */
     @Override
     public void onAssistantCardChosen(int chosenCard) {
         client.sendMessage(new PlayAssistantCard(nickname, chosenCard));
     }
 
+    /**
+     * sends message MoveStudentToIsland
+     * @param island number of island
+     * @param color color
+     */
     @Override
     public void onStudentMovedToIsland(int island, Color color) {
         client.sendMessage(new MoveStudentToIsland(nickname, island, color));
     }
 
+    /**
+     * sends message MoveStudentToDiningRoom
+     * @param color
+     */
     @Override
     public void onStudentMovedToDiningRoom(Color color) {
         client.sendMessage(new MoveStudentToDiningRoom(nickname, color));
     }
 
+    /**
+     * sends message MoveMotherNature
+     * @param steps number of steps
+     */
     @Override
     public void onMotherNatureMoved(int steps) {
         client.sendMessage(new MoveMotherNature(nickname, steps));
     }
+
+    /**
+     * sends message ChooseCLoudCard
+     * @param card number of card
+     */
 
     @Override
     public void onCloudCardChosen(int card) {
         client.sendMessage(new ChooseCloudCard(nickname, card));
     }
 
+    /**
+     * sends message PlayCharacterCard
+     * @param card number of card
+     */
+
     @Override
     public void onCCChosen(int card) {
         client.sendMessage(new PlayCharacterCard(nickname, card));
     }
+
+    /**
+     * sends message CCAllRemoveColorReply
+     * @param color color
+     */
 
     @Override
     public void onCCAllRemoveColorInput(Color color) {
         client.sendMessage(new CCAllRemoveColorReply(nickname, color));
     }
 
+    /**
+     * sends message CCBlockColorOnceReply
+     * @param color color
+     */
     @Override
     public void onCCBlockColorOnceInput(Color color) {
         client.sendMessage(new CCBlockColorOnceReply(nickname, color));
     }
 
+    /**
+     * sends message CCChoose1DiningRoomReply
+     * @param color color
+     */
     @Override
     public void onCCChoose1DiningRoomInput(Color color) {
         client.sendMessage(new CCChoose1DiningRoomReply(nickname, color));
     }
 
+    /**
+     * sends message CCChoose1ToIslandReply
+     * @param color color
+     * @param island number of island
+     */
     @Override
     public void onCCChose1ToIslandInput(Color color, int island) {
         client.sendMessage(new CCChoose1ToIslandReply(nickname, color, island));
     }
+
+    /**
+     * sends message CCChoose3ToEntranceReply
+     * @param chosenFromCard the students chosen from card
+     * @param chosenFromEntrance the students chosen from entrance
+     */
 
     @Override
     public void onCCChoose3ToEntranceInput(EnumMap<Color, Integer> chosenFromCard, EnumMap<Color, Integer> chosenFromEntrance) {
         client.sendMessage(new CCChoose3ToEntranceReply(nickname, chosenFromCard, chosenFromEntrance));
     }
 
+    /**
+     * sends message CCChoose3ToEntrancePartialReply
+     * @param chosenFromCard the students chosen from card
+     * @param chosenFromEntrance the students chosen from entrance
+     * @param inputCount number of iteration
+     */
+
     @Override
     public void onCCChoose3ToEntranceSingleInput(Color chosenFromCard, Color chosenFromEntrance, int inputCount) {
         client.sendMessage(new CCChoose3ToEntrancePartialReply(nickname, chosenFromCard, chosenFromEntrance, inputCount));
     }
+
+    /**
+     * sends message CCChoose3ToEntranceStop
+     */
 
     @Override
     public void onCCChoose3ToEntranceStop() {
         client.sendMessage(new CCChoose3ToEntranceStop(nickname));
     }
 
+    /**
+     * sends message CCChoseIslandReply
+     * @param chosenIsland number of chosen island
+     */
+
     @Override
     public void onCCChooseIslandInput(int chosenIsland) {
         client.sendMessage(new CCChooseIslandReply(nickname, chosenIsland));
     }
+
+    /**
+     * sends message CCExchange2StudentsReply
+     * @param chosenFromEntrance the students chosen from entrance
+     * @param chosenFromDiningRoom the students chosen from card
+     */
 
     @Override
     public void onCCExchange2StudentsInput(EnumMap<Color, Integer> chosenFromEntrance, EnumMap<Color, Integer> chosenFromDiningRoom) {
         client.sendMessage(new CCExchange2StudentsReply(nickname, chosenFromEntrance, chosenFromDiningRoom));
     }
 
+    /**
+     * sends message CCExchange2StudentsPartialReply
+     * @param fromEntrance the students chosen from entrance
+     * @param fromDiningRoom the students chosen from card
+     * @param inputCount number of iteration
+     */
+
     @Override
     public void onCCExchange2StudentsSingleInput(Color fromEntrance, Color fromDiningRoom, int inputCount) {
         client.sendMessage(new CCExchange2StudentsPartialReply(nickname, fromEntrance, fromDiningRoom, inputCount));
     }
 
+    /**
+     * sends message CCExchange2StudentsStop
+     */
+
     @Override
     public void onCCExchange2StudentsStop() {
         client.sendMessage(new CCExchange2StudentsStop(nickname));
     }
+
+    /**
+     * sends message CCNoEntryIslandReply
+     * @param chosenIsland number of chosen island
+     */
 
     @Override
     public void onCCNoEntryIslandInput(int chosenIsland) {

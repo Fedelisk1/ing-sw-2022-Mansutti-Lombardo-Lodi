@@ -56,11 +56,17 @@ public class Cli extends ViewObservable implements View {
      * Prints intro logo and calls askServerInfo.
      */
     public void begin() {
-        System.out.println("▄▄▄ .▄▄▄  ▪   ▄▄▄·  ▐ ▄ ▄▄▄▄▄ ▄· ▄▌.▄▄ · ");
-        System.out.println("▀▄.▀·▀▄ █·██ ▐█ ▀█ •█▌▐█•██  ▐█▪██▌▐█ ▀. ");
-        System.out.println("▐▀▀▪▄▐▀▀▄ ▐█·▄█▀▀█ ▐█▐▐▌ ▐█.▪▐█▌▐█▪▄▀▀▀█▄");
-        System.out.println("▐█▄▄▌▐█•█▌▐█▌▐█ ▪▐▌██▐█▌ ▐█▌· ▐█▀·.▐█▄▪▐█");
-        System.out.println(" ▀▀▀ .▀  ▀▀▀▀ ▀  ▀ ▀▀ █▪ ▀▀▀   ▀ •  ▀▀▀▀ ");
+        //System.out.println("▄▄▄ .▄▄▄  ▪   ▄▄▄·  ▐ ▄ ▄▄▄▄▄ ▄· ▄▌.▄▄ · ");
+        //System.out.println("▀▄.▀·▀▄ █·██ ▐█ ▀█ •█▌▐█•██  ▐█▪██▌▐█ ▀. ");
+        //System.out.println("▐▀▀▪▄▐▀▀▄ ▐█·▄█▀▀█ ▐█▐▐▌ ▐█.▪▐█▌▐█▪▄▀▀▀█▄");
+        //System.out.println("▐█▄▄▌▐█•█▌▐█▌▐█ ▪▐▌██▐█▌ ▐█▌· ▐█▀·.▐█▄▪▐█");
+        //System.out.println(" ▀▀▀ .▀  ▀▀▀▀ ▀  ▀ ▀▀ █▪ ▀▀▀   ▀ •  ▀▀▀▀ ");
+        System.out.println("  _____          _                   _                 \n" +
+                " | ____|  _ __  (_)   __ _   _ __   | |_   _   _   ___ \n" +
+                " |  _|   | '__| | |  / _` | | '_ \\  | __| | | | | / __|\n" +
+                " | |___  | |    | | | (_| | | | | | | |_  | |_| | \\__ \\\n" +
+                " |_____| |_|    |_|  \\__,_| |_| |_|  \\__|  \\__, | |___/\n" +
+                "                                           |___/       ");
         System.out.println();
 
         askServerInfo();
@@ -195,6 +201,11 @@ public class Cli extends ViewObservable implements View {
             System.out.println("Waiting for players to join...");
     }
 
+    /**
+     * Displays the playable assistant card and asks to choose one
+     * @param hand all assistant card in the player's hand
+     * @param notPlayable list of not playable cards
+     */
     @Override
     public void askAssistantCard(Map<Integer, Integer> hand, List<Integer> notPlayable) {
         System.out.println("--- PLAY ASSISTANT CARD ---");
@@ -213,35 +224,59 @@ public class Cli extends ViewObservable implements View {
         System.out.println(content);
     }
 
+    /**
+     * Displays reason of exit
+     * @param message
+     */
     @Override
     public void shutdown(String message) {
         System.out.println(message);
         System.exit(1);
     }
 
+    /**
+     * Displays reason of exit
+     */
     @Override
     public void showServerUnreachable() {
         System.out.println("Server unreachable");
         System.exit(1);
     }
 
+    /**
+     * Displays the winner player's name to other player
+     * @param winnerNick name of the winner
+     */
     @Override
     public void showWinnerToOthers(String winnerNick) {
         System.out.println(winnerNick + " wins the game!");
         System.exit(1);
     }
 
+    /**
+     * Displays to the winner player that the game ends
+     */
     @Override
     public void notifyWinner() {
         System.out.println("You won! The game ends here.");
         System.exit(1);
     }
 
+    /**
+     * Displays to other player that current player has chosen an assistant card
+     * @param player who chose the card
+     * @param card number of card
+     */
     @Override
     public void showPlayedAssistantCard(String player, int card) {
         System.out.println(player + " has chosen assistant card " + card);
     }
 
+    /**
+     * Whenever is called shows for all player: the island, every school dashboard, cloud tiles with students/professors/towers/mother nature.
+     * If the expert mode is active it displays coins and the three character card
+     * @param game the current game
+     */
     @Override
     public void update(ReducedGame game) {
         System.out.println("\n\n-------- Islands --------");
@@ -328,6 +363,13 @@ public class Cli extends ViewObservable implements View {
 
     }
 
+    /**
+     * Displays the request of action phase 1 and asks where do you want to move the student. It is called a number of times equals to number of players plus one.
+     * If the expert mode is active accept the request of playing a character card
+     * @param count number of iteration
+     * @param maxIsland number of island
+     * @param expert true if the expert mode is active
+     */
     @Override
     public void askActionPhase1(int count, int maxIsland, boolean expert) {
         List<String> allowed = new ArrayList<>(Arrays.asList("i", "dr"));
@@ -354,6 +396,12 @@ public class Cli extends ViewObservable implements View {
         }
     }
 
+    /**
+     * Displays the request of action phase 2 and asks how many steps you want to move mother nature.
+     * If the expert mode is active accept the request of playing a character card
+     * @param maxMNSteps number of steps granted by the assistant card played
+     * @param expert if the expert mode is active
+     */
     @Override
     public void askActionPhase2(int maxMNSteps, boolean expert) {
         List<String> allowedStr = new ArrayList<>();
@@ -376,6 +424,12 @@ public class Cli extends ViewObservable implements View {
         }
     }
 
+    /**
+     * Displays the request of action phase 3 and asks a cloud's number to refill the entrance.
+     * If the expert mode is active accept the request of playing a character card
+     * @param alloweValues list of cloud's number fill of students
+     * @param expert if the expert mode is active
+     */
     @Override
     public void askActionPhase3(List<Integer> alloweValues, boolean expert) {
         String prompt = "Please, enter a cloud card's number to refill your School Dashboard's entrance";
@@ -396,25 +450,39 @@ public class Cli extends ViewObservable implements View {
             notifyObservers(o -> o.onCloudCardChosen(Integer.parseInt(input)));
     }
 
+    /**
+     * Asks color for activation of CC
+     */
     @Override
     public void askCCAllRemoveColorInput() {
         Color color = colorInput();
 
         notifyObservers(o -> o.onCCAllRemoveColorInput(color));
     }
-
+    /**
+     * Asks color for activation of CC
+     */
     @Override
     public void askCCBlockColorOnceInput() {
         Color color = colorInput();
         notifyObservers(o -> o.onCCBlockColorOnceInput(color));
     }
 
+    /**
+     * Asks color for activation of CC
+     * @param allowedValues list of allowed color
+     */
     @Override
     public void askCCChoose1DiningRoomInput(List<Color> allowedValues) {
         Color color = colorInput(allowedValues);
         notifyObservers(o -> o.onCCChoose1DiningRoomInput(color));
     }
 
+    /**
+     * Asks color for activation of CC
+     * @param allowedColors list of allowed color
+     * @param maxIsland number of island
+     */
     @Override
     public void askCCChoose1ToIslandInput(List<Color> allowedColors, int maxIsland) {
         Color color = colorInput(allowedColors);
@@ -423,6 +491,12 @@ public class Cli extends ViewObservable implements View {
         notifyObservers(o -> o.onCCChose1ToIslandInput(color, island));
     }
 
+    /**
+     * Asks color for activation of CC showing of allowed color
+     * @param allowedFromCC list of allowed color from CC
+     * @param allowedFromEntrance list of allowed color from entrance
+     * @param inputCount number of iteration
+     */
     @Override
     public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance, int inputCount) {
         EnumMap<Color, Integer> chosenFromCard = new EnumMap<>(Color.class);
@@ -448,6 +522,10 @@ public class Cli extends ViewObservable implements View {
         notifyObservers(o -> o.onCCChoose3ToEntranceInput(chosenFromCard, chosenFromEntrance));
     }
 
+    /**
+     * Asks number of island on which apply the effect of CC
+     * @param maxIsland number of island
+     */
     @Override
     public void askCCChooseIslandInput(int maxIsland) {
         int chosenIsland = intInput(1, maxIsland, "Please, choose an island on which apply the effect: ");
@@ -455,6 +533,12 @@ public class Cli extends ViewObservable implements View {
         notifyObservers(o -> o.onCCChooseIslandInput(chosenIsland));
     }
 
+    /**
+     * Asks color for activation of CC showing of allowed color
+     * @param entrance list of allowed entrance's color
+     * @param diningRoom list of allowed dining room's color
+     * @param inputCount
+     */
     @Override
     public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom, int inputCount) {
         EnumMap<Color, Integer> chosenFromEntrance = new EnumMap<>(Color.class);
@@ -479,7 +563,10 @@ public class Cli extends ViewObservable implements View {
 
         notifyObservers(o -> o.onCCExchange2StudentsInput(chosenFromEntrance, chosenFromDiningRoom));
     }
-
+    /**
+     * Asks number of island on which apply the effect of CC
+     * @param maxIsland number of island
+     */
     @Override
     public void askCCNoEntryIslandInput(int maxIsland) {
         int chosenIsland = intInput(1, maxIsland, "Please, choose an island on which apply the effect: ");
@@ -600,6 +687,14 @@ public class Cli extends ViewObservable implements View {
         return colorOrStringInput(allowed, null, prompt);
     }
 
+    /**
+     * Allows a string input from the user, providing input validation: the input must be
+     * contained in the allowed list
+     * @param allowed list of allowed color
+     * @param string
+     * @param prompt
+     * @return
+     */
     private Color colorOrStringInput(List<Color> allowed, String string, String prompt) {
         List<String> allowedStrings = new ArrayList<>(allowed.stream().map(Color::toString).toList());
         Set<String> allowedColorsSet = new HashSet<>(allowedStrings);
@@ -615,6 +710,10 @@ public class Cli extends ViewObservable implements View {
             return Color.valueOf(input.toUpperCase());
     }
 
+    /**
+     * Reads the input
+     * @return the value read
+     */
     private String readLine() {
         FutureTask<String> futureTask = new FutureTask<>(() -> {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -639,6 +738,10 @@ public class Cli extends ViewObservable implements View {
         return input;
     }
 
+    /**
+     * Displays all available character card
+     * @param characterCards list of CC
+     */
     private void displayCharacterCards(List<ReducedCharacterCard> characterCards) {
         int i = 1;
         for (ReducedCharacterCard cc : characterCards) {
@@ -659,6 +762,9 @@ public class Cli extends ViewObservable implements View {
         }
     }
 
+    /**
+     * Asks the number of character card to play
+     */
     private void askCharacterCard() {
         int chosenCard = intInput(1, Game.CHARACTER_CARDS, "Please enter the number of the Character Card to play: ");
 

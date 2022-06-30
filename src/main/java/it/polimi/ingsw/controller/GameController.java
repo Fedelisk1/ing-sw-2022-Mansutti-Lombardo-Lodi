@@ -70,6 +70,10 @@ public class GameController implements Observer {
         return game.getMaxPlayers();
     }
 
+    /**
+     * Changes state
+     * @param state next state
+     */
     public void changeState(GameState state)
     {
         System.out.println(gameLogHeader() + " new state: " + state.toString());
@@ -88,6 +92,9 @@ public class GameController implements Observer {
         System.out.println(gameLogHeader() + " " + toLog);
     }
 
+    /**
+     * when the game starts the state is change to planning 1 state
+     */
     private void startGame()
     {
         if (game.getPlayersCount() != game.getMaxPlayers())
@@ -115,6 +122,10 @@ public class GameController implements Observer {
         return getVirtualView(game.getCurrentPlayerNick());
     }
 
+    /**
+     * Dispatch messages received
+     * @param message message
+     */
     @Override
     public void onMessageArrived(Message message)
     {
@@ -196,6 +207,11 @@ public class GameController implements Observer {
 
     }
 
+    /**
+     * manages the request of wizard, updates the lobby
+     * @param nickname
+     * @param wizard
+     */
     private void handleChooseWizard(String nickname, Wizard wizard) {
         try {
             System.out.println(gameLogHeader() + " " + nickname + " has requested wizard " + wizard);
@@ -225,10 +241,16 @@ public class GameController implements Observer {
             startGame();
     }
 
+    /**
+     * sets playerActionCount to 0
+     */
     public void clearPlayerActionCount() {
         this.playerActionCount = 0;
     }
 
+    /**
+     * increments playerActionCount
+     */
     public void addPlayerActionCount() {
         this.playerActionCount++;
     }
@@ -327,6 +349,10 @@ public class GameController implements Observer {
         getViews().forEach(vv -> vv.shutdown(nicknameDisconnected + " has disconnected"));
     }
 
+    /**
+     * manages the request of character card, checks number of coins and then update view
+     * @param chosenCard
+     */
     private void handleCharacterCardRequest(int chosenCard) {
         CharacterCard card = game.getCharacterCard(chosenCard - 1);
 
@@ -404,6 +430,10 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     * Calls the character card effect and then restore game flow
+     * @param color color
+     */
     private void playCCAllRemoveColor(Color color) {
         if(color != null) {
             AllRemoveColor card = (AllRemoveColor) game.getCharacterCard(CharacterCardType.ALL_REMOVE_COLOR);
@@ -415,26 +445,43 @@ public class GameController implements Observer {
         restoreGameFlow();
     }
 
+    /**
+     * Calls the character card effect and then restore game flow
+     * @param color color
+     */
     private void playCCBlockColorOnce(Color color) {
         BlockColorOnce card = (BlockColorOnce) game.getCharacterCard(CharacterCardType.BLOCK_COLOR_ONCE);
         card.doEffect(color);
 
         restoreGameFlow();
     }
-
+    /**
+     * Calls the character card effect and then restore game flow
+     * @param color color
+     */
     private void playCCChoose1DiningRoom(Color color) {
         Choose1DiningRoom card = (Choose1DiningRoom) game.getCharacterCard(CharacterCardType.CHOOSE_1_DINING_ROOM);
         card.doEffect(color);
 
         restoreGameFlow();
     }
-
+    /**
+     * Calls the character card effect and then restore game flow
+     * @param color color
+     * @param island number of island
+     */
     private void playCCChoose1ToIsland(Color color, int island) {
         Choose1ToIsland choose1ToIsland = (Choose1ToIsland) game.getCharacterCard(CharacterCardType.CHOOSE_1_TO_ISLAND);
         choose1ToIsland.doEffect(color, island);
 
         restoreGameFlow();
     }
+    /**
+     * Calls the character card partial effect with a single color from card and from entrance
+     * @param fromCard the color chosen from card
+     * @param fromEntrance the color chosen from entrance
+     * @param inputCount number of chooses (MAX 3)
+     */
 
     private void playCCChoose3ToEntrancePartialSwap(Color fromCard, Color fromEntrance, int inputCount) {
         Choose3toEntrance card = (Choose3toEntrance) game.getCharacterCard(CharacterCardType.CHOOSE_3_TO_ENTRANCE);
@@ -454,6 +501,14 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     *
+     * Calls the character card effect with all color from card and from entrance
+     * @param fromCard the color chosen from card
+     * @param fromEntrance the color chosen from entrance
+     *
+     */
+
     private void playCCChoose3ToEntrance(EnumMap<Color, Integer> fromCard, EnumMap<Color, Integer> fromEntrance) {
         Choose3toEntrance choose3toEntrance = (Choose3toEntrance) game.getCharacterCard(CharacterCardType.CHOOSE_3_TO_ENTRANCE);
         choose3toEntrance.doEffect(fromCard, fromEntrance);
@@ -461,6 +516,10 @@ public class GameController implements Observer {
         restoreGameFlow();
     }
 
+    /**
+     * Calls the character card effect
+     * @param chosenIsland number of island
+     */
     private void playCCChooseIsland(int chosenIsland) {
         ChooseIsland card = (ChooseIsland) game.getCharacterCard(CharacterCardType.CHOOSE_ISLAND);
         card.doEffect(chosenIsland);
@@ -468,6 +527,11 @@ public class GameController implements Observer {
         restoreGameFlow();
     }
 
+    /**
+     * Calls the character card effect
+     * @param fromEntrance
+     * @param fromDiningRoom
+     */
     private void playCCExchange2Students(EnumMap<Color, Integer> fromEntrance, EnumMap<Color, Integer> fromDiningRoom) {
         Exchange2Students card = (Exchange2Students) game.getCharacterCard(CharacterCardType.EXCHANGE_2_STUDENTS);
         card.doEffect(fromEntrance, fromDiningRoom);
@@ -475,6 +539,12 @@ public class GameController implements Observer {
         restoreGameFlow();
     }
 
+    /**
+     * Calls the character card partial effect with a single color from entrance and from dining room
+     * @param fromEntrance color from entrance
+     * @param fromDiningRoom color from dining room
+     * @param inputCount number of iteration (MAX 2)
+     */
     private void playCCExchange2StudentsPartialSwap(Color fromEntrance, Color fromDiningRoom, int inputCount) {
         Exchange2Students card = (Exchange2Students) game.getCharacterCard(CharacterCardType.EXCHANGE_2_STUDENTS);
 
@@ -495,6 +565,11 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     * Calls the character card effect
+     * @param island number of island
+     */
+
     private void playCCNoEntryIsland(int island) {
         NoEntryIsland card = (NoEntryIsland) game.getCharacterCard(CharacterCardType.NO_ENTRY_ISLAND);
         card.doEffect(island);
@@ -502,6 +577,9 @@ public class GameController implements Observer {
         restoreGameFlow();
     }
 
+    /**
+     *When a condition deviates the correct game flow (for example not enough coins, wrong color...)
+     */
     private void restoreGameFlow() {
         updateViews();
 
@@ -514,28 +592,38 @@ public class GameController implements Observer {
         }
     }
 
+    /**
+     * Calls the method to process action phase 1 and updates view
+     */
     public void askActionPhase1() {
         if(state instanceof Action1State) {
             int action1Moves = ((Action1State) state).getMovesCount();
-            //modifico 3 e metto 4
+
             if (action1Moves <= 4) {
                 getCurrentPlayerView().askActionPhase1(action1Moves, game.getIslands().size(), getGame().isExpertMode());
                 broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 1, move " + action1Moves + ")...");
             }
         }
     }
-
+    /**
+     * Calls the method to process action phase 2 and updates view
+     */
     public void askActionPhase2() {
         getCurrentPlayerView().askActionPhase2(game.getCurrentPlayerInstance().getMaxSteps(), game.isExpertMode());
         broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 2)...");
     }
-
+    /**
+     * Calls the method to process action phase 3 and updates view
+     */
     public void askActionPhase3() {
         getCurrentPlayerView().askActionPhase3(game.getPlayableCloudCards().stream().map(i -> i+1).toList(), game.isExpertMode());
         broadcastExceptCurrentPlayer(game.getCurrentPlayerNick() + " is playing (action phase 3)...");
     }
 
-
+    /**
+     * When there is a winner in the game broadcast all players
+     * @param winner
+     */
     public void notifyWinner(Player winner) {
         String winnerNick = winner.getNickname();
         System.out.println(gameLogHeader() + " finished: " + winnerNick + " won.");

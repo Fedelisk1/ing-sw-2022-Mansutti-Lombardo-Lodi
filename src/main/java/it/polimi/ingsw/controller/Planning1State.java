@@ -20,7 +20,7 @@ public class Planning1State implements GameState{
     }
 
     /**
-     * fills all cloud cards
+     * Executes planning phase 1, it fills all cloud cards
      */
     @Override
     public void planning1() {

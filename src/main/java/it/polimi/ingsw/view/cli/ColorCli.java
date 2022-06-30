@@ -29,6 +29,12 @@ public enum ColorCli {
         return escape;
     }
 
+    /**
+     * Prints circle
+     * @param color color
+     * @param quantity number of circle
+     * @return string
+     */
     public static String circles(Color color, int quantity) {
         final String[] circles = {""};
 
@@ -43,10 +49,19 @@ public enum ColorCli {
         System.out.print(circles(color, quantity));
     }
 
+    /**
+     * Prints quantity of coins
+     * @param quantity number of coins
+     */
     public static void printCoins(int quantity) {
         IntStream.rangeClosed(1, quantity).forEach(i -> System.out.print("\uD83D\uDCB5 "));
     }
 
+    /**
+     * If the no entry tiles CC is extracted, prints quantity of available tiles
+     * @param quantity number of available tiles
+     * @return a string
+     */
     public static String noEntryTiles(int quantity) {
         StringBuilder res = new StringBuilder("");
 

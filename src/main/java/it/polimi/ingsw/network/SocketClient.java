@@ -33,6 +33,9 @@ public class SocketClient extends Observable {
         connected = new AtomicBoolean(true);
     }
 
+    /**
+     * reads message about the connection and eventually shutdown client
+     */
     public void readMessage() {
         Thread readerThread = new Thread(() -> {
             while (connected.get()) {
@@ -69,7 +72,10 @@ public class SocketClient extends Observable {
         readerThread.start();
     }
 
-
+    /**
+     * send message
+     * @param message message
+     */
     public void sendMessage(Message message) {
         try {
             outputStream.writeObject(message);
@@ -79,6 +85,9 @@ public class SocketClient extends Observable {
         }
     }
 
+    /**
+     * closes socket
+     */
     public void disconnect() {
         try {
             socket.close();

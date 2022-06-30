@@ -28,7 +28,8 @@ public class Planning2State implements GameState{
     }
 
     /**
-     * executes planning phase 2, planning phase 2 must be called a number of times equal to player number to change to next state
+     * Executes planning phase 2, planning phase 2 must be called a number of times equal to player number to change to next state.
+     * All players choose an assistant card
      * @param chosenPriority by the player
      */
     @Override

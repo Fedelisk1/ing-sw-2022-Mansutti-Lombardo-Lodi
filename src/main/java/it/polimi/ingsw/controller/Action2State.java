@@ -19,7 +19,7 @@ public class Action2State implements GameState{
 
 
     /**
-     * Moves mother nature, changes island ownership and checks/executes possible island merges
+     * Executes action 2, moves mother nature, changes island ownership and checks/executes possible island merges
      * @param steps to move mother nature
      */
     @Override

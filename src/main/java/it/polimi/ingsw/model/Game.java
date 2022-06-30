@@ -85,7 +85,7 @@ public class Game {
         p.setNickname(nickname);
 
         if (expertMode)
-            p.setCoins(20);
+            p.setCoins(1);
 
         this.players.add(p);
     }
@@ -390,9 +390,7 @@ public class Game {
 
         Collections.shuffle(res);
 
-        return Arrays.asList(6, 9, 5);
-
-        //return res.subList(0, CHARACTER_CARDS);
+        return res.subList(0, CHARACTER_CARDS);
     }
 
     /**
