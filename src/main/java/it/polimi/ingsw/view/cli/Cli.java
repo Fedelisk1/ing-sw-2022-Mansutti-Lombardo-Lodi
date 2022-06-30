@@ -330,16 +330,13 @@ public class Cli extends ViewObservable implements View {
 
     @Override
     public void askActionPhase1(int count, int maxIsland, boolean expert) {
-        List<String> allowed = Arrays.asList("i", "dr");
+        List<String> allowed = new ArrayList<>(Arrays.asList("i", "dr"));
 
         String prompt = "Action Phase 1 - Move " + count + ": where do you want to move your student? Please, enter \"I\" for island or \"DR\" for Dining Room";
-        System.out.println(prompt);
         if (expert) {
             prompt = prompt.concat("; if you wish to play a Character Card, enter \"CC\" ");
             allowed.add("cc");
         }
-
-        System.out.println(prompt);
 
         String destination = strInput(allowed, prompt);
 

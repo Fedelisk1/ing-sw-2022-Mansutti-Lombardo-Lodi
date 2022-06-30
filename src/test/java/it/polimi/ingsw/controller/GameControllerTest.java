@@ -123,8 +123,6 @@ class GameControllerTest {
         }).when(virtualView2).askAssistantCard(eq(h2), anyList());
 
 
-
-
         // 1) AP1-p1 moves 3 blue students to DR
         doAnswer(invocation -> {
             System.out.println("ap 1 p1");
