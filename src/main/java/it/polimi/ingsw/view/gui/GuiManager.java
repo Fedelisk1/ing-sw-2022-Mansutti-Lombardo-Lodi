@@ -114,7 +114,7 @@ public class GuiManager extends ViewObservable implements View{
                 askWizard();
             }
             this.nickname = nickname;
-            System.out.println("set title");
+
             Platform.runLater(() -> Gui.getStage().setTitle("Eriantys - " + nickname));
         } else {
             nicknameController.onError();
