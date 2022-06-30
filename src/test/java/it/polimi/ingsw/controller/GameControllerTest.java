@@ -62,4 +62,6 @@ class GameControllerTest {
         gameController.addPlayer(nick3, view3);
 
     }
+
+
 }

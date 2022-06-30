@@ -61,6 +61,7 @@ public class Action2State implements GameState{
             currentIslandGroup.setOccupiedBy(higherInfluence);
         }
 
+        //game ends if one player finishes the towers
         if(higherInfluence.getSchoolDashboard().getTowers()<=0) {
             winner = higherInfluence;
 
