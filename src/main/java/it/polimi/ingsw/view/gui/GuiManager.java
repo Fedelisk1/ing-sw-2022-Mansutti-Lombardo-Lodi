@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -223,12 +224,26 @@ public class GuiManager extends ViewObservable implements View{
 
     @Override
     public void shutdown(String message) {
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.INFORMATION);
+            a.setHeaderText("Connection error");
+            a.setContentText(message);
 
+            a.setOnCloseRequest(de -> Platform.exit());
+            a.show();
+        });
     }
 
     @Override
     public void showServerUnreachable() {
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.INFORMATION);
+            a.setHeaderText("Server unreachable");
+            a.setContentText("The connection with the server was lost");
 
+            a.setOnCloseRequest(de -> Platform.exit());
+            a.show();
+        });
     }
 
     @Override

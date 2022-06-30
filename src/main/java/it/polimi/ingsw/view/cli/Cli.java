@@ -578,13 +578,14 @@ public class Cli extends ViewObservable implements View {
 
         while (! inputOk) {
             inputStr = input.nextLine();
+            System.out.println("provided input: " + inputStr + " allowedupper=" + allowedUpper);
             inputOk = allowedUpper.contains(inputStr.toUpperCase());
 
             if (! inputOk)
                 System.out.println("Input not allowed. Please retry.");
         }
 
-        return inputStr;
+        return inputStr.toUpperCase();
     }
 
     private Color colorInput() {
