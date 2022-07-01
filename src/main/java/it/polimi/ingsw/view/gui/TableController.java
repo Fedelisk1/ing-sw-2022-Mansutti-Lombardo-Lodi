@@ -92,6 +92,10 @@ public class TableController extends ViewObservable implements Initializable {
         chosenAssistant = null;
     }
 
+    /**
+     * Performs action phase 1 moving the students from the entrance to an island or to the dining room
+     * @param count number of iteratiofn
+     */
     public void askActionPhase1(int count) {
         phase = Phase.ACTION_1;
         showMessage("Action phase 1 - move " + count + ". Please, select a student from the entrance");
@@ -100,6 +104,10 @@ public class TableController extends ViewObservable implements Initializable {
         characterCardButtons.forEach(b -> b.setDisable(false));
     }
 
+    /**
+     * Performs action phase 2 asking for the island to move mother nature to
+     * @param maxMNStpes maximum number of steps allowed by the played assistant card
+     */
     public void askActionPhase2(int maxMNStpes) {
         phase = Phase.ACTION_2;
         this.maxMNSteps = maxMNStpes;
@@ -109,6 +117,10 @@ public class TableController extends ViewObservable implements Initializable {
         characterCardButtons.forEach(b -> b.setDisable(false));
     }
 
+    /**
+     * Performs action phase 3 asking to select a cloud card to fill the entrance
+     * @param alloweValues the number of cloud cards that contain students
+     */
     public void askActionPhase3(List<Integer> alloweValues) {
         phase = Phase.ACTION_3;
         allowedClodCards = alloweValues;
@@ -118,6 +130,11 @@ public class TableController extends ViewObservable implements Initializable {
         characterCardButtons.forEach(b -> b.setDisable(false));
     }
 
+    /**
+     * Shows next to the school the assistant card of the player who played it
+     * @param player who played card
+     * @param card number of assistant card played
+     */
     public void showPlayedAssistant(String player, int card) {
         chosenAssistant = null;
         ImageView assistantIV = (ImageView) Gui.getStage().getScene().lookup("#assistantIV" + player);
@@ -132,6 +149,11 @@ public class TableController extends ViewObservable implements Initializable {
         diningRoomUpdateSem = new Semaphore(0);
     }
 
+    /**
+     * Updates all components in the view (island, school dashboard...) based on the input
+     *
+     * @param game the reduced game
+     */
     public void update(ReducedGame game) {
         this.game = game;
 
@@ -697,6 +719,11 @@ public class TableController extends ViewObservable implements Initializable {
         return iv;
     }
 
+    /**
+     * Asks to play an allowed assistant card
+     * @param hand all the player's cards
+     * @param notPlayable non-playable cards
+     */
     public void askAssistantCard(Map<Integer, Integer> hand, List<Integer> notPlayable) {
         phase = Phase.PLANNING_2;
 
@@ -775,6 +802,10 @@ public class TableController extends ViewObservable implements Initializable {
         notifyObservers(o -> o.onCCChosen(cardIndex + 1));
      }
 
+    /**
+     * Displays the string in the interface
+     * @param content the string that will be printed
+     */
     public void showMessage(String content) {
         promptText.setText(content);
     }

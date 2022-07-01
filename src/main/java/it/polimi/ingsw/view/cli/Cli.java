@@ -163,6 +163,10 @@ public class Cli extends ViewObservable implements View {
         notifyObservers(o -> o.onWizardChosen(Wizard.valueOf(chosenWizard)));
     }
 
+    /**
+     * When a player chooses a wizard not present in the list of available
+     * @param availableWizards list of available wizard
+     */
     @Override
     public void showWizardError(List<Wizard> availableWizards) {
         System.out.println("\nLooks like this wizard has already been chosen by another player :( \n");

@@ -43,6 +43,11 @@ public class LobbyController implements Initializable {
                 .forEach(this::addPlayer);
     }
 
+    /**
+     * When a new player is added set nickname in the stage,
+     * set the wizard image and when all player have joined enable the start button
+     * @param player
+     */
     private void addPlayer(ReducedPlayer player) {
         players.add(player);
         int i = players.size();
@@ -67,6 +72,11 @@ public class LobbyController implements Initializable {
             startButton.setDisable(false);
     }
 
+    /**
+     * before starting the game it shows a number of slots equal to the number of players entered at the start of the game,
+     * and as long as all players are not connected it shows a spinner
+     * @param maxPlayers
+     */
     public void setPlayersNumber(int maxPlayers) {
         if (players.size() != 0)
             return;
