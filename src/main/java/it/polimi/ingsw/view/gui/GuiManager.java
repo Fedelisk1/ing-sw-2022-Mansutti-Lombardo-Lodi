@@ -92,7 +92,11 @@ public class GuiManager extends ViewObservable implements View{
     public static Semaphore getSemaphore() {
         return semaphore;
     }
-
+    /**
+     * Displays appropriate message for connection to server.
+     *
+     * @param connectionOk true if connection was successful.
+     */
     @Override
     public void showConnectionOutcome(boolean connectionOk) {
         if (connectionOk) {
@@ -101,7 +105,12 @@ public class GuiManager extends ViewObservable implements View{
             connectToServerController.onError();
         }
     }
-
+    /**
+     * Displays the outcome of login.
+     * @param userNameAvailable true if the chosen nickname is available.
+     * @param newGame true if the client is going to start a new game.
+     * @param nickname nickname of the user.
+     */
     @Override
     public void showLoginOutcome(boolean userNameAvailable, boolean newGame, String nickname, List<Wizard> availableWizards) {
         if (userNameAvailable) {
@@ -122,20 +131,35 @@ public class GuiManager extends ViewObservable implements View{
         }
     }
 
+    /**
+     * At the beginning of the game it asks you to select a wizard
+     */
     public void askWizard() {
         Platform.runLater(() -> Gui.getStage().setScene(new Scene(wizardRoot)));
     }
 
+    /**
+     * After that one player has chosen the wizard, he updates the list of those available
+     * @param availableWizards list of available wizards
+     */
     @Override
     public void updateAvailableWizards(List<Wizard> availableWizards) {
         wizardController.setAvailableWizards(availableWizards);
     }
-
+    /**
+     * When a player chooses a wizard not present in the list of available
+     * @param availableWizards list of available wizard
+     */
     @Override
     public void showWizardError(List<Wizard> availableWizards) {
         wizardController.setAvailableWizards(availableWizards);
     }
-
+    /**
+     * Displays the lobby status to the user.
+     *
+     * @param players players already in the lobby.
+     * @param playersNumber maximum number of players of the lobby.
+     */
     @Override
     public void showLobby(List<ReducedPlayer> players, int playersNumber) {
         Platform.runLater(() -> {
@@ -146,82 +170,146 @@ public class GuiManager extends ViewObservable implements View{
             lobbyController.setPlayers(players);
         });
     }
-
+    /**
+     * Displays the playable assistant card and asks to choose one
+     * @param hand all assistant card in the player's hand
+     * @param notPlayable list of not playable cards
+     */
     @Override
     public void askAssistantCard(Map<Integer, Integer> hand, List<Integer> notPlayable) {
         tableController.askAssistantCard(hand, notPlayable);
     }
-
+    /**
+     * Displays to other player that current player has chosen an assistant card
+     * @param player who chose the card
+     * @param card number of card
+     */
     @Override
     public void showPlayedAssistantCard(String player, int card) {
         tableController.showPlayedAssistant(player, card);
     }
-
+    /**
+     * Whenever is called update for all player: the island, every school dashboard, cloud tiles with students/professors/towers/mother nature.
+     * If the expert mode is active it displays coins and the three character card
+     * @param game the current game
+     */
     @Override
     public void update(ReducedGame game) {
         tableController.update(game);
     }
-
+    /**
+     * Displays the request of action phase 1 and asks where do you want to move the student. It is called a number of times equals to number of players plus one.
+     * If the expert mode is active accept the request of playing a character card
+     * @param count number of iteration
+     * @param maxIsland number of island
+     * @param expert true if the expert mode is active
+     */
     @Override
     public void askActionPhase1(int count, int maxIsland, boolean expert) {
         Platform.runLater(() -> tableController.askActionPhase1(count));
     }
-
+    /**
+     * Displays the request of action phase 2 and asks how many steps you want to move mother nature.
+     * If the expert mode is active accept the request of playing a character card
+     * @param maxMNStpes number of steps granted by the assistant card played
+     * @param expert if the expert mode is active
+     */
     @Override
     public void askActionPhase2(int maxMNStpes, boolean expert) {
         Platform.runLater(() -> tableController.askActionPhase2(maxMNStpes));
     }
-
+    /**
+     * Displays the request of action phase 3 and asks a cloud's number to refill the entrance.
+     * If the expert mode is active accept the request of playing a character card
+     * @param alloweValues list of cloud's number fill of students
+     * @param expert if the expert mode is active
+     */
     @Override
     public void askActionPhase3(List<Integer> alloweValues, boolean expert) {
         Platform.runLater(() -> tableController.askActionPhase3(alloweValues));
     }
-
+    /**
+     * Asks color for activation of CC
+     */
     @Override
     public void askCCAllRemoveColorInput() {
         tableController.askCCAllRemoveColorInput();
     }
-
+    /**
+     * Asks color for activation of CC
+     */
     @Override
     public void askCCBlockColorOnceInput() {
         tableController.askCCBlockColorOnceInput();
     }
-
+    /**
+     * Asks color for activation of CC
+     * @param allowedValues list of allowed color
+     */
     @Override
     public void askCCChoose1DiningRoomInput(List<Color> allowedValues) {
         tableController.askCCChoose1DiningRoomInput();
     }
-
+    /**
+     * Asks color for activation of CC
+     * @param allowedColors list of allowed color
+     * @param maxIsland number of island
+     */
     @Override
     public void askCCChoose1ToIslandInput(List<Color> allowedColors, int maxIsland) {
         tableController.askCCChoose1ToIslandInput();
     }
-
+    /**
+     * Asks color for activation of CC showing of allowed color
+     * @param allowedFromCC list of allowed color from CC
+     * @param allowedFromEntrance list of allowed color from entrance
+     * @param inputCount number of iteration
+     */
     @Override
     public void askCCChoose3ToEntranceInput(List<Color> allowedFromCC, List<Color> allowedFromEntrance, int inputCount) {
         tableController.askCCChoose3ToEntranceInput(inputCount);
     }
 
+    /**
+     * Asks number of island on which apply the effect of CC
+     * @param maxIsland number of island
+     */
     @Override
     public void askCCChooseIslandInput(int maxIsland) {
         tableController.askCCChooseIslandInput();
     }
-
+    /**
+     * Asks color for activation of CC showing of allowed color
+     * @param entrance list of allowed entrance's color
+     * @param diningRoom list of allowed dining room's color
+     * @param inputCount number of iteration
+     */
     @Override
     public void askCCExchange2StudentsInput(List<Color> entrance, List<Color> diningRoom, int inputCount) {
         tableController.askCCExchange2StudentsInput(inputCount);
     }
-
+    /**
+     * Asks number of island on which apply the effect of CC
+     * @param maxIsland number of island
+     */
     @Override
     public void askCCNoEntryIslandInput(int maxIsland) {
         tableController.askCCNoEntryIslandInput();
     }
 
+    /**
+     * Displays a string message
+     * @param content
+     */
     @Override
     public void showStringMessage(String content) {
         tableController.showMessage(content);
     }
 
+    /**
+     * Closes the game window when there is a connection error
+     * @param message this is a string
+     */
     @Override
     public void shutdown(String message) {
         Platform.runLater(() -> {
@@ -234,6 +322,9 @@ public class GuiManager extends ViewObservable implements View{
         });
     }
 
+    /**
+     * Shows a string when the connection has been lost
+     */
     @Override
     public void showServerUnreachable() {
         Platform.runLater(() -> {
@@ -246,16 +337,26 @@ public class GuiManager extends ViewObservable implements View{
         });
     }
 
+    /**
+     * When one player wins the game he shows to others the winner's name
+     * @param winnerNick name of the winner
+     */
     @Override
     public void showWinnerToOthers(String winnerNick) {
         Platform.runLater(() -> {tableController.showLoser(winnerNick); });
     }
 
+    /**
+     * Notify the winner
+     */
     @Override
     public void notifyWinner() {
         Platform.runLater(() -> {tableController.showWinner(); });
     }
 
+    /**
+     * Show off gui
+     */
     public void showTable() {
         Platform.runLater(() -> {
             Gui.getStage().setScene(new Scene(tableRoot));

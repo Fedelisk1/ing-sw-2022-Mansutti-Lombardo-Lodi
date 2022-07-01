@@ -118,7 +118,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * handles login and asserts that nickname is unique
-     * @param nickname
+     * @param nickname name to verify
      */
     private void handleLogin(String nickname) {
         System.out.println(threadName() + " validate nickname: find " + nickname + " in " + nickControllerMap.keySet() + "");
@@ -151,7 +151,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * allocates client and if there is an available empty game adds the player to it
-     * @param nickname
+     * @param nickname name of the player
      * @return
      * @throws NoGameAvailableExcpetion if there isn't any available game
      */

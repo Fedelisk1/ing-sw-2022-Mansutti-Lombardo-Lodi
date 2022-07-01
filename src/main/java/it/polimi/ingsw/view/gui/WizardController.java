@@ -23,6 +23,9 @@ import java.util.ResourceBundle;
 
 import static it.polimi.ingsw.model.Wizard.*;
 
+/**
+ * Management of wizards in the gui
+ */
 public class WizardController extends ViewObservable implements Initializable {
     public HBox wizardsHBox;
     public Button kingButton;
@@ -37,6 +40,10 @@ public class WizardController extends ViewObservable implements Initializable {
         availableWizards = Arrays.stream(values()).toList();
     }
 
+    /**
+     * After each choice it updates the view of the available wizards removing those already chosen
+     * @param availableWizardsUpdate list of wizard
+     */
     public void setAvailableWizards(List<Wizard> availableWizardsUpdate) {
         List<Wizard> removed = new ArrayList<>(availableWizards);
         removed.removeAll(availableWizardsUpdate);
