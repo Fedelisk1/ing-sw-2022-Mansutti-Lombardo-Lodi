@@ -422,7 +422,10 @@ public class Game {
 
     }
 
-
+    public void setCharacterCards(List<CharacterCard> characterCards) {
+        this.characterCards.clear();
+        this.characterCards.addAll(characterCards);
+    }
 
     public int getTotalCoins() {
         return totalCoins;

@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.charactercards.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,6 +106,7 @@ class NoEntryIslandTest{
     @Test
     public void testDoEffect(){
         Game game = new Game(2, true);
+        game.setCharacterCards(Arrays.asList(new NoEntryIsland(game)));
         game.addPlayer("p1");
         game.addPlayer("p2");
 

@@ -58,9 +58,7 @@ class GameTest {
 
         int i = 0;
         for (IslandGroup x : g.getIslands()) {
-            System.out.println(i);
-            Arrays.stream(Color.values()).sequential().forEach(c -> System.out.print(c + " " + x.getStudents(c) + " | "));
-            System.out.println();
+            //Arrays.stream(Color.values()).sequential().forEach(c -> System.out.print(c + " " + x.getStudents(c) + " | "));
             i++;
         }
 
@@ -76,9 +74,7 @@ class GameTest {
 
         i = 0;
         for (IslandGroup x : g.getIslands()) {
-            System.out.println(i);
-            Arrays.stream(Color.values()).sequential().forEach(c -> System.out.print(c + " " + x.getStudents(c) + " | "));
-            System.out.println();
+            //Arrays.stream(Color.values()).sequential().forEach(c -> System.out.print(c + " " + x.getStudents(c) + " | "));
             i++;
         }
 
@@ -171,8 +167,6 @@ class GameTest {
         g.addPlayer("pietro");
         //g.addPlayer("ico");
 
-        System.out.println(g.getPlayers().get(0));
-        System.out.println(g.getPlayers().get(1));
         //System.out.println(g.getPlayers().get(2));
         g.setCurrentPlayer(1);
         g.playerWithHigherInfluence(g.getIslands().get(2));

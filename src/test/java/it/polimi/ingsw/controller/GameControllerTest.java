@@ -31,7 +31,6 @@ class GameControllerTest {
 
         @Override
         public EnumMap<Color, Integer> extractFromBag(int q) {
-            System.out.println("bag extract " + q);
             if (q == 7) {
                 // instantiate a custom
                 EnumMap<Color, Integer> customExtract = new EnumMap<>(Color.class);
@@ -119,7 +118,6 @@ class GameControllerTest {
 
         // 1) p1 plays assistant 1
         doAnswer(invocation -> {
-            System.out.println("p1 ask ac");
             Map<Integer, Integer> hand = (Map<Integer, Integer>) invocation.getArguments()[0];
             List<Integer> notPlayable = (List<Integer>) invocation.getArguments()[1];
 
@@ -131,7 +129,6 @@ class GameControllerTest {
 
         // 1) p2 plays assistant 4
         doAnswer(invocation -> {
-            System.out.println("p2 ask ac");
             Map<Integer, Integer> hand = (Map<Integer, Integer>) invocation.getArguments()[0];
             List<Integer> notPlayable = (List<Integer>) invocation.getArguments()[1];
 
@@ -144,7 +141,6 @@ class GameControllerTest {
 
         // 1) AP1-p1 moves 2 blue students and 1 red student to DR
         doAnswer(invocation -> {
-            System.out.println("ap 1 p1");
             gameController.onMessageArrived(new MoveStudentToDiningRoom(nick1, Color.BLUE));
 
             doNothing().when(virtualView1).askActionPhase1(eq(1), anyInt(), anyBoolean());
@@ -199,7 +195,6 @@ class GameControllerTest {
 
         // 1) AP1-p2 moves 2 RED and 1 blue student to DR
         doAnswer(invocation -> {
-            System.out.println("ap 1 p2");
             gameController.onMessageArrived(new MoveStudentToDiningRoom(nick2, Color.RED));
             return null;
         }).when(virtualView2).askActionPhase1(eq(1), anyInt(), anyBoolean());
@@ -229,7 +224,6 @@ class GameControllerTest {
             gameController.onMessageArrived(new ChooseCloudCard(nick2, 1));
             return null;
         }).when(virtualView2).askActionPhase3(any(), anyBoolean());
-
 
 
         gameController.onMessageArrived(new ChooseWizard(nick1, Wizard.PIXIE));
