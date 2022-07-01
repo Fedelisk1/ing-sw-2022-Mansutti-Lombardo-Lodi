@@ -22,7 +22,7 @@ java - jar eriantys-client.jar -v cli
 java - jar eriantys-client.jar -v gui
 ```
 
-If the parameter is not provided, you will be asked 
+If the parameter is not provided, you will be asked to enter the value once the application starts.
 
 ## Technologies
 * Java SE 18
