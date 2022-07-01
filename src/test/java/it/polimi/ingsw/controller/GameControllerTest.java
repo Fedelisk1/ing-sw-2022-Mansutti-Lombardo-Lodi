@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.IslandGroup;
 import it.polimi.ingsw.model.Wizard;
 import it.polimi.ingsw.model.reduced.ReducedGame;
 import it.polimi.ingsw.network.ClientHandler;
@@ -72,6 +73,24 @@ class GameControllerTest {
         Game game = new CustomGame(2, true);
         gameController.setGame(game);
 
+        //each ArrayList now contains the exact colors contained in the islands
+        for(int i=0; i<12;i++)
+        {
+            game.getIslands().get(i).getStudents().clear();
+        }
+
+        game.getIslands().get(1).addStudents(Color.BLUE);
+        game.getIslands().get(2).addStudents(Color.GREEN);
+        game.getIslands().get(3).addStudents(Color.YELLOW);
+        game.getIslands().get(4).addStudents(Color.BLUE);
+        game.getIslands().get(5).addStudents(Color.BLUE);
+        game.getIslands().get(7).addStudents(Color.RED);
+        game.getIslands().get(8).addStudents(Color.YELLOW);
+        game.getIslands().get(9).addStudents(Color.GREEN);
+        game.getIslands().get(10).addStudents(Color.RED);
+        game.getIslands().get(11).addStudents(Color.RED);
+
+
         nick1 = "p1";
         nick2 = "p2";
 
@@ -82,6 +101,7 @@ class GameControllerTest {
         doNothing().when(virtualView1).showStringMessage(anyString());
         doNothing().when(virtualView1).update(any(ReducedGame.class));
         doNothing().when(virtualView1).updateAvailableWizards(anyList());
+        doNothing().when(virtualView1).askActionPhase3(anyList(), anyBoolean());
 
         doNothing().when(virtualView2).showLobby(anyList(), anyInt());
         doNothing().when(virtualView2).showStringMessage(anyString());
@@ -123,7 +143,7 @@ class GameControllerTest {
         }).when(virtualView2).askAssistantCard(eq(h2), anyList());
 
 
-        // 1) AP1-p1 moves 3 blue students to DR
+        // 1) AP1-p1 moves 2 blue students and 1 red student to DR
         doAnswer(invocation -> {
             System.out.println("ap 1 p1");
             gameController.onMessageArrived(new MoveStudentToDiningRoom(nick1, Color.BLUE));
@@ -141,6 +161,16 @@ class GameControllerTest {
             gameController.onMessageArrived(new MoveStudentToDiningRoom(nick1, Color.RED));
 
             assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getDiningRoom().get(Color.BLUE), 2);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getDiningRoom().get(Color.RED), 1);
+
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.RED), 1);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.BLUE), 0);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.GREEN), 1);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.YELLOW), 1);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.PINK), 1);
+
+            assertTrue(game.getPlayer(nick1).get().getSchoolDashboard().hasProfessor(Color.RED));
+            assertTrue(game.getPlayer(nick1).get().getSchoolDashboard().hasProfessor(Color.BLUE));
             return null;
         }).when(virtualView1).askActionPhase1(eq(3), anyInt(), anyBoolean());
 
@@ -149,16 +179,27 @@ class GameControllerTest {
             gameController.onMessageArrived(new MoveMotherNature(nick1, 1));
 
             assertEquals(game.getMotherNaturePosition(), 1);
+            assertEquals(game.getCurrentPlayerInstance(),game.getCurrentIsland().getOccupiedBy());
+
+
             return null;
         }).when(virtualView1).askActionPhase2(eq(1), anyBoolean());
 
         // 1) AP3-p1 chooses CC 0
         doAnswer(invocation -> {
-            gameController.onMessageArrived(new ChooseCloudCard(nick1, 0));
+            gameController.changeState(new Action3State(gameController));
+            gameController.onMessageArrived(new ChooseCloudCard(nick1, 1));
+
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.RED), 2);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.BLUE), 1);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.GREEN), 2);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.YELLOW), 1);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.PINK), 1);
+
             return null;
         }).when(virtualView1).askActionPhase3(any(), anyBoolean());
 
-        // 1) AP1-p2 moves 3 RED students to DR
+        // 1) AP1-p2 moves 2 RED and 1 blue student to DR
         doAnswer(invocation -> {
             System.out.println("ap 1 p2");
             gameController.onMessageArrived(new MoveStudentToDiningRoom(nick2, Color.RED));
