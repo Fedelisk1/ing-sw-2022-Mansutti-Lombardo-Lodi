@@ -1,4 +1,4 @@
-# ing-sw-2022-Mansutti-Lombardo-Lodi
+# Software Engineering Final Project
 
 ## Run the game
 You can download the server and client jars. They can run on linux, macos and windows and include all the needed dependecies for all platforms.
