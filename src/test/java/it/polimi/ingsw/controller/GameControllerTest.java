@@ -185,7 +185,7 @@ class GameControllerTest {
 
         // 1) AP3-p1 chooses CC 0
         doAnswer(invocation -> {
-            gameController.changeState(new Action3State(gameController));
+
             gameController.onMessageArrived(new ChooseCloudCard(nick1, 1));
 
             assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.RED), 2);

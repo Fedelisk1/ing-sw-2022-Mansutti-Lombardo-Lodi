@@ -153,6 +153,7 @@ class SchoolDashboardTest
     @Test
     public void moveToIslandGroup() throws MissingStudentException {
         game.setCurrentPlayer(0);
+        game.getIslands().get(1).getStudents().clear();
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().addStudentToEntrance(Color.GREEN);
         game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().moveToIslandGroup(Color.GREEN,1);
         Assertions.assertEquals(0, game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(Color.GREEN));
