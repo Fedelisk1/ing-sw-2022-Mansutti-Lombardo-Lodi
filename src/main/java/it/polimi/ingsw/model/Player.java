@@ -166,11 +166,11 @@ public class Player {
      */
     public void moveOneOfThreeToDiningRoom(Color color) throws NullPointerException, MissingStudentException
     {
-        if(count==3)throw new IllegalStateException("limit of students moved reached for this turn");
+        if(count == 3) throw new IllegalStateException("limit of students moved reached for this turn");
         schoolDashboard.moveStudentToDiningRoom(color);
         count++;
-
     }
+
     public Hand getHand()
     {
         return hand;

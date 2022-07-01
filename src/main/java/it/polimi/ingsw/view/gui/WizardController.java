@@ -43,8 +43,6 @@ public class WizardController extends ViewObservable implements Initializable {
 
         availableWizards = availableWizardsUpdate;
 
-        System.out.println("removed " + removed);
-
         removed.forEach(r -> {
             Button toRemove = null;
 
@@ -57,8 +55,6 @@ public class WizardController extends ViewObservable implements Initializable {
 
             Button finalToRemove = toRemove;
             Platform.runLater(() -> {
-                System.out.println(wizardsHBox.getChildren().contains(finalToRemove));
-
                 wizardsHBox.getChildren().remove(finalToRemove);
             });
         });

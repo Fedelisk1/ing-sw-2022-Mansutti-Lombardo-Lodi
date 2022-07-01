@@ -11,7 +11,7 @@ public class Message implements Serializable{
 
     public Message(String nickname, MessageType messageType) {
         this.messageType = messageType;
-        this.nickname=nickname;
+        this.nickname = nickname;
     }
 
     public MessageType getMessageType() {

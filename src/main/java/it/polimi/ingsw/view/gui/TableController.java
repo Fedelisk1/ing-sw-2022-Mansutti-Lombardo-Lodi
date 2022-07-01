@@ -14,6 +14,7 @@ import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -138,7 +139,6 @@ public class TableController extends ViewObservable implements Initializable {
             Platform.runLater(() -> {
                 updateCharacterCards(game);
 
-                System.out.println("update characters done");
                 characterCardUpdateSem.release();
             });
         }
@@ -155,7 +155,6 @@ public class TableController extends ViewObservable implements Initializable {
         Platform.runLater(() -> {
             updateSchoolDashboards(game);
 
-            System.out.println("update dr done");
             diningRoomUpdateSem.release();
         });
 
@@ -188,14 +187,16 @@ public class TableController extends ViewObservable implements Initializable {
         islandsHBox1.getChildren().clear();
         islandsHBox2.getChildren().clear();
         int i = 1;
+        int islandsCount = game.getIslands().size();
 
         islandsImageViews.clear();
 
         for (ReducedIsland island : game.getIslands()) {
-            if (i <= game.getIslands().size() / 2)
+            if (i <= islandsCount / 2)
                 addIsland(island, i, islandsHBox1, this::onIslandClicked);
             else
                 addIsland(island, i, islandsHBox2, this::onIslandClicked);
+
             i++;
         }
 
@@ -870,13 +871,11 @@ public class TableController extends ViewObservable implements Initializable {
      */
     public void askCCChoose3ToEntranceInput(int inputCount) {
         // wait for the character cards to be rendered by the update method
-        System.out.println("wait for characterCardUpdateSem");
         try {
             characterCardUpdateSem.acquire();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("characterCardUpdateSem acquired");
 
         showMessage("[Swap " + inputCount + " of 3] Please, choose a student from the card");
 
@@ -938,13 +937,11 @@ public class TableController extends ViewObservable implements Initializable {
      */
     public void askCCExchange2StudentsInput(int inputCount) {
         // wait for the character cards to be rendered by the update method
-        System.out.println("waiting for characterCardUpdateSem");
         try {
             characterCardUpdateSem.acquire();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("characterCardUpdateSem acquired");
 
         showMessage("[Swap " + inputCount + " of 2] Please, choose a student from the entrance");
 
@@ -958,13 +955,11 @@ public class TableController extends ViewObservable implements Initializable {
         });
 
         // wait for the school dashboard to be rendered by the update method
-        System.out.println("waiting for diningRoomUpdateSem");
         try {
             diningRoomUpdateSem.acquire();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("diningRoomUpdateSem acquired");
 
         entranceStudents.forEach(es -> {
             es.setOnMouseClicked(event -> {

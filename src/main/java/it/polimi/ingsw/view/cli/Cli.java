@@ -56,11 +56,6 @@ public class Cli extends ViewObservable implements View {
      * Prints intro logo and calls askServerInfo.
      */
     public void begin() {
-        //System.out.println("▄▄▄ .▄▄▄  ▪   ▄▄▄·  ▐ ▄ ▄▄▄▄▄ ▄· ▄▌.▄▄ · ");
-        //System.out.println("▀▄.▀·▀▄ █·██ ▐█ ▀█ •█▌▐█•██  ▐█▪██▌▐█ ▀. ");
-        //System.out.println("▐▀▀▪▄▐▀▀▄ ▐█·▄█▀▀█ ▐█▐▐▌ ▐█.▪▐█▌▐█▪▄▀▀▀█▄");
-        //System.out.println("▐█▄▄▌▐█•█▌▐█▌▐█ ▪▐▌██▐█▌ ▐█▌· ▐█▀·.▐█▄▪▐█");
-        //System.out.println(" ▀▀▀ .▀  ▀▀▀▀ ▀  ▀ ▀▀ █▪ ▀▀▀   ▀ •  ▀▀▀▀ ");
         System.out.println("  _____          _                   _                 \n" +
                 " | ____|  _ __  (_)   __ _   _ __   | |_   _   _   ___ \n" +
                 " |  _|   | '__| | |  / _` | | '_ \\  | __| | | | | / __|\n" +
@@ -85,7 +80,6 @@ public class Cli extends ViewObservable implements View {
 
         serverAddress = serverAddress.equals("") ? "localhost" : serverAddress;
         serverInfo.put("address", serverAddress);
-        System.out.println("Chosen address: " + serverAddress);
 
         System.out.println("Please enter the server port, or press ENTER to use the default port (" + Server.DEFAULT_PORT + "): ");
 
@@ -93,7 +87,6 @@ public class Cli extends ViewObservable implements View {
 
         port = port.equals("") ? Server.DEFAULT_PORT + "" : port;
         serverInfo.put("port", port);
-        System.out.println("Chosen port: " + port);
 
         notifyObservers(o -> o.onServerInfoInput(serverInfo));
     }
@@ -440,8 +433,6 @@ public class Cli extends ViewObservable implements View {
             allowedStr.add("cc");
         }
 
-        System.out.println("allowed: " + allowedStr);
-
         String input = strInput(allowedStr, prompt);
 
         if (input.equalsIgnoreCase("cc"))
@@ -665,7 +656,6 @@ public class Cli extends ViewObservable implements View {
 
         while (! inputOk) {
             inputStr = input.nextLine();
-            System.out.println("provided input: " + inputStr + " allowedupper=" + allowedUpper);
             inputOk = allowedUpper.contains(inputStr.toUpperCase());
 
             if (! inputOk)

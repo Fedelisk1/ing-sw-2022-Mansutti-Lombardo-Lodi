@@ -2,7 +2,6 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.network.message.Message;
 import it.polimi.ingsw.network.message.MessageType;
-import it.polimi.ingsw.network.message.PlayerDisconnection;
 import it.polimi.ingsw.network.message.Shutdown;
 import it.polimi.ingsw.observer.Observable;
 
@@ -42,11 +41,11 @@ public class SocketClient extends Observable {
                 Message message;
                 try {
                     message = (Message) inputStream.readObject();
-                    System.out.println("message arrived: " + message.getMessageType());
-                    switch (message.getMessageType()) {
-                        case PING -> {
 
-                        }
+                    // System.out.println("message arrived: " + message.getMessageType());
+
+                    switch (message.getMessageType()) {
+                        case PING -> {}
                         case SHUTDOWN_CLIENT -> {
                             connected.set(false);
                             notifyObservers(message);

@@ -74,7 +74,6 @@ public class LobbyController implements Initializable {
         this.maxPlayers = maxPlayers;
 
         for (int i = 1; i <= maxPlayers; i++) {
-            System.out.println(i);
             VBox vBox = (VBox) Gui.getStage().getScene().lookup("#vBoxPlayer" + i);
 
             Image spinner = new Image("/images/spinner.gif");

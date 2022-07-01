@@ -257,7 +257,12 @@ public class GuiManager extends ViewObservable implements View{
     }
 
     public void showTable() {
-        Platform.runLater(() -> Gui.getStage().setScene(new Scene(tableRoot)));
+        Platform.runLater(() -> {
+            Gui.getStage().setScene(new Scene(tableRoot));
+            Gui.getStage().setResizable(true);
+            Gui.getStage().setMinHeight(950);
+            Gui.getStage().setMinWidth(1350);
+        });
     }
 
     public String getNickname() {

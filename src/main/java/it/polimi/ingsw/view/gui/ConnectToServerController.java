@@ -15,9 +15,6 @@ public class ConnectToServerController extends ViewObservable {
     public TextField port;
     public Text connectionError;
 
-    public void onAction(ActionEvent actionEvent) {
-        System.out.println(address.getText());
-    }
 
     public void handleConnectButton(ActionEvent actionEvent) {
         Map<String, String> serverInfo = new HashMap<>();

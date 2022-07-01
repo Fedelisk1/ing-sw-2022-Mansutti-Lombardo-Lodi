@@ -51,7 +51,7 @@ public class Exchange2Students extends CharacterCard {
 
     public void doPartialEffect(Color fromEntrance, Color fromDiningRoom) {
         SchoolDashboard sd = currentGame.getCurrentPlayerInstance().getSchoolDashboard();
-        cost=2;
+        cost = 2;
 
         // remove from entrance
         sd.getEntrance().merge(fromEntrance, -1, Integer::sum);

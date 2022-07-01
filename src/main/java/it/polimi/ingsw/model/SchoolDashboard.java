@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.exceptions.FullDiningRoomException;
 import it.polimi.ingsw.exceptions.MissingStudentException;
 
 import java.util.*;
@@ -91,8 +92,6 @@ public class SchoolDashboard {
     /**
      * Removes a student from the entrance
      * @param color student color
-     * @throws IllegalArgumentException if there is no student of the chosen color in the entrance
-     * @throws NullPointerException if color is null
      */
     public void removeStudentFromEntrance(Color color) throws MissingStudentException {
         entrance.putIfAbsent(color, 0);
@@ -151,22 +150,14 @@ public class SchoolDashboard {
      * Moves student from entrance to dining room
      * @param color student color
      * @throws NullPointerException if color is null
-     * @throws IllegalArgumentException if there is no student of the chosen color in the entrance
+     * @throws FullDiningRoomException if the dining room already contains the maximum (10) number of students
      */
-    public void moveStudentToDiningRoom(Color color) throws NullPointerException, MissingStudentException
-    {
+    public void moveStudentToDiningRoom(Color color) throws NullPointerException, MissingStudentException, FullDiningRoomException {
+        if (diningRoom.getOrDefault(color, 0) >= 10)
+            throw new FullDiningRoomException();
+
         removeStudentFromEntrance(color);
         addStudentToDiningRoom(color);
-    }
-
-    /**
-     * Moves the desired quantity of students of the specified color to the dining room
-     * @param color color of the students to move
-     * @param quantity how many students to move
-     */
-    public void moveStudentsToDiningRoom(Color color, int quantity) throws MissingStudentException {
-        for (int i = 0; i < quantity; i++)
-            moveStudentToDiningRoom(color);
     }
 
     /**
@@ -179,25 +170,25 @@ public class SchoolDashboard {
     {
         boolean hasMoreStudents = true;
         diningRoom.putIfAbsent(color, 0);
-        diningRoom.put(color,diningRoom.get(color)+1);
+        diningRoom.put(color, diningRoom.get(color)+1);
         if(currentGame.isExpertMode()){
-            if(diningRoom.get(color)%3==0)
-                currentGame.getPlayers().get(currentGame.getCurrentPlayer()).addCoins();
+            if(diningRoom.get(color) % 3 == 0)
+                currentGame.getCurrentPlayerInstance().addCoins();
         }
 
 
-        if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getProfessors().contains(color)) return;
+        if(currentGame.getCurrentPlayerInstance().getSchoolDashboard().getProfessors().contains(color)) return;
 
         //for each player different from the current player, check the number of students in his dining room, if they are less then add a professor to currentplayer
         for(int i=0; i<currentGame.getPlayers().size();i++)
         {
-            if(i!=currentGame.getCurrentPlayer())
+            if(i != currentGame.getCurrentPlayer())
             {
                 currentGame.getPlayers().get(i).getSchoolDashboard().getDiningRoom().putIfAbsent(color, 0);
 
                 //checks all players, if any of them has a number of students of the chosen color larger than the current player, sets hasMoreStudents to false
 
-                if(currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().getDiningRoom().get(color)<=
+                if(currentGame.getCurrentPlayerInstance().getSchoolDashboard().getDiningRoom().get(color)<=
                         currentGame.getPlayers().get(i).getSchoolDashboard().getDiningRoom().get(color))
                 {
                     hasMoreStudents=false;
@@ -205,7 +196,7 @@ public class SchoolDashboard {
                 //if player i has less students and has the professor, move the professor
                 if(currentGame.getPlayers().get(i).getSchoolDashboard().getProfessors().contains(color) && hasMoreStudents)
                 {
-                    currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
+                    currentGame.getCurrentPlayerInstance().getSchoolDashboard().addProfessor(color);
                     currentGame.getPlayers().get(i).getSchoolDashboard().removeProfessor(color);
                     hasMoreStudents=false;
                 }
@@ -215,7 +206,7 @@ public class SchoolDashboard {
         //if no player has more students than the current player, and no player has the chosen professor color, remove a professor from current game
         if(hasMoreStudents)
         {
-            currentGame.getPlayers().get(currentGame.getCurrentPlayer()).getSchoolDashboard().addProfessor(color);
+            currentGame.getCurrentPlayerInstance().getSchoolDashboard().addProfessor(color);
             currentGame.removeUnusedProfessor(color);
         }
 
@@ -282,23 +273,6 @@ public class SchoolDashboard {
      */
     public Boolean hasProfessor(Color color) {
         return professors.contains(color);
-    }
-
-    /**
-     * Allows to obtain a representation of the dashboard through a {@link Map}.
-     * @return Map representation of the dashboard having the keys:
-     *          - "entrance"
-     *          - "diningRoom"
-     *          - "professors"
-     */
-    public Map<String, Map<Color, Integer>> asMap() {
-        Map<String, Map<Color, Integer>> res = new HashMap<>();
-        res.put("entrance", getEntrance());
-        res.put("diningRoom", getDiningRoom());
-        Map<Color, Integer> profMap = new HashMap<>();
-        Arrays.stream(Color.values()).forEach(c -> profMap.put(c, hasProfessor(c) ? 1 : 0));
-        res.put("professors", profMap);
-        return res;
     }
 
     public void setTowers(int towers) {

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.exceptions.FullDiningRoomException;
 import it.polimi.ingsw.exceptions.MissingStudentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.*;
@@ -30,13 +31,17 @@ public class Action1State implements GameState{
         VirtualView virtualView = gameController.getCurrentPlayerView();
 
         try {
-            if (islandNumber < 0)
-                game.getPlayers().get(game.getCurrentPlayer()).getSchoolDashboard().moveStudentToDiningRoom(color);
-            else
+            if (islandNumber < 0) {
+                try {
+                    game.getCurrentPlayerInstance().getSchoolDashboard().moveStudentToDiningRoom(color);
+                } catch (FullDiningRoomException e) {
+                    // the move is not executed and therefore movesCounter shall not be incremented
+                    movesCount--;
+                }
+            } else
                 game.getCurrentPlayerInstance().getSchoolDashboard().moveToIslandGroup(color, islandNumber - 1);
 
             gameController.updateViews();
-            //gameController.viewsExceptCurrentPlayer().forEach(v -> v.showStringMessage(currentPlayer + " is playing (action phase 1) ..."));
 
             //if there are 2 players, after 3 times the move method is called, with 3 players 4 times.
             if(movesCount == game.getMaxPlayers() + 1) {
@@ -44,7 +49,6 @@ public class Action1State implements GameState{
                 gameController.askActionPhase2();
             } else {
                 movesCount++;
-                //virtualView.askActionPhase1(movesCount, game.getIslands().size());
                 gameController.askActionPhase1();
             }
 

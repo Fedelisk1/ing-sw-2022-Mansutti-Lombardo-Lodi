@@ -390,6 +390,8 @@ public class Game {
 
         Collections.shuffle(res);
 
+        //return Arrays.asList(4, 6, 9);
+
         return res.subList(0, CHARACTER_CARDS);
     }
 

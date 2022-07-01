@@ -365,7 +365,6 @@ public class ClientController implements ViewObserver, Observer {
                 taskQueue.submit(view::notifyWinner);
             }
             case SERVER_UNREACHABLE -> view.showServerUnreachable();
-            case ERROR -> {}
             default -> throw new IllegalStateException("Unexpected value: " + message.getMessageType());
         }
     }
