@@ -15,7 +15,10 @@ public class ConnectToServerController extends ViewObservable {
     public TextField port;
     public Text connectionError;
 
-
+    /**
+     * notifies observer with server's address and port
+     * @param actionEvent
+     */
     public void handleConnectButton(ActionEvent actionEvent) {
         Map<String, String> serverInfo = new HashMap<>();
         serverInfo.put("address", address.getText());
@@ -24,6 +27,9 @@ public class ConnectToServerController extends ViewObservable {
         notifyObservers(o -> o.onServerInfoInput(serverInfo));
     }
 
+    /**
+     * shows connection to server error
+     */
     public void onError() {
         connectionError.setVisible(true);
     }

@@ -11,7 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Periodic task that allows the client to send a ping message to the serer in order to notify that he is still connected.
+ * Periodic task that allows the client to send a ping message to the serer in order to notify that the client is still connected.
  */
 public class HeartBeatClient extends TimerTask implements Runnable {
     private final int PERIOD = 5000;

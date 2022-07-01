@@ -67,6 +67,10 @@ public class WizardController extends ViewObservable implements Initializable {
         });
     }
 
+    /**
+     * Called when a king button is triggered
+     * @param actionEvent
+     */
     public void handleKingButton(ActionEvent actionEvent) {
         String chosenId = ((Button) actionEvent.getSource()).getId();
         String chosenWizard = chosenId.substring(0, chosenId.indexOf("Button")).toUpperCase();

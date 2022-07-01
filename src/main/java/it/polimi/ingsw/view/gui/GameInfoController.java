@@ -29,6 +29,7 @@ public class GameInfoController extends ViewObservable implements Initializable 
         this.guiManager = guiManager;
     }
 
+
     public void handleStartButton(ActionEvent actionEvent) {
         int players = Integer.parseInt(playersChoiceBox.getSelectionModel().getSelectedItem());
         boolean expertMode = expert.isSelected();

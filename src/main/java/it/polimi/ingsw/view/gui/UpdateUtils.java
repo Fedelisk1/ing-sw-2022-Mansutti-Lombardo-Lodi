@@ -19,6 +19,9 @@ import javafx.scene.text.Text;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Helper class for updating the GUI.
+ */
 public class UpdateUtils {
     public final static Image islandImage = new Image("images/table/islands/island2.png");
     public final static Image noEntryTileImage = new Image("images/table/noEntry.png");
@@ -54,6 +57,12 @@ public class UpdateUtils {
 
     public static Image coinImage = new Image("/images/table/coin.png");
 
+    /**
+     * helper function to generate an ImageView for an island
+     * @param islandIndex 1-indexed island index
+     * @param eventEventHandler eventHandler to be associated with ImageView's onMouseClicked event.
+     * @return an {@link ImageView} representing the island
+     */
     public static ImageView islandImageView(int islandIndex, EventHandler<MouseEvent> eventEventHandler) {
         ImageView imageView = new ImageView(islandImage);
         imageView.setFitHeight(150.0);
@@ -64,6 +73,11 @@ public class UpdateUtils {
         return imageView;
     }
 
+    /**
+     * generates a no entry tile {@link ImageView}
+     * @param size size (height/width) in pixels
+     * @return an {@link ImageView} representing the no Entry tile
+     */
     public static ImageView noEntryImageView(double size) {
         ImageView imageView = new ImageView(noEntryTileImage);
         imageView.setFitWidth(size);
@@ -72,10 +86,19 @@ public class UpdateUtils {
         return imageView;
     }
 
+    /**
+     * @param priority priority of the assistant card to be generated
+     * @return {@link Image} of the assistant card with the provided priority
+     */
     public static Image assistantImage(int priority) {
         return assistantImages.get(priority - 1);
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public static Image studentImage(Color c) {
         switch (c) {
             case GREEN -> {return greenStudentImage;}

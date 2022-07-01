@@ -18,22 +18,6 @@ public abstract class ViewObservable {
         observers.add(viewObserver);
     }
 
-    /**
-     * Adds new observer
-     * @param viewObservers list of observers to add
-     */
-    public void addObservers(List<ViewObserver> viewObservers) {
-        observers.addAll(viewObservers);
-    }
-
-    /**
-     * Removes a previously added observer
-     * @param viewObserver the observer to remove
-     */
-    public void removeObserver(ViewObserver viewObserver) {
-        observers.remove(viewObserver);
-    }
-
     public List<ViewObserver> getObservers() {
         return observers;
     }

@@ -241,7 +241,7 @@ public class Cli extends ViewObservable implements View {
     }
 
     /**
-     * Displays the winner player's name to other player
+     * Displays the winner player's name to loser player
      * @param winnerNick name of the winner
      */
     @Override
@@ -270,8 +270,8 @@ public class Cli extends ViewObservable implements View {
     }
 
     /**
-     * Whenever is called shows for all player: the island, every school dashboard, cloud tiles with students/professors/towers/mother nature.
-     * If the expert mode is active it displays coins and the three character card
+     * Shows: the island, every school dashboard, cloud tiles with students/professors/towers/mother nature.
+     * If the expert mode is active it displays coins and the three character cards
      * @param game the current game
      */
     @Override

@@ -9,6 +9,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Periodic task that sends a ping message to the clients
+ */
 public class HeartBeatServer extends TimerTask implements Runnable {
     private final int PERIOD = 10000;
     private final ClientHandler clientHandler;

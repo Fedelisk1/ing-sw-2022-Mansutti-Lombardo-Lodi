@@ -56,9 +56,9 @@ class GameControllerTest {
                 customExtract.put(Color.GREEN, 1);
 
                 // remove from bag
-                bag.merge(Color.BLUE,   -1, Integer::sum);
-                bag.merge(Color.RED,    -1, Integer::sum);
-                bag.merge(Color.GREEN,  -1, Integer::sum);
+                bag.merge(Color.BLUE,  -1, Integer::sum);
+                bag.merge(Color.RED,   -1, Integer::sum);
+                bag.merge(Color.GREEN, -1, Integer::sum);
 
                 return customExtract;
             } else {
@@ -114,7 +114,6 @@ class GameControllerTest {
         gameController.addPlayer(nick1, virtualView1);
         gameController.addPlayer(nick2, virtualView2);
         game.setCurrentPlayer(0);
-        System.out.println(game.getCurrentPlayerNick());
 
         Map<Integer, Integer> h1 = new HashMap<>(game.getPlayer(nick1).get().getHand().getAsMap());
 
@@ -159,7 +158,11 @@ class GameControllerTest {
 
         doAnswer(invocation -> {
             gameController.onMessageArrived(new MoveStudentToDiningRoom(nick1, Color.RED));
+            return null;
+        }).when(virtualView1).askActionPhase1(eq(3), anyInt(), anyBoolean());
 
+        // 1) AP2-p1 moves MN 1 step
+        doAnswer(invocation -> {
             assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getDiningRoom().get(Color.BLUE), 2);
             assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getDiningRoom().get(Color.RED), 1);
 
@@ -171,16 +174,11 @@ class GameControllerTest {
 
             assertTrue(game.getPlayer(nick1).get().getSchoolDashboard().hasProfessor(Color.RED));
             assertTrue(game.getPlayer(nick1).get().getSchoolDashboard().hasProfessor(Color.BLUE));
-            return null;
-        }).when(virtualView1).askActionPhase1(eq(3), anyInt(), anyBoolean());
 
-        // 1) AP2-p1 moves MN 1 step
-        doAnswer(invocation -> {
             gameController.onMessageArrived(new MoveMotherNature(nick1, 1));
 
             assertEquals(game.getMotherNaturePosition(), 1);
-            assertEquals(game.getCurrentPlayerInstance(),game.getCurrentIsland().getOccupiedBy());
-
+            assertEquals(nick1, game.getCurrentIsland().getOccupiedBy().getNickname());
 
             return null;
         }).when(virtualView1).askActionPhase2(eq(1), anyBoolean());
