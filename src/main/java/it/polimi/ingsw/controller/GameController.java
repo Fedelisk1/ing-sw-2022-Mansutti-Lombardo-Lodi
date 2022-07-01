@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * Handles the flow of the game serer side.
  */
-public class GameController implements Observer {
+public class GameController {
     private Game game;
     private final Map<String, VirtualView> nickVirtualViewMap;
     private GameState state;
@@ -126,7 +126,6 @@ public class GameController implements Observer {
      * Dispatch messages received
      * @param message message
      */
-    @Override
     public void onMessageArrived(Message message)
     {
         switch (message.getMessageType()) {

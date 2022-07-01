@@ -32,18 +32,11 @@ public class Gui extends Application {
         stage.setScene(new Scene(root));
         connectToServerController = connectLoader.getController();
 
-        //stage.setResizable(false);
+        stage.setResizable(false);
 
         stage.show();
         GuiManager.getSemaphore().release();
 
-/*
-        try {
-            GuiManager.queue.put("done");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-*/
         stage.setOnCloseRequest((WindowEvent t) -> {
             Platform.exit();
             System.exit(0);
