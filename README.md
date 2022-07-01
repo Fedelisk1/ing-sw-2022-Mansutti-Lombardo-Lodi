@@ -3,23 +3,23 @@
 ## Run the game
 You can download the server and client jars. They can run on linux, macos and windows and include all the needed dependecies for all platforms.
 
-The application was tested and developed with Oracle JDK 18
+The application was tested and developed with Oracle JDK 18.
 
 You can run the server with the following command: 
 ```
-java - jar eriantys-server.jar
+java -jar eriantys-server.jar
 ```
 while the client can be run with the command:
 ```
-java - jar eriantys-client.jar
+java -jar eriantys-client.jar
 ```
 
-optional parameter ```-v``` can be used choose the interface before executing the application itself. Allowed values are ```cli``` and ```gui```:
+parameter ```-v``` can be used choose the interface before executing the application itself. Allowed values are ```cli``` and ```gui```:
 ```
-java - jar eriantys-client.jar -v cli
+java -jar eriantys-client.jar -v cli
 ```
 ```
-java - jar eriantys-client.jar -v gui
+java -jar eriantys-client.jar -v gui
 ```
 
 If the parameter is not provided, you will be asked to enter the value once the application starts.
