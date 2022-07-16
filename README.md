@@ -1,7 +1,7 @@
 # Software Engineering Final Project
 
 ## Run the game
-You can download the server and client jars. They can run on linux, macos and windows and include all the needed dependecies for all platforms.
+You can download the [server](deliveries/final/jar/eriantys-server.jar) and [client](deliveries/final/jar/eriantys-client.jar) jars. They can run on linux, macos and windows and include all the needed dependecies for all platforms.
 
 The application was tested and developed with Oracle JDK 18.
 
