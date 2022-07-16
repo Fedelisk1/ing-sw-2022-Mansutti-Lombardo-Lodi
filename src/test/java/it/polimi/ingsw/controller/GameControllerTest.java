@@ -184,17 +184,17 @@ class GameControllerTest {
 
             gameController.onMessageArrived(new ChooseCloudCard(nick1, 1));
 
-            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.RED), 2);
-            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.BLUE), 1);
-            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.GREEN), 2);
-            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.YELLOW), 1);
-            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.PINK), 1);
 
             return null;
         }).when(virtualView1).askActionPhase3(any(), anyBoolean());
 
         // 1) AP1-p2 moves 2 RED and 1 blue student to DR
         doAnswer(invocation -> {
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.RED), 2);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.BLUE), 1);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.GREEN), 2);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.YELLOW), 1);
+            assertEquals(game.getPlayer(nick1).get().getSchoolDashboard().getEntrance().get(Color.PINK), 1);
             gameController.onMessageArrived(new MoveStudentToDiningRoom(nick2, Color.RED));
             return null;
         }).when(virtualView2).askActionPhase1(eq(1), anyInt(), anyBoolean());
